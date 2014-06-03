@@ -494,7 +494,7 @@ describe('Resources: ', function () {
           assert.instanceOf(result[1],ApiKey);
         });
         it('should cache the ApiKey',function(){
-          assert.equal(JSON.stringify(cacheResult[1]),JSON.stringify(foundResponse.items[0]));
+          assert.equal(cacheResult[1].href,foundResponse.items[0].href);
         });
       });
       describe('on second get',function(){
@@ -506,7 +506,7 @@ describe('Resources: ', function () {
           });
         });
         it('should have the key from the cache',function(){
-          assert.equal(JSON.stringify(result[1]),JSON.stringify(foundResponse.items[0]));
+          assert.equal(result[1].href,foundResponse.items[0].href);
         });
       });
       describe('when apikey is not found',function(){
