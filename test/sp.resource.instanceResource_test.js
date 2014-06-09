@@ -1,7 +1,5 @@
 var common = require('./common');
 var sinon = common.sinon;
-var nock = common.nock;
-var u = common.u;
 
 var Resource = require('../lib/resource/Resource');
 var InstanceResource = require('../lib/resource/InstanceResource');
@@ -69,8 +67,9 @@ describe('Resources: ', function () {
           cb = function(err){error = err;};
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
-          nock(u.BASE_URL).get(u.v1(app.href)).reply(200, {});
-
+          sandbox.stub(ds.requestExecutor,'execute',function(){
+            Array.prototype.slice.call(arguments).pop().call(null,null,app);
+          });
           instanceResource.get('applications', cb);
         });
         after(function(){
@@ -93,8 +92,9 @@ describe('Resources: ', function () {
           ctor = Resource;
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
-          nock(u.BASE_URL).get(u.v1(app.href)).reply(200, app);
-
+          sandbox.stub(ds.requestExecutor,'execute',function(){
+            Array.prototype.slice.call(arguments).pop().call(null,null,app);
+          });
           instanceResource.get('applications', ctor, cb);
         });
         after(function(){
@@ -117,8 +117,9 @@ describe('Resources: ', function () {
           cb = function(err){error = err;};
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
-          nock(u.BASE_URL).get(u.v1(app.href) + '?q='+query.q).reply(200, app);
-
+          sandbox.stub(ds.requestExecutor,'execute',function(){
+            Array.prototype.slice.call(arguments).pop().call(null,null,app);
+          });
           instanceResource.get('applications', query, cb);
         });
         after(function(){
@@ -138,7 +139,9 @@ describe('Resources: ', function () {
           query = {q:'boom!'};
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
-          nock(u.BASE_URL).get(u.v1(app.href) + '?q='+query.q).reply(200, app);
+          sandbox.stub(ds.requestExecutor,'execute',function(){
+            Array.prototype.slice.call(arguments).pop().call(null,null,app);
+          });
 
           instanceResource.get('applications', query, ctor, cb);
         });

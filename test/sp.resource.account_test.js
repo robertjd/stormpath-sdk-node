@@ -1,8 +1,6 @@
 /* jshint -W030 */
 var common = require('./common');
 var sinon = common.sinon;
-var nock = common.nock;
-var u = common.u;
 
 var Group = require('../lib/resource/Group');
 var Account = require('../lib/resource/Account');
@@ -282,14 +280,19 @@ describe('Resources: ', function () {
     describe('get provider data', function(){
       function getProviderData(data) {
         return function () {
-          var accObj, providerDataObj, app, providerData;
+          var accObj, providerDataObj, app, providerData, sandbox;
           before(function (done) {
             // assert
             providerDataObj = {href: '/provider/data/href', name: 'provider name'};
             accObj = {providerData: {href: providerDataObj.href}};
             app = new Account(accObj, dataStore);
 
-            nock(u.BASE_URL).get(u.v1(providerDataObj.href)).reply(200, providerDataObj);
+            sandbox = sinon.sandbox.create();
+            sandbox.stub(dataStore.requestExecutor,'execute',function(){
+              var args = Array.prototype.slice.call(arguments);
+              var cb = args.pop();
+              cb(null,providerDataObj);
+            });
 
             var args = [];
             if (data) {
@@ -302,6 +305,9 @@ describe('Resources: ', function () {
 
             // act
             app.getProviderData.apply(app, args);
+          });
+          after(function(){
+            sandbox.restore();
           });
 
           it('should get provider data', function () {

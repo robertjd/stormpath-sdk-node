@@ -2,8 +2,6 @@
 "use strict";
 var common = require('./common');
 var sinon = common.sinon;
-var nock = common.nock;
-var u = common.u;
 
 var Account = require('../lib/resource/Account');
 var Group = require('../lib/resource/Group');
@@ -278,14 +276,17 @@ describe('Resources: ', function () {
     describe('get provider', function(){
       function getProvider(data) {
         return function () {
-          var dirObj, providerObj, app, provider;
+          var dirObj, providerObj, app, provider, sandbox;
           before(function (done) {
             // assert
             providerObj = {href: '/provider/href', name: 'provider name'};
             dirObj = {provider: {href: providerObj.href}};
             app = new Directory(dirObj, dataStore);
+            sandbox = sinon.sandbox.create();
 
-            nock(u.BASE_URL).get(u.v1(providerObj.href)).reply(200, providerObj);
+            sandbox.stub(dataStore.requestExecutor,'execute',function(){
+              Array.prototype.slice.call(arguments).pop().call(null,null,providerObj);
+            });
 
             var args = [];
             if (data) {
@@ -298,6 +299,9 @@ describe('Resources: ', function () {
 
             // act
             app.getProvider.apply(app, args);
+          });
+          after(function () {
+            sandbox.restore();
           });
           it('should get provider', function () {
             provider.href.should.be.equal(provider.href);

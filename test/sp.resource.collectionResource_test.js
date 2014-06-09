@@ -1,13 +1,10 @@
 /* jshint -W030 */
 var common = require('./common');
 var _ = common._;
-var u = common.u;
-var nock = common.nock;
 var sinon = common.sinon;
 var should = common.should;
 
 var async = require('async');
-var querystring = require('querystring');
 
 var Tenant = require('../lib/resource/Tenant');
 var Resource = require('../lib/resource/Resource');
@@ -311,13 +308,19 @@ describe('Resources: ', function () {
               pages.push(createAppsCollection(items, i*100, (i+1)*100));
             }
             applications = instantiate(Application, pages[0], {}, ds);
-            // 3. nock
-            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200,pages);
-            for (i = 1; i < Math.ceil(n/100); i++) {
-              var ref = u.v1(applications.href) + '?' + querystring.stringify({offset: i * 100, limit: 100});
-              nock(u.BASE_URL).get(ref).reply(200, pages[i]);
-            }
+            // 3. setup mock http repsonder
             sandbox = sinon.sandbox.create();
+            sandbox.stub(ds.requestExecutor,'execute',function(){
+              var args = Array.prototype.slice.call(arguments);
+              var cb = args.pop();
+              var reqOpts = args.shift();
+              var page = reqOpts.query && reqOpts.query.offset;
+              if(page){
+                cb(null,pages[page/100]);
+              }else{
+                cb(null,pages);
+              }
+            });
             // 4. iterator and callback spies
             function iterator(item, cb){
               cb();
@@ -406,13 +409,18 @@ describe('Resources: ', function () {
               pages.push(createAppsCollection(items, i*100, (i+1)*100));
             }
             applications = instantiate(Application, pages[0], {}, ds);
-            // 3. nock
-            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200,pages);
-            for (i = 1; i < Math.ceil(n/100); i++) {
-              var ref = u.v1(applications.href) + '?' + querystring.stringify({offset: i * 100, limit: 100});
-              nock(u.BASE_URL).get(ref).reply(200, pages[i]);
-            }
             sandbox = sinon.sandbox.create();
+            sandbox.stub(ds.requestExecutor,'execute',function(){
+              var args = Array.prototype.slice.call(arguments);
+              var cb = args.pop();
+              var reqOpts = args.shift();
+              var page = reqOpts.query && reqOpts.query.offset;
+              if(page){
+                cb(null,pages[page/100]);
+              }else{
+                cb(null,pages);
+              }
+            });
             // 4. iterator and callback spies
             function iterator(item, cb){
               cb();
@@ -502,13 +510,19 @@ describe('Resources: ', function () {
               pages.push(createAppsCollection(items, i*100, (i+1)*100));
             }
             applications = instantiate(Application, pages[0], {}, ds);
-            // 3. nock
-            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200,pages);
-            for (i = 1; i < Math.ceil(n/100); i++) {
-              var ref = u.v1(applications.href) + '?' + querystring.stringify({offset: i * 100, limit: 100});
-              nock(u.BASE_URL).get(ref).reply(200, pages[i]);
-            }
+            // 3. setup mock http repsonder
             sandbox = sinon.sandbox.create();
+            sandbox.stub(ds.requestExecutor,'execute',function(){
+              var args = Array.prototype.slice.call(arguments);
+              var cb = args.pop();
+              var reqOpts = args.shift();
+              var page = reqOpts.query && reqOpts.query.offset;
+              if(page){
+                cb(null,pages[page/100]);
+              }else{
+                cb(null,pages);
+              }
+            });
             // 4. iterator and callback spies
             function iterator(item, cb){
               cb(item.description % 2 === 0);
@@ -604,13 +618,19 @@ describe('Resources: ', function () {
               pages.push(createAppsCollection(items, i*100, (i+1)*100));
             }
             applications = instantiate(Application, pages[0], {}, ds);
-            // 3. nock
-            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200,pages);
-            for (i = 1; i < Math.ceil(n/100); i++) {
-              var ref = u.v1(applications.href) + '?' + querystring.stringify({offset: i * 100, limit: 100});
-              nock(u.BASE_URL).get(ref).reply(200, pages[i]);
-            }
+            // 3. setup mock http repsonder
             sandbox = sinon.sandbox.create();
+            sandbox.stub(ds.requestExecutor,'execute',function(){
+              var args = Array.prototype.slice.call(arguments);
+              var cb = args.pop();
+              var reqOpts = args.shift();
+              var page = reqOpts.query && reqOpts.query.offset;
+              if(page){
+                cb(null,pages[page/100]);
+              }else{
+                cb(null,pages);
+              }
+            });
             // 4. iterator and callback spies
             function iterator(item, cb){
               cb(item.description % 2 === 0);
@@ -705,13 +725,19 @@ describe('Resources: ', function () {
               pages.push(createAppsCollection(items, i*100, (i+1)*100));
             }
             applications = instantiate(Application, pages[0], {}, ds);
-            // 3. nock
-            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200,pages);
-            for (i = 1; i < Math.ceil(n/100); i++) {
-              var ref = u.v1(applications.href) + '?' + querystring.stringify({offset: i * 100, limit: 100});
-              nock(u.BASE_URL).get(ref).reply(200, pages[i]);
-            }
+            // 3. setup mock http repsonder
             sandbox = sinon.sandbox.create();
+            sandbox.stub(ds.requestExecutor,'execute',function(){
+              var args = Array.prototype.slice.call(arguments);
+              var cb = args.pop();
+              var reqOpts = args.shift();
+              var page = reqOpts.query && reqOpts.query.offset;
+              if(page){
+                cb(null,pages[page/100]);
+              }else{
+                cb(null,pages);
+              }
+            });
             // 4. iterator and callback spies
             function iterator(item, cb){
               cb(null, item.description % 2 === 0);
@@ -806,13 +832,19 @@ describe('Resources: ', function () {
               pages.push(createAppsCollection(items, i*100, (i+1)*100));
             }
             applications = instantiate(Application, pages[0], {}, ds);
-            // 3. nock
-            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200,pages);
-            for (i = 1; i < Math.ceil(n/100); i++) {
-              var ref = u.v1(applications.href) + '?' + querystring.stringify({offset: i * 100, limit: 100});
-              nock(u.BASE_URL).get(ref).reply(200, pages[i]);
-            }
+            // 3. setup mock http repsonder
             sandbox = sinon.sandbox.create();
+            sandbox.stub(ds.requestExecutor,'execute',function(){
+              var args = Array.prototype.slice.call(arguments);
+              var cb = args.pop();
+              var reqOpts = args.shift();
+              var page = reqOpts.query && reqOpts.query.offset;
+              if(page){
+                cb(null,pages[page/100]);
+              }else{
+                cb(null,pages);
+              }
+            });
             // 4. iterator and callback spies
             function iterator(memo, item, cb){
               cb(null, memo + item.description);

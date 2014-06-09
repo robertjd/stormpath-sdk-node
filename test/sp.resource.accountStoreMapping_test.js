@@ -1,14 +1,15 @@
 var common = require('./common');
-var nock = common.nock;
+var sinon = common.sinon;
+
 var async = require('async');
-var u = common.u;
+
 
 var Group = require('../lib/resource/Group');
 var Directory = require('../lib/resource/Directory');
 var Application = require('../lib/resource/Application');
 var AccountStoreMapping = require('../lib/resource/AccountStoreMapping');
 var DataStore = require('../lib/ds/DataStore');
-var BASE_URL = u.BASE_URL;
+
 
 describe('Resources: ', function () {
   "use strict";
@@ -16,30 +17,41 @@ describe('Resources: ', function () {
     var dataStore = new DataStore({apiKey: {id: 1, secret: 2}});
 
     describe('get application', function () {
-      var asm, appData, app, app2, accountStoreMapping;
+      var asm, appData, app, app2, accountStoreMapping, sandbox;
       before(function (done) {
         // arrange
         appData = { href: '/application/test/href', name: 'boom'};
         asm = { application: {href: appData.href} };
         accountStoreMapping = new AccountStoreMapping(asm, dataStore);
 
+        sandbox = sinon.sandbox.create();
+        sandbox.stub(dataStore.requestExecutor,'execute',function(){
+          var args = Array.prototype.slice.call(arguments);
+          var cb = args.pop();
+          cb(null,appData);
+        });
+
         // act
         async.parallel([
           function getApp(cb) {
-            nock(BASE_URL).get(u.v1(appData.href)).reply(200, appData);
+
             accountStoreMapping.getApplication(function (err, res) {
               app = res;
               cb();
             });
           },
           function getAppWithOptions(cb) {
-            nock(BASE_URL).get(u.v1(appData.href)).reply(200, appData);
+
             accountStoreMapping.getApplication({}, function (err, res) {
               app2 = res;
               cb();
             });
           }
         ], done);
+      });
+
+      after(function(){
+        sandbox.restore();
       });
 
       // assert
@@ -60,23 +72,31 @@ describe('Resources: ', function () {
     describe('get account store', function () {
       function testAccountStore(data, type) {
         return function () {
-          var asm, resource, resource2, accountStoreMapping;
+          var asm, resource, resource2, accountStoreMapping, sandbox;
           before(function (done) {
             // arrange
             asm = { accountStore: {href: data.href} };
             accountStoreMapping = new AccountStoreMapping(asm, dataStore);
 
+            sandbox = sinon.sandbox.create();
+            sandbox.stub(dataStore.requestExecutor,'execute',function(){
+              var args = Array.prototype.slice.call(arguments);
+              var cb = args.pop();
+              cb(null,data);
+            });
+
             // act
             async.parallel([
               function getApp(cb) {
-                nock(BASE_URL).get(u.v1(data.href)).reply(200, data);
+
+
                 accountStoreMapping.getAccountStore(function (err, res) {
                   resource = res;
                   cb();
                 });
               },
               function getAppWithOptions(cb) {
-                nock(BASE_URL).get(u.v1(data.href)).reply(200, data);
+
                 accountStoreMapping.getAccountStore({}, function (err, res) {
                   resource2 = res;
                   cb();
@@ -84,6 +104,10 @@ describe('Resources: ', function () {
               }
             ], done);
 
+          });
+
+          after(function(){
+            sandbox.restore();
           });
 
           // assert

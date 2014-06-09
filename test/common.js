@@ -4,7 +4,6 @@ var _ = require('lodash');
 //_.extend(process.env, require('./test.env'));
 
 var chai = require("chai");
-var nock = require('nock');
 var sinon = require("sinon");
 var assert = require('chai').assert;
 var should = require("chai").should();
@@ -28,7 +27,6 @@ module.exports = {
   _: _,
   u: u,
   chai: chai,
-  nock: nock,
   sinon: sinon,
   assert: assert,
   expect: chai.expect,

@@ -4,7 +4,6 @@
 var common = require('./common');
 var expect = common.expect;
 var sinon = common.sinon;
-var nock = require('nock');
 
 var RequestExecutor = require('../lib/ds/RequestExecutor');
 var ResourceError = require('../lib/error/ResourceError');
@@ -58,12 +57,10 @@ describe('ds:', function () {
 
       it('should return response', function (done) {
         var cbSpy;
-        var uri = 'http://example.com';
-        var res = {test: 'boom'};
-        nock(uri).get('/').reply(200, res);
-        function cb(err, body) {
+        var uri = 'https://api.stormpath.com';
+
+        function cb(err) {
           expect(err).to.be.null;
-          body.should.be.deep.equal(res);
           cbSpy.should.have.been.calledOnce;
           done();
         }
@@ -75,8 +72,6 @@ describe('ds:', function () {
       it('should return resource error in case of incorrect request', function (done) {
         var cbSpy;
         var uri = 'https://api.stormpath.com/v1/test';
-        var res = {test: 'boom'};
-        nock(uri).get('/v1/test').reply(400, res);
         function cb(err, body) {
           err.should.be.an.instanceof(ResourceError);
           expect(body).to.be.null;

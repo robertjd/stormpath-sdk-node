@@ -1,8 +1,7 @@
 /* jshint -W030 */
 var common = require('./common');
 var sinon = common.sinon;
-var nock = common.nock;
-var u = common.u;
+var _ = common._;
 
 var utils = require('../lib/utils');
 var Account = require('../lib/resource/Account');
@@ -439,14 +438,20 @@ describe('Resources: ', function () {
     describe('get account store mappings', function () {
       function getAccountStoreMappings(data) {
         return function () {
-          var appObj, asmObj, app, asm;
+          var appObj, asmObj, app, asm, sandbox;
           before(function (done) {
             // assert
             asmObj = {href: '/account/store/mapping/href', name: 'asm name'};
             appObj = {accountStoreMappings: {href: asmObj.href}};
             app = new Application(appObj, dataStore);
 
-            nock(u.BASE_URL).get(u.v1(asmObj.href)).reply(200, asmObj);
+            sandbox = sinon.sandbox.create();
+            sandbox.stub(dataStore.requestExecutor,'execute',function(){
+              var args = Array.prototype.slice.call(arguments);
+              var cb = args.pop();
+              cb(null,asmObj);
+            });
+
 
             var args = [];
             if (data) {
@@ -459,6 +464,9 @@ describe('Resources: ', function () {
 
             // act
             app.getAccountStoreMappings.apply(app, args);
+          });
+          after(function(){
+            sandbox.restore();
           });
           it('should get account store mapping data', function () {
             asm.href.should.be.equal(asm.href);
@@ -478,14 +486,19 @@ describe('Resources: ', function () {
     describe('get default account store', function () {
       function getDefaultAccountStore(data) {
         return function () {
-          var appObj, asmObj, app, asm;
+          var appObj, asmObj, app, asm, sandbox;
           before(function (done) {
             // assert
             asmObj = {href: '/account/store/mapping/href', name: 'asm name'};
             appObj = {defaultAccountStoreMapping: {href: asmObj.href}};
             app = new Application(appObj, dataStore);
 
-            nock(u.BASE_URL).get(u.v1(asmObj.href)).reply(200, asmObj);
+            sandbox = sinon.sandbox.create();
+            sandbox.stub(dataStore.requestExecutor,'execute',function(){
+              var args = Array.prototype.slice.call(arguments);
+              var cb = args.pop();
+              cb(null,asmObj);
+            });
 
             var args = [];
             if (data) {
@@ -498,6 +511,9 @@ describe('Resources: ', function () {
 
             // act
             app.getDefaultAccountStore.apply(app, args);
+          });
+          after(function(){
+            sandbox.restore();
           });
           it('should get default account store mapping data', function () {
             asm.href.should.be.equal(asm.href);
@@ -542,17 +558,23 @@ describe('Resources: ', function () {
         store = new Directory(storeObj, dataStore);
         sandbox = sinon.sandbox.create();
         evokeSpy = sandbox.spy(app.dataStore, '_evict');
-        cbSpy = sandbox.spy(done);
-        nock(u.BASE_URL)
-          .get(u.v1(app.accountStoreMappings.href))
-          .reply(200, asmObj)
 
-          .post(u.v1('/accountStoreMappings'))
-          .reply(201, function (uri, reqBody) {
-            asm = JSON.parse(reqBody);
-            asm.href = '/accountStoreMappings/href';
-            return asm;
-          });
+        sandbox.stub(dataStore.requestExecutor,'execute',function(){
+          var args = Array.prototype.slice.call(arguments);
+          var cb = args.pop();
+          var reqOpts = args.shift();
+          if(reqOpts.uri===app.accountStoreMappings.href){
+            cb(null,asmObj);
+          }
+          if(reqOpts.uri==='/accountStoreMappings'){
+            cb(null,_.extend({},reqOpts.body,{href:'/accountStoreMappings/href'}));
+          }
+        });
+
+        cbSpy = sandbox.spy(function(err,result){
+          asm = result;
+          done();
+        });
 
         // act
         app.setDefaultAccountStore(store, cbSpy);
@@ -583,14 +605,19 @@ describe('Resources: ', function () {
     describe('get default group store', function () {
       function getDefaultGroupStore(data) {
         return function () {
-          var appObj, asmObj, app, asm;
+          var appObj, asmObj, app, asm, sandbox;
           before(function (done) {
             // assert
             asmObj = {href: '/account/store/mapping/href', name: 'asm name'};
             appObj = {defaultGroupStoreMapping: {href: asmObj.href}};
             app = new Application(appObj, dataStore);
 
-            nock(u.BASE_URL).get(u.v1(asmObj.href)).reply(200, asmObj);
+            sandbox = sinon.sandbox.create();
+            sandbox.stub(dataStore.requestExecutor,'execute',function(){
+              var args = Array.prototype.slice.call(arguments);
+              var cb = args.pop();
+              cb(null,asmObj);
+            });
 
             var args = [];
             if (data) {
@@ -603,6 +630,9 @@ describe('Resources: ', function () {
 
             // act
             app.getDefaultGroupStore.apply(app, args);
+          });
+          after(function(){
+            sandbox.restore();
           });
           it('should get default group store mapping data', function () {
             asm.href.should.be.equal(asm.href);
@@ -647,17 +677,23 @@ describe('Resources: ', function () {
         store = new Directory(storeObj, dataStore);
         sandbox = sinon.sandbox.create();
         evokeSpy = sinon.spy(app.dataStore, '_evict');
-        cbSpy = sinon.spy(done);
-        nock(u.BASE_URL)
-          .get(u.v1(app.accountStoreMappings.href))
-          .reply(200, asmObj)
 
-          .post(u.v1('/accountStoreMappings'))
-          .reply(201, function (uri, reqBody) {
-            asm = JSON.parse(reqBody);
-            asm.href = '/accountStoreMappings/href';
-            return asm;
-          });
+        sandbox.stub(dataStore.requestExecutor,'execute',function(){
+          var args = Array.prototype.slice.call(arguments);
+          var cb = args.pop();
+          var reqOpts = args.shift();
+          if(reqOpts.uri===app.accountStoreMappings.href){
+            cb(null,asmObj);
+          }
+          if(reqOpts.uri==='/accountStoreMappings'){
+            cb(null,_.extend({},reqOpts.body,{href:'/accountStoreMappings/href'}));
+          }
+        });
+
+        cbSpy = sandbox.spy(function(err,result){
+          asm = result;
+          done();
+        });
 
         // act
         app.setDefaultGroupStore(store, cbSpy);
@@ -685,7 +721,7 @@ describe('Resources: ', function () {
     });
 
     describe('create account store mapping', function () {
-      var asmObj, appObj, app, storeObj, asm, cbSpy;
+      var asmObj, appObj, app, storeObj, asm, cbSpy, sandbox;
       before(function (done) {
         // arrange
         appObj = { href: '/app/test/href', name: 'test app name'};
@@ -693,18 +729,24 @@ describe('Resources: ', function () {
         asmObj = { href: '/asm/href', isDefaultGroupStore: true, accountStore: storeObj };
 
         app = new Application(appObj, dataStore);
-        cbSpy = sinon.spy();
-        nock(u.BASE_URL)
-          .post(u.v1('/accountStoreMappings'))
-          .reply(201, function (uri, reqBody) {
-            asm = JSON.parse(reqBody);
-            asm.href = '/accountStoreMappings/href';
-            done();
-            return asm;
-          });
+        cbSpy = sinon.spy(function(err,resp){
+          asm = resp;
+          done();
+        });
+
+        sandbox = sinon.sandbox.create();
+        sandbox.stub(dataStore.requestExecutor,'execute',function(){
+          var args = Array.prototype.slice.call(arguments);
+          var cb = args.pop();
+          var reqOpts = args.shift();
+          cb(null,_.extend({},reqOpts.body,{href:'/accountStoreMappings/href'}));
+        });
 
         // act
         app.createAccountStoreMapping(asmObj, cbSpy);
+      });
+      after(function(){
+        sandbox.restore();
       });
 
       // assert
@@ -720,25 +762,30 @@ describe('Resources: ', function () {
     });
 
     describe('add account store', function () {
-      var storeObj, store, appObj, app, asm, cbSpy;
+      var storeObj, store, appObj, app, asm, cbSpy, sandbox;
       before(function (done) {
         // arrange
         appObj = { href: '/app/test/href', name: 'test app name'};
         storeObj = {href: '/directories/href', name: 'test dir name'};
         app = new Application(appObj, dataStore);
         store = new Directory(storeObj, dataStore);
-        cbSpy = sinon.spy();
-        nock(u.BASE_URL)
-          .post(u.v1('/accountStoreMappings'))
-          .reply(201, function (uri, reqBody) {
-            asm = JSON.parse(reqBody);
-            asm.href = '/accountStoreMappings/href';
-            done();
-            return asm;
-          });
+        cbSpy = sinon.spy(function(err,resp){
+          asm = resp;
+          done();
+        });
+        sandbox = sinon.sandbox.create();
+        sandbox.stub(dataStore.requestExecutor,'execute',function(){
+          var args = Array.prototype.slice.call(arguments);
+          var cb = args.pop();
+          var reqOpts = args.shift();
+          cb(null,_.extend({},reqOpts.body,{href:'/accountStoreMappings/href'}));
+        });
 
         // act
         app.addAccountStore(store, cbSpy);
+      });
+      after(function(){
+        sandbox.restore();
       });
 
       // assert
@@ -752,14 +799,23 @@ describe('Resources: ', function () {
     describe('get account',function(){
       function getAccount(isNew, data) {
         return function () {
-          var appObj, accObj, app, resp;
+          var appObj, accObj, app, resp, sandbox;
           before(function (done) {
             // assert
             accObj = {href: '/accounts/href', name: 'provider name'};
             appObj = {accounts: {href: accObj.href}};
             app = new Application(appObj, dataStore);
 
-            nock(u.BASE_URL).post(u.v1(accObj.href)).reply(isNew ? 201: 200, accObj);
+            sandbox = sinon.sandbox.create();
+            sandbox.stub(dataStore.requestExecutor,'execute',function(){
+              var args = Array.prototype.slice.call(arguments);
+              var cb = args.pop();
+              var resp = _.extend({},accObj);
+              if (isNew){
+                resp._isNew = true;
+              }
+              cb(null,resp);
+            });
 
             var args = [{}];
             if (data) {
@@ -772,6 +828,10 @@ describe('Resources: ', function () {
 
             // act
             app.getAccount.apply(app, args);
+          });
+
+          after(function(){
+            sandbox.restore();
           });
 
           it('should get provider data', function () {
