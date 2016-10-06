@@ -1,5 +1,3 @@
-/*jshint expr: true*/
-/*jshint unused: false*/
 'use strict';
 
 var authc = require('../lib/authc');

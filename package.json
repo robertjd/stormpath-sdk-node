@@ -36,9 +36,10 @@
     "url": "git://github.com/stormpath/stormpath-sdk-node.git"
   },
   "scripts": {
-    "coverage": "node ./node_modules/istanbul/lib/cli cover ./node_modules/mocha/bin/_mocha",
+    "lint": "./node_modules/eslint/bin/eslint.js -c .eslintrc lib/** test/** --ignore-pattern **/*.yml --quiet",
     "docs": "./node_modules/.bin/jsdoc -c ./docs/jsdoc.json -d ./apidocs/ -P ./package.json -r lib/ --readme ./docs/JSDOC.md",
-    "test": "grunt"
+    "test": "npm run lint && istanbul cover ./node_modules/mocha/bin/_mocha --check-leaks --report html -- --reporter spec --recursive --growl --no-timeouts",
+    "test-travis": "npm run lint && istanbul cover ./node_modules/mocha/bin/_mocha --check-leaks --report lcovonly -- --reporter spec --recursive --no-timeouts"
   },
   "dependencies": {
     "async": "~1.5.2",
@@ -59,6 +60,7 @@
     "benchmark": "^2.0.0",
     "chai": "~3.5.0",
     "coveralls": "^2.11.11",
+    "eslint": "^3.7.1",
     "expand-home-dir": "0.0.3",
     "fake-fs": "^0.5.0",
     "grunt": "~1.0.1",
