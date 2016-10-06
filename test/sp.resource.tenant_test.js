@@ -1,3 +1,5 @@
+'use strict';
+
 var common = require('./common');
 var assert = common.assert;
 var sinon = common.sinon;
@@ -273,8 +275,8 @@ describe('Resources: ', function () {
 
     describe('verify account email', function () {
 
-      describe('with a successful token response',function(){
-        var sandbox, tenant, tenantResult,cacheResult;
+      describe('with a successful token response', function () {
+        var sandbox, tenant, tenantResult, cacheResult;
         var accountResponse;
         var evictSpy;
 
@@ -292,13 +294,13 @@ describe('Resources: ', function () {
           sandbox.stub(dataStore.requestExecutor, 'execute',
             // simulate a successful response
             function (reqOpts, cb) {
-              cb(null,accountResponse);
+              cb(null, accountResponse);
             });
 
-          tenant.verifyAccountEmail(uuid(), function(err,account){
-            tenantResult = [err,account];
-            dataStore.cacheHandler.get(account.href,function(err,account){
-              cacheResult = [err,account];
+          tenant.verifyAccountEmail(uuid(), function (err, account) {
+            tenantResult = [err, account];
+            dataStore.cacheHandler.get(account.href, function (err, account) {
+              cacheResult = [err, account];
               done();
             });
           });
@@ -307,20 +309,20 @@ describe('Resources: ', function () {
           sandbox.restore();
         });
 
-        it('should not err',function(){
-          assert.equal(tenantResult[0],null);
+        it('should not err', function () {
+          assert.equal(tenantResult[0], null);
         });
-        it('should callback with an Account intance',function(){
-          assert(tenantResult[1] instanceof Account,true);
+        it('should callback with an Account intance', function () {
+          assert(tenantResult[1] instanceof Account, true);
         });
-        it('should evict the account from the cache',function(){
+        it('should evict the account from the cache', function () {
           evictSpy.should.have.been.calledWith(accountResponse.href);
         });
-        it('should put the updated account in the cache',function(){
-          assert.deepEqual(cacheResult[1],accountResponse);
+        it('should put the updated account in the cache', function () {
+          assert.deepEqual(cacheResult[1], accountResponse);
         });
       });
-      describe('with an error response',function(){
+      describe('with an error response', function () {
         var sandbox, tenant, tenantResult;
         before(function (done) {
           sandbox = sinon.sandbox.create();
@@ -331,8 +333,8 @@ describe('Resources: ', function () {
               cb({status:404});
             });
 
-          tenant.verifyAccountEmail(uuid(), function(err,account){
-            tenantResult = [err,account];
+          tenant.verifyAccountEmail(uuid(), function (err, account) {
+            tenantResult = [err, account];
             done();
           });
         });
@@ -340,9 +342,9 @@ describe('Resources: ', function () {
           sandbox.restore();
         });
 
-        it('should err',function(){
-          assert.notEqual(tenantResult[0],null);
-          assert.equal(tenantResult[1],null);
+        it('should err', function () {
+          assert.notEqual(tenantResult[0], null);
+          assert.equal(tenantResult[1], null);
         });
       });
     });
