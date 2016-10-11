@@ -38,7 +38,7 @@
   "scripts": {
     "lint": "./node_modules/eslint/bin/eslint.js -c .eslintrc lib/** test/** --ignore-pattern **/*.yml --quiet",
     "docs": "./node_modules/.bin/jsdoc -c ./docs/jsdoc.json -d ./apidocs/ -P ./package.json -r lib/ --readme ./docs/JSDOC.md",
-    "test": "npm run lint && istanbul cover ./node_modules/mocha/bin/_mocha --check-leaks --report html -- --reporter spec --recursive --growl --no-timeouts",
+    "test": "npm run lint && istanbul cover ./node_modules/mocha/bin/_mocha --check-leaks --report html test/it/*_it.js test/**/*_test.js -- --reporter spec --recursive --growl --no-timeouts",
     "test-travis": "npm run lint && istanbul cover ./node_modules/mocha/bin/_mocha --check-leaks --report lcovonly -- --reporter spec --recursive --no-timeouts"
   },
   "dependencies": {
