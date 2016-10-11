@@ -21,19 +21,19 @@ var SmtpServer = require('../lib/resource/SmtpServer');
 var Tenant = require('../lib/resource/Tenant');
 
 
-function makeTestClient (options) {
+function makeTestClient(options) {
   return new Client(options);
 }
 
-function clearEnvVars(){
+function clearEnvVars() {
   var args = Array.prototype.slice.call(arguments);
-  var saved = args.reduce(function(saved,arg){
+  var saved = args.reduce(function (saved, arg) {
     saved[arg] = process.env[arg];
     delete process.env[arg];
     return saved;
   },{});
-  return function(){
-    args.forEach(function(arg){
+  return function () {
+    args.forEach(function (arg) {
       process.env[arg] = saved[arg];
     });
   };
@@ -69,10 +69,10 @@ describe('Client', function () {
       expect(client._currentTenant).to.be.null;
       /* jshint +W030 */
     });
-    it('should use the public api as the base url',function(){
+    it('should use the public api as the base url', function () {
       expect(client._dataStore.requestExecutor.baseUrl).to.equal('https://api.stormpath.com/v1');
     });
-    it('should allow me to change the base url',function(done){
+    it('should allow me to change the base url', function (done) {
       var url = 'http://api.example.com/';
       var client = makeTestClient({apiKey: apiKey, baseUrl: url});
 
@@ -89,7 +89,7 @@ describe('Client', function () {
 
   describe('default constructor', function () {
 
-    it('should emit a ready event with the client itself as the value', function(done) {
+    it('should emit a ready event with the client itself as the value', function (done) {
       var client = makeTestClient({
         client: {
           apiKey: { id: '1', secret: '2' }
@@ -100,17 +100,17 @@ describe('Client', function () {
         throw err;
       });
 
-      client.on('ready', function(c) {
+      client.on('ready', function (c) {
         assert.deepEqual(client.config.client, c.config.client);
         done();
       });
     });
 
     it('should error if it\'s an invalid properties file', function (done) {
-      var resetEnvVars = clearEnvVars('STORMPATH_CLIENT_APIKEY_ID','STORMPATH_CLIENT_APIKEY_SECRET');
+      var resetEnvVars = clearEnvVars('STORMPATH_CLIENT_APIKEY_ID', 'STORMPATH_CLIENT_APIKEY_SECRET');
       var tmpobj = tmp.fileSync();
 
-      fs.writeSync(tmpobj.fd,'yo');
+      fs.writeSync(tmpobj.fd, 'yo');
       fs.closeSync(tmpobj.fd);
 
       var client = makeTestClient({
@@ -133,11 +133,11 @@ describe('Client', function () {
       });
     });
 
-    it('should populate api key id secret on the config object', function(done) {
-      var resetEnvVars = clearEnvVars('STORMPATH_CLIENT_APIKEY_ID','STORMPATH_CLIENT_APIKEY_SECRET');
+    it('should populate api key id secret on the config object', function (done) {
+      var resetEnvVars = clearEnvVars('STORMPATH_CLIENT_APIKEY_ID', 'STORMPATH_CLIENT_APIKEY_SECRET');
       var tmpobj = tmp.fileSync();
 
-      fs.writeSync(tmpobj.fd,'apiKey.id=1\napiKey.secret=2');
+      fs.writeSync(tmpobj.fd, 'apiKey.id=1\napiKey.secret=2');
       fs.closeSync(tmpobj.fd);
 
       var client = makeTestClient({
@@ -155,14 +155,14 @@ describe('Client', function () {
 
       client.on('ready', function () {
         resetEnvVars();
-        assert.equal(client.config.client.apiKey.id,'1');
-        assert.equal(client.config.client.apiKey.secret,'2');
+        assert.equal(client.config.client.apiKey.id, '1');
+        assert.equal(client.config.client.apiKey.secret, '2');
         done();
       });
     });
   });
 
-  describe('with an invalid app href', function() {
+  describe('with an invalid app href', function () {
     it('should fail', function (done) {
       var client = makeTestClient({
         application:{
@@ -170,7 +170,7 @@ describe('Client', function () {
         }
       });
 
-      client.on('error', function(err) {
+      client.on('error', function (err) {
         assert.equal(err.status, 404);
         done();
       });
@@ -185,15 +185,15 @@ describe('Client', function () {
   //  TODO bring this test back when i figure out why nock
   //  is interfering with the application call
   //
-  // describe('with an application name',function(){
+  // describe('with an application name',function () {
 
   //   var application;
-  //   before(function(done){
+  //   before(function (done) {
   //     new Client().createApplication(
   //       {name:common.uuid()},
   //       {createDirectory: true},
-  //       function(err,app){
-  //         if(err){
+  //       function (err,app) {
+  //         if(err) {
   //           throw err;
   //         }else{
   //           application = app;
@@ -202,17 +202,17 @@ describe('Client', function () {
   //       }
   //     );
   //   });
-  //   after(function(done){
+  //   after(function (done) {
   //     application.delete(done);
   //   });
 
-  //   it('should fail',function(done){
+  //   it('should fail',function (done) {
   //     var client = makeTestClient({
   //       application:{
   //         name: application.name
   //       }
   //     });
-  //     client.on('ready',function(){
+  //     client.on('ready',function () {
   //       assert.equal(client.config.application.href,application.href);
   //       done();
   //     });
@@ -416,12 +416,12 @@ describe('Client', function () {
     });
   });
 
-  describe('call to get accounts', function() {
+  describe('call to get accounts', function () {
     var cbSpy, client, err, sandbox, tenant;
     var getCurrentTenantStub, getTenantAccounts;
     var returnError;
 
-    before(function(done) {
+    before(function (done) {
       returnError = false;
       sandbox = sinon.sandbox.create();
       err = {error: 'boom!'};
@@ -436,7 +436,7 @@ describe('Client', function () {
         tenant = new Tenant({ href: 'boom!' }, client._dataStore);
         cbSpy = sandbox.spy();
 
-        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function(cb) {
+        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function (cb) {
           if (returnError) {
             return cb(err);
           }
@@ -444,7 +444,7 @@ describe('Client', function () {
           return cb(null, tenant);
         });
 
-        getTenantAccounts = sandbox.stub(tenant, 'getAccounts', function(options, cb) {
+        getTenantAccounts = sandbox.stub(tenant, 'getAccounts', function (options, cb) {
           cb();
         });
 
@@ -452,11 +452,11 @@ describe('Client', function () {
       });
     });
 
-    after(function() {
+    after(function () {
       sandbox.restore();
     });
 
-    it('should call tenant get accounts', function() {
+    it('should call tenant get accounts', function () {
       client.getAccounts(cbSpy);
       client.getAccounts({}, cbSpy);
 
@@ -471,7 +471,7 @@ describe('Client', function () {
       });
     });
 
-    it('should return error', function() {
+    it('should return error', function () {
       returnError = true;
 
       client.getAccounts(cbSpy);
@@ -487,7 +487,7 @@ describe('Client', function () {
     });
   });
 
-  describe('call to get groups', function() {
+  describe('call to get groups', function () {
     var cbSpy, client, err, sandbox, tenant;
     var getCurrentTenantStub, getTenantGroups;
     var returnError;
@@ -507,7 +507,7 @@ describe('Client', function () {
         tenant = new Tenant({ href: 'boom!' }, client._dataStore);
         cbSpy = sandbox.spy();
 
-        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function(cb) {
+        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function (cb) {
           if (returnError) {
             return cb(err);
           }
@@ -515,7 +515,7 @@ describe('Client', function () {
           return cb(null, tenant);
         });
 
-        getTenantGroups = sandbox.stub(tenant, 'getGroups', function(options, cb) {
+        getTenantGroups = sandbox.stub(tenant, 'getGroups', function (options, cb) {
           cb();
         });
 
@@ -523,11 +523,11 @@ describe('Client', function () {
       });
     });
 
-    after(function() {
+    after(function () {
       sandbox.restore();
     });
 
-    it('should call tenant get groups', function() {
+    it('should call tenant get groups', function () {
       client.getGroups(cbSpy);
       client.getGroups({}, cbSpy);
 
@@ -540,7 +540,7 @@ describe('Client', function () {
       /* jshint +W030 */
     });
 
-    it('should return error', function() {
+    it('should return error', function () {
       returnError = true;
 
       client.getGroups(cbSpy);
@@ -571,14 +571,14 @@ describe('Client', function () {
         tenant = new Tenant({href: 'boom!'}, client._dataStore);
         cbSpy = sandbox.spy();
 
-        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function(cb){
-          if (returnError){
+        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function (cb) {
+          if (returnError) {
             return cb(err);
           }
           cb(null, tenant);
         });
 
-        getTenantApplications = sandbox.stub(tenant, 'getApplications', function(options, cb){
+        getTenantApplications = sandbox.stub(tenant, 'getApplications', function (options, cb) {
           cb();
         });
 
@@ -604,7 +604,7 @@ describe('Client', function () {
       /* jshint +W030 */
     });
 
-    it('should return error', function(){
+    it('should return error', function () {
       returnError = true;
       client.getApplications(cbSpy);
       cbSpy.should.have.been.calledWith(err);
@@ -633,14 +633,14 @@ describe('Client', function () {
         tenant = new Tenant({href: 'boom!'}, client._dataStore);
         cbSpy = sandbox.spy();
 
-        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function(cb){
-          if (returnError){
+        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function (cb) {
+          if (returnError) {
             return cb(err);
           }
           cb(null, tenant);
         });
 
-        createTenantApplication = sandbox.stub(tenant, 'createApplication', function(app, options, cb){
+        createTenantApplication = sandbox.stub(tenant, 'createApplication', function (app, options, cb) {
           cb();
         });
 
@@ -666,7 +666,7 @@ describe('Client', function () {
       /* jshint +W030 */
     });
 
-    it('should return error', function(){
+    it('should return error', function () {
       returnError = true;
       client.createApplication(app, cbSpy);
       cbSpy.should.have.been.calledWith(err);
@@ -695,14 +695,14 @@ describe('Client', function () {
         tenant = new Tenant({href: 'boom!'}, client._dataStore);
         cbSpy = sandbox.spy();
 
-        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function(cb){
-          if (returnError){
+        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function (cb) {
+          if (returnError) {
             return cb(err);
           }
           cb(null, tenant);
         });
 
-        getTenantDirectories = sandbox.stub(tenant, 'getDirectories', function(options, cb){
+        getTenantDirectories = sandbox.stub(tenant, 'getDirectories', function (options, cb) {
           cb();
         });
 
@@ -728,7 +728,7 @@ describe('Client', function () {
       /* jshint +W030 */
     });
 
-    it('should return error', function(){
+    it('should return error', function () {
       returnError = true;
       client.getDirectories(cbSpy);
       cbSpy.should.have.been.calledWith(err);
@@ -757,14 +757,14 @@ describe('Client', function () {
         tenant = new Tenant({href: 'boom!'}, client._dataStore);
         cbSpy = sandbox.spy();
 
-        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function(cb){
-          if (returnError){
+        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function (cb) {
+          if (returnError) {
             return cb(err);
           }
           cb(null, tenant);
         });
 
-        createTenantDirectory = sandbox.stub(tenant, 'createDirectory', function(app, options, cb){
+        createTenantDirectory = sandbox.stub(tenant, 'createDirectory', function (app, options, cb) {
           cb();
         });
 
@@ -790,7 +790,7 @@ describe('Client', function () {
       /* jshint +W030 */
     });
 
-    it('should return error', function(){
+    it('should return error', function () {
       returnError = true;
       client.createDirectory(app, cbSpy);
       cbSpy.should.have.been.calledWith(err);
@@ -1192,14 +1192,14 @@ describe('Client', function () {
         tenant = new Tenant({href: 'boom!'}, client._dataStore);
         cbSpy = sandbox.spy();
 
-        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function(cb){
+        getCurrentTenantStub = sandbox.stub(client, 'getCurrentTenant', function (cb) {
           if (returnError) {
             return cb(err);
           }
           cb(null, tenant);
         });
 
-        getTenantIdSites = sandbox.stub(tenant, 'getIdSites', function(options, cb) {
+        getTenantIdSites = sandbox.stub(tenant, 'getIdSites', function (options, cb) {
           cb();
         });
 
@@ -1225,7 +1225,7 @@ describe('Client', function () {
       /* jshint +W030 */
     });
 
-    it('should return error', function(){
+    it('should return error', function () {
       returnError = true;
       client.getIdSites(cbSpy);
       cbSpy.should.have.been.calledWith(err);

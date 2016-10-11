@@ -47,7 +47,7 @@ describe('Cache module', function () {
 
   function testStore(opt) {
     var cache;
-    before(function(){
+    before(function () {
       cache = opt.cache;
     });
 
@@ -290,76 +290,76 @@ describe('Cache module', function () {
 
   }
 
-  describe('Default store', function(){
+  describe('Default store', function () {
     testStore({cache: new Cache()});
   });
 
-  describe('MemoryStore store', function(){
+  describe('MemoryStore store', function () {
     testStore({cache: new Cache(MemoryStore)});
   });
 
-  describe('Redis store', function(){
+  describe('Redis store', function () {
     var opt = {};
     var sandbox;
 
-    before(function(){
+    before(function () {
       opt.cache = null;
       sandbox = sinon.sandbox.create();
       var ms = new MemoryStore();
       _.extend(ms,{
-        expire: function(){},
+        expire: function () {},
         del: ms.delete,
         flushdb: ms.clear,
         dbsize: ms.size
       });
 
-      sandbox.stub(RedisStore, '_createClient', function(){
+      sandbox.stub(RedisStore, '_createClient', function () {
         return ms;
       });
 
       opt.cache = new Cache(RedisStore);
     });
-    after(function(){
+    after(function () {
       sandbox.restore();
     });
-    describe('...', function(){
+    describe('...', function () {
       testStore(opt);
     });
   });
 
-  describe('Memcached store', function(){
+  describe('Memcached store', function () {
     var opt = {};
     var sandbox;
 
-    before(function(){
+    before(function () {
       opt.cache = null;
       sandbox = sinon.sandbox.create();
       var ms = new MemoryStore();
       ms._set = ms.set;
-      _.extend(ms,{
-        expire: function(){},
+      _.extend(ms, {
+        expire: function () {},
         del: ms.delete,
         flush: ms.clear,
-        stats: function(cb){
-          ms.size(function(err, size){
+        stats: function (cb) {
+          ms.size(function (err, size) {
             cb(null, [{curr_items:size}]);
           });
         }
       });
 
-      sandbox.stub(ms, 'set', function(key,val, ttl, cb){
+      sandbox.stub(ms, 'set', function (key, val, ttl, cb) {
         return ms._set(key, val, cb);
       });
-      sandbox.stub(MemcachedStore, '_createClient', function(){
+      sandbox.stub(MemcachedStore, '_createClient', function () {
         return ms;
       });
 
       opt.cache = new Cache(MemcachedStore);
     });
-    after(function(){
+    after(function () {
       sandbox.restore();
     });
-    describe('...', function(){
+    describe('...', function () {
       testStore(opt);
     });
   });

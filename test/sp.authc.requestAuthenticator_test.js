@@ -4,8 +4,8 @@ var RequestAuthenticator = require('../lib/authc/RequestAuthenticator');
 
 describe('authc', function () {
   describe('RequestAuthenticator class', function () {
-    function createAuth(apiKey){
-      return function(){
+    function createAuth(apiKey) {
+      return function () {
         return new RequestAuthenticator(apiKey);
       };
     }

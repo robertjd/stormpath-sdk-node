@@ -88,9 +88,9 @@ describe('Resources: ', function () {
                   cb();
                 });
               }
-            ], function(a,b){
+            ], function (a, b) {
 
-              done(a,b);
+              done(a, b);
 
             });
 

@@ -7,11 +7,11 @@ var uuid = require('uuid');
 var ApiKey = require('../lib/resource/ApiKey');
 var DataStore = require('../lib/ds/DataStore');
 
-describe('resource', function() {
-  describe('ApiKey', function() {
+describe('resource', function () {
+  describe('ApiKey', function () {
     var clientApiKeySecret, sandbox, cbSpy, apiKey, getResourceStub;
 
-    before(function(done) {
+    before(function (done) {
       clientApiKeySecret = uuid();
       sandbox = sinon.sandbox.create();
       cbSpy = sandbox.spy();
@@ -33,7 +33,7 @@ describe('resource', function() {
         }
       });
 
-      getResourceStub = sinon.stub(apiKey.dataStore, 'getResource', function() {
+      getResourceStub = sinon.stub(apiKey.dataStore, 'getResource', function () {
         var args = Array.prototype.slice.call(arguments);
         var href = args.shift();
         var callback = args.pop();
@@ -43,17 +43,17 @@ describe('resource', function() {
       done();
     });
 
-    after(function() {
+    after(function () {
       sandbox.restore();
     });
 
-    it('should provide a getAccount method', function() {
+    it('should provide a getAccount method', function () {
       assert(typeof apiKey.getAccount === 'function');
     });
 
-    describe('getAccount', function() {
-      it('should return an Account object', function(done) {
-        apiKey.getAccount(function(err, account) {
+    describe('getAccount', function () {
+      it('should return an Account object', function (done) {
+        apiKey.getAccount(function (err, account) {
           if (err) {
             return done(err);
           }

@@ -63,7 +63,7 @@ describe('ds:', function () {
           cacheOptions: {
             store: 'memory'
           },
-          client: {
+          client: {
             apiKey: {id: 1, secret: 2}
           }
         });
@@ -428,7 +428,7 @@ describe('ds:', function () {
         it('should be stored in cache', function () {
           /* jshint -W030 */
           cachePutSpy.should.have.been.calledOnce;
-          cachePutSpy.should.have.been.calledWith(response.href,response,false);
+          cachePutSpy.should.have.been.calledWith(response.href, response, false);
         });
       });
     });

@@ -120,7 +120,7 @@ describe('Cache module', function () {
         key = 'key' + Date.now();
         val = 'val' + Date.now();
 
-        memoryStore.clear(function(){
+        memoryStore.clear(function () {
           memoryStore.set(key, val, done);
         });
       });

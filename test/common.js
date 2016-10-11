@@ -1,30 +1,30 @@
 'use strict';
 
 var _ = require('lodash');
-//_.extend(process.env, require('./test.env'));
 
-var chai = require("chai");
+var chai = require('chai');
 var nock = require('nock');
-var sinon = require("sinon");
+var sinon = require('sinon');
 var assert = require('chai').assert;
-var should = require("chai").should();
+var should = require('chai').should();
 var moment = require('moment');
-var sinonChai = require("sinon-chai");
+var sinonChai = require('sinon-chai');
 var uuid = require('node-uuid');
-var nock = require('nock');
 var timekeeper = require('timekeeper');
 var jwt = require('njwt');
 
 var Stormpath = require('../lib');
 chai.use(sinonChai);
 
-function u(){}
+function u() {}
 u.BASE_URL = 'https://api.stormpath.com';
 /** adds '/v1' to relative URL, to work with nock request mocker  */
-u.v1 = function(s){return '/v1' + s;};
+u.v1 = function (s) {
+  return '/v1' + s;
+};
 
-function random(){
-  return '' + Math.random()*Date.now();
+function random() {
+  return '' + Math.random() * Date.now();
 }
 
 function clone(value) {
@@ -41,12 +41,12 @@ function snapshotEnv() {
       }
     }
     for (key in originalEnv) {
-      process.env[key] = originalEnv[key];
+      process.env[key] = originalEnv[key];
     }
   };
 }
 
-function assertAccessTokenResponse(response){
+function assertAccessTokenResponse(response) {
   assert.isDefined(response.accessTokenResponse);
   assert.isDefined(response.accessTokenResponse.access_token);
   assert.isDefined(response.accessTokenResponse.refresh_token);
@@ -54,10 +54,10 @@ function assertAccessTokenResponse(response){
   assert.isDefined(response.refreshToken);
 }
 
-function assertPasswordGrantResponse(done){
-  return function(err,response){
+function assertPasswordGrantResponse(done) {
+  return function (err, response) {
     assert.isNull(err);
-    assert.instanceOf(response,Stormpath.OauthPasswordGrantAuthenticationResult);
+    assert.instanceOf(response, Stormpath.OauthPasswordGrantAuthenticationResult);
     assertAccessTokenResponse(response);
     done();
   };

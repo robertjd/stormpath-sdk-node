@@ -8,29 +8,29 @@ var sinon = common.sinon;
 var CacheHandler = require('../lib/cache/CacheHandler');
 
 
-function rand(){
-  return parseInt(Math.random() * 1000,10);
+function rand() {
+  return parseInt(Math.random() * 1000, 10);
 }
 
-describe('CacheHandler',function(){
+describe('CacheHandler', function () {
 
-  describe('when constructed', function(){
+  describe('when constructed', function () {
 
-    describe('without options', function(){
+    describe('without options', function () {
       var handler = new CacheHandler();
-      it('it should have a cache manager', function(){
+      it('it should have a cache manager', function () {
         should.exist(handler.cacheManager);
       });
-      it('it should have a cache', function(){
+      it('it should have a cache', function () {
         should.exist(handler.cacheManager.caches);
       });
-      it('should create caches for each region', function(){
+      it('should create caches for each region', function () {
         expect(Object.keys(handler.cacheManager.caches))
           .to.deep.equal(CacheHandler.CACHE_REGIONS);
       });
     });
 
-    describe('with a custom store constructor', function(){
+    describe('with a custom store constructor', function () {
       var MockStore;
       var cacheOptions;
       var handler;
@@ -55,20 +55,20 @@ describe('CacheHandler',function(){
         });
       });
 
-      it('should construct the custom store with the global options', function(){
-          var customStoreInstance = handler.cacheManager.caches.applications.store;
-          var options = customStoreInstance._options;
-          expect(customStoreInstance instanceof MockStore).to.equal(true);
-          expect(options.ttl).to.equal(cacheOptions.ttl);
-          expect(options.tti).to.equal(cacheOptions.tti);
-          expect(options.options.a).to.equal(cacheOptions.options.a);
-          expect(options.options.b).to.equal(cacheOptions.options.b);
+      it('should construct the custom store with the global options', function () {
+        var customStoreInstance = handler.cacheManager.caches.applications.store;
+        var options = customStoreInstance._options;
+        expect(customStoreInstance instanceof MockStore).to.equal(true);
+        expect(options.ttl).to.equal(cacheOptions.ttl);
+        expect(options.tti).to.equal(cacheOptions.tti);
+        expect(options.options.a).to.equal(cacheOptions.options.a);
+        expect(options.options.b).to.equal(cacheOptions.options.b);
       });
     });
 
   });
 
-  describe('.put()',function(){
+  describe('.put()', function () {
     var cacheHandler,
       sandbox,
       acountRegionPutSpy,
@@ -76,10 +76,10 @@ describe('CacheHandler',function(){
       directoryRegionPutSpy,
       customDataRegionPutSpy;
 
-    describe('with a resource result',function(){
+    describe('with a resource result', function () {
       var result;
 
-      before(function(done) {
+      before(function (done) {
         result = {
           href: '/v1/accounts/' + common.uuid(),
           username: common.uuid()
@@ -88,20 +88,20 @@ describe('CacheHandler',function(){
         cacheHandler = new CacheHandler();
         sandbox = sinon.sandbox.create();
         acountRegionPutSpy = sandbox.spy(cacheHandler.cacheManager.caches.accounts, 'put');
-        cacheHandler.put(result.href,result,done);
+        cacheHandler.put(result.href, result, done);
       });
 
-      it('should call .put() on the cache for the region of this resource',function() {
+      it('should call .put() on the cache for the region of this resource', function () {
         expect(acountRegionPutSpy.args[0][0]).to.equal(result.href);
         expect(acountRegionPutSpy.args[0][1]).to.deep.equal(result);
       });
     });
 
-    describe('with a resource result that cotains an expanded collection and a linked resource',function(){
+    describe('with a resource result that cotains an expanded collection and a linked resource', function () {
       var parentResourceHref;
       var result;
 
-      before(function(done) {
+      before(function (done) {
         parentResourceHref = '/v1/accounts/' + common.uuid();
 
         result = {
@@ -133,25 +133,25 @@ describe('CacheHandler',function(){
         acountRegionPutSpy = sandbox.spy(cacheHandler.cacheManager.caches.accounts, 'put');
         groupRegionPutSpy = sandbox.spy(cacheHandler.cacheManager.caches.groups, 'put');
         directoryRegionPutSpy = sandbox.spy(cacheHandler.cacheManager.caches.directories, 'put');
-        cacheHandler.put(result.href,result,done);
+        cacheHandler.put(result.href, result, done);
       });
-      it('should call .put() on the cache for the region of the parent resource',function() {
+      it('should call .put() on the cache for the region of the parent resource', function () {
         expect(acountRegionPutSpy.args[0][0]).to.equal(result.href);
       });
-      it('should call .put() on the cache for the region of the expanded resources, for each in the collection',function() {
+      it('should call .put() on the cache for the region of the expanded resources, for each in the collection', function () {
         expect(groupRegionPutSpy.args[0][0]).to.equal(result.groups.items[0].href);
         expect(groupRegionPutSpy.args[1][0]).to.equal(result.groups.items[1].href);
       });
-      it('should NOT call .put() on the cache for the region of the linked resource',function() {
+      it('should NOT call .put() on the cache for the region of the linked resource', function () {
         expect(directoryRegionPutSpy.args.length).to.equal(0);
       });
     });
 
-    describe('with a collection result',function(){
+    describe('with a collection result', function () {
       var collectionHref;
       var collectionResult;
 
-      before(function(done) {
+      before(function (done) {
         collectionHref = 'http://api.stormpath.com/v1/tenants/' + common.uuid() + '/groups';
 
         collectionResult = {
@@ -174,20 +174,20 @@ describe('CacheHandler',function(){
         cacheHandler = new CacheHandler();
         sandbox = sinon.sandbox.create();
         groupRegionPutSpy = sandbox.spy(cacheHandler.cacheManager.caches.groups, 'put');
-        cacheHandler.put(collectionResult.href,collectionResult,done);
+        cacheHandler.put(collectionResult.href, collectionResult, done);
       });
-      it('should call .put() on the cache for the region of each of the resources in the collection',function() {
+      it('should call .put() on the cache for the region of each of the resources in the collection', function () {
         expect(groupRegionPutSpy.args[0][0]).to.equal(collectionResult.items[0].href);
       });
     });
 
-    describe('with a collection result where the collection items have expansions',function(){
+    describe('with a collection result where the collection items have expansions', function () {
       var collectionHref;
       var groupId1;
       var groupId2;
       var collectionResult;
 
-      before(function(done) {
+      before(function (done) {
         collectionHref = 'http://api.stormpath.com/v1/tenants/' + common.uuid() + '/groups?expand=customData';
         groupId1 = common.uuid();
         groupId2 = common.uuid();
@@ -221,23 +221,23 @@ describe('CacheHandler',function(){
         sandbox = sinon.sandbox.create();
         groupRegionPutSpy = sandbox.spy(cacheHandler.cacheManager.caches.groups, 'put');
         customDataRegionPutSpy = sandbox.spy(cacheHandler.cacheManager.caches.customData, 'put');
-        cacheHandler.put(collectionResult.href,collectionResult,done);
+        cacheHandler.put(collectionResult.href, collectionResult, done);
       });
-      it('should call .put() on the cache for the region of each of the resources in the collection',function() {
+      it('should call .put() on the cache for the region of each of the resources in the collection', function () {
         expect(groupRegionPutSpy.args[0][0]).to.equal(collectionResult.items[0].href);
         expect(groupRegionPutSpy.args[1][0]).to.equal(collectionResult.items[1].href);
       });
-      it('should call .put() on the cache for the region of each of the expanded resources of the collection items',function() {
+      it('should call .put() on the cache for the region of each of the expanded resources of the collection items', function () {
         expect(customDataRegionPutSpy.args[0][0]).to.equal(collectionResult.items[0].customData.href);
         expect(customDataRegionPutSpy.args[1][0]).to.equal(collectionResult.items[1].customData.href);
       });
     });
 
 
-    describe('with a resource result that contains an expanded resource',function(){
+    describe('with a resource result that contains an expanded resource', function () {
       var result;
 
-      before(function(done) {
+      before(function (done) {
         result = {
           href: '/v1/accounts/' + common.uuid(),
           username: common.uuid(),
@@ -251,15 +251,15 @@ describe('CacheHandler',function(){
         sandbox = sinon.sandbox.create();
         acountRegionPutSpy = sandbox.spy(cacheHandler.cacheManager.caches.accounts, 'put');
         directoryRegionPutSpy = sandbox.spy(cacheHandler.cacheManager.caches.directories, 'put');
-        cacheHandler.put(result.href,result,done);
+        cacheHandler.put(result.href, result, done);
       });
-      it('should call .put() on the cache for the region of the parent resource',function() {
+      it('should call .put() on the cache for the region of the parent resource', function () {
         expect(acountRegionPutSpy.args[0][0]).to.equal(result.href);
       });
-      it('should call .put() on the cache for the region of the expanded resource',function() {
+      it('should call .put() on the cache for the region of the expanded resource', function () {
         expect(directoryRegionPutSpy.args[0][0]).to.equal(result.directory.href);
       });
-      it('should preserve the hrefs, but not the propeties, of the linked resources',function(){
+      it('should preserve the hrefs, but not the propeties, of the linked resources', function () {
         expect(acountRegionPutSpy.args[0][1].directory.href).to.equal(result.directory.href);
         expect(acountRegionPutSpy.args[0][1].directory.name).to.equal(undefined);
       });

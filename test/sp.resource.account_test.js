@@ -201,8 +201,7 @@ describe('Resources: ', function () {
           createResourceStub.should.have.been
             .calledWith(
               createGroupMembershipHref,
-              null,
-              {
+              null, {
                 account: {href: acc.href},
                 group: group
               },
@@ -212,8 +211,7 @@ describe('Resources: ', function () {
           createResourceStub.should.have.been
             .calledWith(
               createGroupMembershipHref,
-              null,
-              {
+              null, {
                 account: {href: acc.href},
                 group: {href: groupHref}
               },
@@ -223,8 +221,7 @@ describe('Resources: ', function () {
           createResourceStub.should.have.been
             .calledWith(
               createGroupMembershipHref,
-              opt,
-              {
+              opt, {
                 account: {href: acc.href},
                 group: group
               },
@@ -234,8 +231,7 @@ describe('Resources: ', function () {
           createResourceStub.should.have.been
             .calledWith(
               createGroupMembershipHref,
-              opt,
-              {
+              opt, {
                 account: {href: acc.href},
                 group: {href: groupHref}
               },
@@ -245,7 +241,7 @@ describe('Resources: ', function () {
       });
     });
 
-    describe('custom data', function(){
+    describe('custom data', function () {
       var sandbox, account, accountJSON;
       before(function () {
         sandbox = sinon.sandbox.create();
@@ -260,7 +256,7 @@ describe('Resources: ', function () {
       after(function () {
         sandbox.restore();
       });
-      it('should wrap account field customData in CustomData class', function(){
+      it('should wrap account field customData in CustomData class', function () {
         // assert
         account.customData.should.be.an.instanceOf(CustomData);
       });
@@ -319,7 +315,7 @@ describe('Resources: ', function () {
       });
     });
 
-    describe('get provider data', function(){
+    describe('get provider data', function () {
       function getProviderData(data) {
         return function () {
           var accObj, providerDataObj, app, providerData;
@@ -376,14 +372,14 @@ describe('Resources: ', function () {
       });
     });
 
-    describe('createApiKey',function () {
+    describe('createApiKey', function () {
       var sandbox;
       var accountHref;
       var result, cacheResult, requestedOptions;
       var creationResponse;
       var decryptedSecret;
 
-      before(function(done){
+      before(function (done) {
         sandbox = sinon.sandbox.create();
         accountHref = 'accounts/' + uuid();
         decryptedSecret = 'rncdUXr2dtjjQ5OyDdWRHRxncRW7K0OnU6/Wqf2iqdQ';
@@ -401,11 +397,11 @@ describe('Resources: ', function () {
           }
         };
 
-        sandbox.stub(dataStore.requestExecutor,'execute',function(requestOptions,cb) {
+        sandbox.stub(dataStore.requestExecutor, 'execute', function (requestOptions, cb) {
           requestedOptions = requestOptions;
           // hack - override the salt
           requestOptions.query.encryptionKeySalt = 'uHMSUA6F8LFoCIPqKYSRCg==';
-          cb(null,creationResponse);
+          cb(null, creationResponse);
         });
         new Account({
           href:accountHref,
@@ -413,63 +409,63 @@ describe('Resources: ', function () {
             href: accountHref + '/apiKeys'
           }
         }, dataStore)
-          .createApiKey(function(err,value) {
-            result = [err,value];
-            dataStore.cacheHandler.get(creationResponse.href,function(err,value){
-              cacheResult = [err,value];
+          .createApiKey(function (err, value) {
+            result = [err, value];
+            dataStore.cacheHandler.get(creationResponse.href, function(err, value) {
+              cacheResult = [err, value];
               done();
             });
           });
       });
-      after(function(){
+      after(function () {
         sandbox.restore();
       });
-      it('should have asked for encrypted secret',function(){
-        assert.equal(requestedOptions.query.encryptSecret,true);
+      it('should have asked for encrypted secret', function () {
+        assert.equal(requestedOptions.query.encryptSecret, true);
       });
-      it('should not err',function(){
-        assert.equal(result[0],null);
+      it('should not err', function () {
+        assert.equal(result[0], null);
       });
-      it('should return an ApiKey instance',function(){
-        assert.instanceOf(result[1],ApiKey);
+      it('should return an ApiKey instance', function () {
+        assert.instanceOf(result[1], ApiKey);
       });
-      it('should cache the ApiKey',function(){
-        assert.equal(cacheResult[1].href,creationResponse.href);
+      it('should cache the ApiKey', function () {
+        assert.equal(cacheResult[1].href, creationResponse.href);
       });
-      it('should store the encrypted key in the cache',function(){
-        assert.equal(cacheResult[1].secret,creationResponse.secret);
+      it('should store the encrypted key in the cache', function () {
+        assert.equal(cacheResult[1].secret, creationResponse.secret);
       });
-      it('should return the decrypted secret',function(){
-        assert.equal(result[1].secret,decryptedSecret);
+      it('should return the decrypted secret', function () {
+        assert.equal(result[1].secret, decryptedSecret);
       });
     });
 
-    describe('getApiKeys',function () {
+    describe('getApiKeys', function () {
       var sandbox;
       var accountHref;
       var result, requestedOptions;
 
-      before(function(done){
+      before(function (done) {
         sandbox = sinon.sandbox.create();
         accountHref = 'accounts/' + uuid();
 
-        sandbox.stub(dataStore.requestExecutor,'execute',function(requestOptions,cb) {
+        sandbox.stub(dataStore.requestExecutor, 'execute', function (requestOptions, cb) {
           requestedOptions = requestOptions;
 
           // hack - override the salt
           requestOptions.query.encryptionKeySalt = 'uHMSUA6F8LFoCIPqKYSRCg==';
-          cb(null,{
-            "href": "https://api.stormpath.com/v1/accounts/1234/apiKeys",
-            "items": [
+          cb(null, {
+            'href': 'https://api.stormpath.com/v1/accounts/1234/apiKeys',
+            'items': [
               {
-                "href": "https://api.stormpath.com/v1/apiKeys/5678",
-                "id": "5678",
-                "secret": "NuUYYcIAjRYS+LiNBPhpu/p8iYP+jBltei1n1wxcMye3FTKRCTILpP/cD6Ynfvu6S4UokPM/SwuBaEn77aM3Ww==",
-                "status": "ENABLED"
+                'href': 'https://api.stormpath.com/v1/apiKeys/5678',
+                'id': '5678',
+                'secret': 'NuUYYcIAjRYS+LiNBPhpu/p8iYP+jBltei1n1wxcMye3FTKRCTILpP/cD6Ynfvu6S4UokPM/SwuBaEn77aM3Ww==',
+                'status': 'ENABLED'
               }
             ],
-            "limit": 25,
-            "offset": 0
+            'limit': 25,
+            'offset': 0
           });
         });
         new Account({
@@ -478,25 +474,25 @@ describe('Resources: ', function () {
             href: accountHref + '/apiKeys'
           }
         }, dataStore)
-          .getApiKeys(function(err,value) {
-            result = [err,value];
+          .getApiKeys(function (err, value) {
+            result = [err, value];
             done();
           });
       });
-      after(function(){
+      after(function () {
         sandbox.restore();
       });
-      it('should have asked for encrypted secret',function(){
-        assert.equal(requestedOptions.query.encryptSecret,true);
+      it('should have asked for encrypted secret', function () {
+        assert.equal(requestedOptions.query.encryptSecret, true);
       });
-      it('should not err',function(){
-        assert.equal(result[0],null);
+      it('should not err', function () {
+        assert.equal(result[0], null);
       });
-      it('should return a collection resource',function(){
-        assert.instanceOf(result[1],CollectionResource);
+      it('should return a collection resource', function () {
+        assert.instanceOf(result[1], CollectionResource);
       });
-      it('should return ApiKey instances',function(){
-        assert.instanceOf(result[1].items[0],ApiKey);
+      it('should return ApiKey instances', function () {
+        assert.instanceOf(result[1].items[0], ApiKey);
       });
     });
 

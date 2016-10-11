@@ -78,7 +78,7 @@ describe('ds:', function () {
         var nockOptions = {
           reqheaders: {
             'User-Agent': function (headerValue) {
-              return (headerValue || '').match(/stormpath-sdk-node/i) !== null;
+              return (headerValue || '').match(/stormpath-sdk-node/i) !== null;
             }
           }
         };

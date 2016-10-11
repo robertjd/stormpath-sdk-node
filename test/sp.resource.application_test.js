@@ -74,19 +74,19 @@ describe('Resources: ', function () {
             state: clientState
           });
 
-          params = url.parse(redirectUrl,true).query;
+          params = url.parse(redirectUrl, true).query;
           path = url.parse(redirectUrl).pathname;
         });
 
-        it('should create a request to /sso',function(){
-          common.assert.equal(path,'/sso');
+        it('should create a request to /sso', function () {
+          common.assert.equal(path, '/sso');
         });
 
-        it('should create a url with a jwtRequest',function(){
+        it('should create a url with a jwtRequest', function () {
           common.assert.isNotNull(params.jwtRequest);
         });
         it('should create a jwtRequest that is signed with the client secret',
-          function(){
+          function () {
             common.assert.equal(
               nJwt.verify(params.jwtRequest,clientApiKeySecret).body.state,
               clientState
@@ -124,19 +124,19 @@ describe('Resources: ', function () {
             logout: true
           });
 
-          params = url.parse(redirectUrl,true).query;
+          params = url.parse(redirectUrl, true).query;
           path = url.parse(redirectUrl).pathname;
         });
 
-        it('should create a request to /sso/logout',function(){
-          common.assert.equal(path,'/sso/logout');
+        it('should create a request to /sso/logout', function () {
+          common.assert.equal(path, '/sso/logout');
         });
 
-        it('should create a url with a jwtRequest',function(){
+        it('should create a url with a jwtRequest', function () {
           common.assert.isNotNull(params.jwtRequest);
         });
         it('should create a jwtRequest that is signed with the client secret',
-          function(){
+          function () {
             common.assert.equal(
               nJwt.verify(params.jwtRequest,clientApiKeySecret).body.state,
               clientState
@@ -146,9 +146,9 @@ describe('Resources: ', function () {
 
       });
 
-      function SsoResponseTest(options){
+      function SsoResponseTest(options) {
         var self = this;
-        self.before = function(){
+        self.before = function () {
           self.clientApiKeySecret = uuid();
           self.clientApiKeyId = uuid();
           var dataStore = new DataStore({
@@ -161,47 +161,47 @@ describe('Resources: ', function () {
           });
           var app = {href:'http://api.stormpath.com/v1/applications/'+uuid()};
           self.application = new Application(app, dataStore);
-          self.getResourceStub = sinon.stub(dataStore,'getResource',function(){
+          self.getResourceStub = sinon.stub(dataStore, 'getResource', function () {
             var args = Array.prototype.slice.call(arguments);
             var href = args.shift();
             var callback = args.pop();
-            var Ctor = (args.length > 0 ) ? args.shift() : function Ctor(){};
-            callback(null,new Ctor({href:href}));
+            var Ctor = (args.length > 0) ? args.shift() : function Ctor() {};
+            callback(null, new Ctor({href:href}));
           });
           self.redirectUrl = self.application.createIdSiteUrl(options);
-          var params = url.parse(self.redirectUrl,true).query;
+          var params = url.parse(self.redirectUrl, true).query;
           self.jwtRequest = self.decodeJwtRequest(params.jwtRequest);
           self.cbSpy = sinon.spy();
         };
-        self.handleIdSiteCallback = function(responseUri){
-          self.application.handleIdSiteCallback(responseUri,self.cbSpy);
+        self.handleIdSiteCallback = function (responseUri) {
+          self.application.handleIdSiteCallback(responseUri, self.cbSpy);
         };
-        self.after = function(){
+        self.after = function () {
           self.getResourceStub.restore();
         };
-        self.decodeJwtRequest = function(jwtRequest){
-          return nJwt.verify(decodeURIComponent(jwtRequest),self.clientApiKeySecret);
+        self.decodeJwtRequest = function (jwtRequest) {
+          return nJwt.verify(decodeURIComponent(jwtRequest), self.clientApiKeySecret);
         };
         return self;
       }
 
-      describe('handleIdSiteCallback',function(){
-        describe('without a callbackUri',function(){
+      describe('handleIdSiteCallback', function () {
+        describe('without a callbackUri', function () {
           var test;
 
           before(function () {
             test = new SsoResponseTest();
           });
 
-          it('should throw the callbackUri required error',function(){
-            common.assert.throws(test.before,errorMessages.ID_SITE_INVALID_CB_URI);
+          it('should throw the callbackUri required error', function () {
+            common.assert.throws(test.before, errorMessages.ID_SITE_INVALID_CB_URI);
           });
         });
 
-        describe('with out the responseUri argument',function(){
+        describe('with out the responseUri argument', function () {
           var test;
 
-          before(function(){
+          before(function () {
             test = new SsoResponseTest({
               callbackUri: '/',
               state: uuid()
@@ -209,23 +209,23 @@ describe('Resources: ', function () {
 
             test.before();
           });
-          after(function(){
+          after(function () {
             test.after();
           });
-          it('should throw',function(){
+          it('should throw', function () {
             assert.throws(test.handleIdSiteCallback);
           });
         });
 
 
-        describe('with a valid jwt response',function(){
+        describe('with a valid jwt response', function () {
           var accountHref;
           var clientState;
           var statusValue;
           var test;
           var responseJwt;
 
-          before(function(){
+          before(function () {
             accountHref = uuid();
             clientState = uuid();
             statusValue = uuid();
@@ -246,20 +246,21 @@ describe('Resources: ', function () {
               status: statusValue
             };
             var responseUri = '/somewhere?jwtResponse=' +
-              nJwt.create(responseJwt,test.clientApiKeySecret,'HS256') + '&state=' + test.givenState;
+              nJwt.create(responseJwt, test.clientApiKeySecret, 'HS256') + '&state=' + test.givenState;
             test.handleIdSiteCallback(responseUri);
           });
-          after(function(){
+          after(function () {
             test.after();
           });
-          it('should not error',function(){
+          it('should not error', function () {
             var result = test.cbSpy.args[0];
-            common.assert.equal(result[0],null);
+            common.assert.equal(result[0], null);
           });
-          it('should return an account property on the idSiteResult',function(){
+          it('should return an account property on the idSiteResult', function () {
             var result = test.cbSpy.args[0];
-            common.assert.instanceOf(result[1].account,Account);
+            common.assert.instanceOf(result[1].account, Account);
           });
+<<<<<<< HEAD
 
           it('should return an expanded instance of Account', function() {
             var result = test.cbSpy.args[0];
@@ -267,30 +268,33 @@ describe('Resources: ', function () {
           });
 
           it('should return the correct account on the idSiteResult',function(){
+=======
+          it('should return the correct account on the idSiteResult', function () {
+>>>>>>> more eslint fixes
             var result = test.cbSpy.args[0];
-            common.assert.equal(result[1].account.href,accountHref);
+            common.assert.equal(result[1].account.href, accountHref);
           });
-          it('should set the isNew property on the idSiteResult',function(){
+          it('should set the isNew property on the idSiteResult', function () {
             var result = test.cbSpy.args[0];
-            common.assert.equal(result[1].isNew,false);
+            common.assert.equal(result[1].isNew, false);
           });
-          it('should set the state property on the idSiteResult',function(){
+          it('should set the state property on the idSiteResult', function () {
             var result = test.cbSpy.args[0];
-            common.assert.equal(result[1].state,clientState);
+            common.assert.equal(result[1].state, clientState);
           });
-          it('should set the status property on the idSiteResult',function(){
+          it('should set the status property on the idSiteResult', function () {
             var result = test.cbSpy.args[0];
-            common.assert.equal(result[1].status,statusValue);
+            common.assert.equal(result[1].status, statusValue);
           });
         });
 
 
-        describe('with an expired token',function(){
+        describe('with an expired token', function () {
           var accountHref;
           var responseJwt;
           var test;
 
-          before(function(){
+          before(function () {
             accountHref = uuid();
 
             test = new SsoResponseTest({
@@ -302,26 +306,26 @@ describe('Resources: ', function () {
               sub: accountHref,
               irt: test.jwtRequest.jti,
               aud: test.clientApiKeyId
-            },test.clientApiKeySecret,'HS256');
+            }, test.clientApiKeySecret, 'HS256');
             responseJwt.setExpiration(utils.nowEpochSeconds() - 1);
             var responseUri = '/somewhere?jwtResponse=' + responseJwt + '&state=' + test.givenState;
-            test.handleIdSiteCallback(responseUri,'jwt');
+            test.handleIdSiteCallback(responseUri, 'jwt');
           });
-          after(function(){
+          after(function () {
             test.after();
           });
-          it('should error with the expiration error',function(){
+          it('should error with the expiration error', function () {
 
-            common.assert.equal(test.cbSpy.args[0][0].message,nJwtProperties.errors.EXPIRED);
+            common.assert.equal(test.cbSpy.args[0][0].message, nJwtProperties.errors.EXPIRED);
           });
         });
 
-        describe('with a different client id (aud)',function(){
+        describe('with a different client id (aud)', function () {
           var accountHref;
           var responseJwt;
           var test;
 
-          before(function(){
+          before(function () {
             accountHref = uuid();
 
             test = new SsoResponseTest({
@@ -333,25 +337,25 @@ describe('Resources: ', function () {
               sub: accountHref,
               irt: test.jwtRequest.jti,
               aud: uuid()
-            },test.clientApiKeySecret,'HS256');
+            }, test.clientApiKeySecret, 'HS256');
             var responseUri = '/somewhere?jwtResponse=' + responseJwt + '&state=' + test.givenState;
-            test.handleIdSiteCallback(responseUri,'jwt');
+            test.handleIdSiteCallback(responseUri, 'jwt');
           });
-          after(function(){
+          after(function () {
             test.after();
           });
-          it('should error',function(){
-            common.assert.instanceOf(test.cbSpy.args[0][0],Error);
-            common.assert.equal(test.cbSpy.args[0][0].message,errorMessages.ID_SITE_JWT_INVALID_AUD);
+          it('should error', function () {
+            common.assert.instanceOf(test.cbSpy.args[0][0], Error);
+            common.assert.equal(test.cbSpy.args[0][0].message, errorMessages.ID_SITE_JWT_INVALID_AUD);
           });
         });
 
-        describe('with an invalid exp value',function(){
+        describe('with an invalid exp value', function () {
           var accountHref;
           var responseJwt;
           var test;
 
-          before(function(){
+          before(function () {
             accountHref = uuid();
 
             test = new SsoResponseTest({
@@ -363,25 +367,25 @@ describe('Resources: ', function () {
               sub: accountHref,
               irt: test.jwtRequest.jti,
               aud: test.clientApiKeyId,
-              exp: "yeah right"
-            },test.clientApiKeySecret,'HS256');
-            responseJwt.setExpiration("yeah right");
+              exp: 'yeah right'
+            }, test.clientApiKeySecret, 'HS256');
+            responseJwt.setExpiration('yeah right');
             var responseUri = '/somewhere?jwtResponse=' + responseJwt + '&state=' + test.givenState;
-            test.handleIdSiteCallback(responseUri,'jwt');
+            test.handleIdSiteCallback(responseUri, 'jwt');
           });
-          after(function(){
+          after(function () {
             test.after();
           });
-          it('should error with the expiration error',function(){
-            common.assert.equal(test.cbSpy.args[0][0].message,nJwtProperties.errors.EXPIRED);
+          it('should error with the expiration error', function () {
+            common.assert.equal(test.cbSpy.args[0][0].message, nJwtProperties.errors.EXPIRED);
           });
         });
 
-        describe('with a replayed nonce',function(){
+        describe('with a replayed nonce', function () {
           var accountHref;
           var test;
 
-          before(function(){
+          before(function () {
             accountHref = uuid();
 
             test = new SsoResponseTest({
@@ -393,27 +397,27 @@ describe('Resources: ', function () {
               sub: accountHref,
               irt: test.jwtRequest.body.jti,
               aud: test.clientApiKeyId
-            },test.clientApiKeySecret,'HS256');
+            }, test.clientApiKeySecret, 'HS256');
             var responseUri = '/somewhere?jwtResponse=' + responseJwt + '&state=';
             test.handleIdSiteCallback(responseUri);
             test.handleIdSiteCallback(responseUri);
           });
-          after(function(){
+          after(function () {
             test.after();
           });
-          it('should succeed on the first try',function(){
-            common.assert.equal(test.cbSpy.args[0][0],null);
+          it('should succeed on the first try', function () {
+            common.assert.equal(test.cbSpy.args[0][0], null);
           });
-          it('should fail on the second try the nonce',function(){
-            common.assert.equal(test.cbSpy.args[1][0].message,errorMessages.ID_SITE_JWT_ALREADY_USED);
+          it('should fail on the second try the nonce', function () {
+            common.assert.equal(test.cbSpy.args[1][0].message, errorMessages.ID_SITE_JWT_ALREADY_USED);
           });
         });
 
-        describe('with an invalid signature',function(){
+        describe('with an invalid signature', function () {
           var clientState;
           var test;
 
-          before(function(){
+          before(function () {
             clientState = uuid();
 
             test = new SsoResponseTest({
@@ -425,15 +429,15 @@ describe('Resources: ', function () {
             var responseJwt = nJwt.create({
               irt: test.givenNonce,
               state: test.givenState
-            },'not the right key','HS256');
+            }, 'not the right key', 'HS256');
             var responseUri = '/somewhere?jwtResponse=' + responseJwt + '&state=' + test.givenState;
             test.handleIdSiteCallback(responseUri);
           });
-          after(function(){
+          after(function () {
             test.after();
           });
-          it('should reject the signature',function(){
-            common.assert.equal(test.cbSpy.args[0][0].message,'Signature verification failed');
+          it('should reject the signature', function () {
+            common.assert.equal(test.cbSpy.args[0][0].message, 'Signature verification failed');
           });
         });
 
@@ -470,14 +474,14 @@ describe('Resources: ', function () {
           // explicit check that login attempt type can be overridden
           expectedLoginAttempt1 = {
             type: 'digest',
-            value: utils.base64.encode({}.username + ":" + {}.password)
+            value: utils.base64.encode({}.username + ':' + {}.password)
           };
 
           application.authenticateAccount(authRequest, cbSpy);
           // implicit check that default type - 'basic'
           expectedLoginAttempt2 = {
             type: 'basic',
-            value: utils.base64.encode(authRequest.username + ":" +
+            value: utils.base64.encode(authRequest.username + ':' +
               authRequest.password)
           };
         });
@@ -502,9 +506,9 @@ describe('Resources: ', function () {
         });
       });
 
-      describe('if accountStore is provided', function(){
+      describe('if accountStore is provided', function () {
         var application, accountStore, app, cbSpy, username, password;
-        before(function(done){
+        before(function (done) {
           // arrange
           username = 'test_username';
           password = 'test_password';
@@ -513,8 +517,8 @@ describe('Resources: ', function () {
           application = new Application(app, dataStore);
           cbSpy = sinon.spy(done);
           nock(u.BASE_URL)
-            .post(u.v1(app.loginAttempts.href) + '?expand=account',{
-              value: utils.base64.encode(username + ":" + password),
+            .post(u.v1(app.loginAttempts.href) + '?expand=account', {
+              value: utils.base64.encode(username + ':' + password),
               type: 'basic',
               accountStore: accountStore
             })
@@ -529,7 +533,7 @@ describe('Resources: ', function () {
         });
 
         // assert
-        it('should provide account store in request', function(){
+        it('should provide account store in request', function () {
           cbSpy.should.have.been.calledOnce;
         });
       });
@@ -575,9 +579,9 @@ describe('Resources: ', function () {
           /* jshint +W030 */
 
           createResourceStub.should.have.been
-            .calledWith(app.passwordResetTokens.href, null, {email: opt}, PasswordResetToken ,cbSpy);
+            .calledWith(app.passwordResetTokens.href, null, {email: opt}, PasswordResetToken, cbSpy);
 
-          cbSpy.should.have.been.calledWith(null,mockTokenResourceResponse);
+          cbSpy.should.have.been.calledWith(null, mockTokenResourceResponse);
         });
       });
     });
@@ -630,16 +634,16 @@ describe('Resources: ', function () {
       });
     });
 
-    describe('reset password', function(){
+    describe('reset password', function () {
       var application, cbSpy, app, acc, token, password, response;
-      before(function(done){
+      before(function (done) {
         // Arrange
         token = 'test_token';
         password = 'test_password';
         acc = { href: '/test/account/href' };
         app = {passwordResetTokens: {href: '/test/passwordResetTokens/href'}};
         application = new Application(app, dataStore);
-        cbSpy = sinon.spy(function(err, resp){
+        cbSpy = sinon.spy(function (err,  resp) {
           response = resp;
           done();
         });
@@ -652,7 +656,7 @@ describe('Resources: ', function () {
       });
 
       // Assert
-      it('should sent post request with password in body', function(){
+      it('should sent post request with password in body', function () {
         cbSpy.should.have.been.calledOnce;
         response.account.href.should.be.equal(acc.href);
       });
@@ -1039,7 +1043,7 @@ describe('Resources: ', function () {
         app.setDefaultAccountStore(store, cbSpy);
       });
 
-      after(function(){
+      after(function () {
         sandbox.restore();
       });
 
@@ -1050,7 +1054,7 @@ describe('Resources: ', function () {
         asm.application.href.should.be.equal(app.href);
       });
 
-      it('should invalidate application cache', function(){
+      it('should invalidate application cache', function () {
         evokeSpy.should.have.been.calledOnce;
         evokeSpy.should.have.been.calledWith(appObj.href);
 
@@ -1144,7 +1148,7 @@ describe('Resources: ', function () {
         app.setDefaultGroupStore(store, cbSpy);
       });
 
-      after(function(){
+      after(function () {
         sandbox.restore();
       });
 
@@ -1155,7 +1159,7 @@ describe('Resources: ', function () {
         asm.application.href.should.be.equal(app.href);
       });
 
-      it('should invalidate application cache', function(){
+      it('should invalidate application cache', function () {
         evokeSpy.should.have.been.calledOnce;
         evokeSpy.should.have.been.calledWith(appObj.href);
       });
@@ -1207,20 +1211,20 @@ describe('Resources: ', function () {
 
       before(function (done) {
         options = {login: uuid()};
-        dataStore = new DataStore({client: {apiKey: {id: 1, secret: 2}}});
+        dataStore = new DataStore({client: {apiKey: {id: 1, secret: 2}}});
 
         app = new Application(
-          { href: uuid() , verificationEmails: {href:uuid()} },
+          { href: uuid(), verificationEmails: {href:uuid()} },
           dataStore
         );
 
-        createResourceStub = sinon.stub(dataStore,'createResource',function(){
+        createResourceStub = sinon.stub(dataStore, 'createResource', function () {
           var args = Array.prototype.slice.call(arguments);
           var callback = args.pop();
           callback();
         });
 
-        app.resendVerificationEmail(options,done);
+        app.resendVerificationEmail(options, done);
       });
 
 
@@ -1260,7 +1264,7 @@ describe('Resources: ', function () {
       });
     });
 
-    //describe('get account',function(){
+    //describe('get account', function () {
     //  function getAccount(isNew, data) {
     //    return function () {
     //      var appObj, accObj, app, resp;
@@ -1305,7 +1309,7 @@ describe('Resources: ', function () {
     //  describe('with options', getAccount(true, {}));
     //});
 
-    describe('get apiKey',function(){
+    describe('get apiKey', function () {
       var appHref;
       var application;
       var foundResponse;
@@ -1351,103 +1355,103 @@ describe('Resources: ', function () {
         };
 
         decryptedSecret = 'rncdUXr2dtjjQ5OyDdWRHRxncRW7K0OnU6/Wqf2iqdQ';
-        callCount=0;
+        callCount = 0;
       });
 
-      describe('when apikey is found',function(){
+      describe('when apikey is found', function () {
         var sandbox;
         var result, requestedOptions, cacheResult;
 
-        before(function(done){
+        before(function (done) {
           sandbox = sinon.sandbox.create();
 
-          sandbox.stub(dataStore.requestExecutor,'execute',function(requestOptions,cb) {
+          sandbox.stub(dataStore.requestExecutor, 'execute', function (requestOptions, cb) {
             callCount++;
             // hack - override the salt
             requestOptions.query.encryptionKeySalt = 'uHMSUA6F8LFoCIPqKYSRCg==';
             requestedOptions = requestOptions;
-            cb(null,_.extend({},foundResponse));
+            cb(null, _.extend({}, foundResponse));
           });
-          application.getApiKey('an id',function(err,value) {
-            result = [err,value];
-            dataStore.cacheHandler.get(foundResponse.items[0].href,function(err,value){
-              cacheResult = [err,value];
+          application.getApiKey('an id', function (err, value) {
+            result = [err, value];
+            dataStore.cacheHandler.get(foundResponse.items[0].href, function (err, value) {
+              cacheResult = [err, value];
               done();
             });
 
           });
         });
-        after(function(){
+        after(function () {
           sandbox.restore();
         });
-        it('should not err',function(){
-          assert.equal(result[0],null);
+        it('should not err', function () {
+          assert.equal(result[0], null);
         });
-        it('should have asked for encrypted secret',function(){
-          assert.equal(requestedOptions.query.encryptSecret,true);
+        it('should have asked for encrypted secret', function () {
+          assert.equal(requestedOptions.query.encryptSecret, true);
         });
-        it('should return an ApiKey instance',function(){
-          assert.instanceOf(result[1],ApiKey);
+        it('should return an ApiKey instance', function () {
+          assert.instanceOf(result[1], ApiKey);
         });
-        it('should return an ApiKey instance with a decrypted secret',function(){
-          assert.equal(result[1].secret,decryptedSecret);
+        it('should return an ApiKey instance with a decrypted secret', function () {
+          assert.equal(result[1].secret, decryptedSecret);
         });
-        it('should cache the ApiKey',function(){
-          assert.equal(cacheResult[1].href,foundResponse.items[0].href);
+        it('should cache the ApiKey', function () {
+          assert.equal(cacheResult[1].href, foundResponse.items[0].href);
         });
-        it('should store the encrypted key in the cache',function(){
-          assert.equal(cacheResult[1].secret,foundResponse.items[0].secret);
+        it('should store the encrypted key in the cache', function () {
+          assert.equal(cacheResult[1].secret, foundResponse.items[0].secret);
         });
       });
-      describe('on second get',function(){
+      describe('on second get', function () {
         var result;
         var sandbox;
 
-        before(function(done){
+        before(function (done) {
           sandbox = sinon.sandbox.create();
 
-          sandbox.stub(dataStore.requestExecutor,'execute',function(requestOptions,cb) {
-            cb(null,_.extend({},foundResponse.items[0].account));
+          sandbox.stub(dataStore.requestExecutor, 'execute', function (requestOptions, cb) {
+            cb(null, _.extend({}, foundResponse.items[0].account));
           });
-          application.getApiKey(foundResponse.items[0].id,function(err,value) {
-            result = [err,value];
+          application.getApiKey(foundResponse.items[0].id, function (err, value) {
+            result = [err, value];
             done();
           });
         });
-        after(function(){
+        after(function () {
           sandbox.restore();
         });
-        it('should have got it from the cache',function(){
-          assert.equal(callCount,1);
+        it('should have got it from the cache', function () {
+          assert.equal(callCount, 1);
         });
-        it('should get the api key with the decrypted secret',function(){
-          assert.equal(result[1].secret,decryptedSecret);
+        it('should get the api key with the decrypted secret', function () {
+          assert.equal(result[1].secret, decryptedSecret);
         });
       });
-      describe('when apikey is not found',function(){
+      describe('when apikey is not found', function () {
         var sandbox;
         var result, requestedOptions;
 
-        before(function(done){
+        before(function (done) {
           sandbox = sinon.sandbox.create();
 
-          sandbox.stub(dataStore.requestExecutor,'execute',function(requestOptions,cb) {
+          sandbox.stub(dataStore.requestExecutor, 'execute', function (requestOptions, cb) {
             requestedOptions = requestOptions;
-            cb(null,notFoundResponse);
+            cb(null, notFoundResponse);
           });
-          application.getApiKey('an id',function(err,value) {
-            result = [err,value];
+          application.getApiKey('an id', function (err, value) {
+            result = [err, value];
             done();
           });
         });
-        after(function(){
+        after(function () {
           sandbox.restore();
         });
-        it('should have asked for encrypted secret',function(){
-          assert.equal(requestedOptions.query.encryptSecret,true);
+        it('should have asked for encrypted secret', function () {
+          assert.equal(requestedOptions.query.encryptSecret, true);
         });
-        it('should return a not found error',function(){
-          assert.equal(result[0].message,'ApiKey not found');
+        it('should return a not found error', function () {
+          assert.equal(result[0].message, 'ApiKey not found');
         });
       });
     });

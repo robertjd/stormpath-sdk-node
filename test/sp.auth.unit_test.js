@@ -20,34 +20,34 @@ describe('Authorization module', function () {
     apiKey = {id: 'stormpath_apiKey_id', secret: 'stormpath_apiKey_secret'};
   });
 
-  describe('constructor', function(){
-    function createAuth(options){
-      return  function(){
+  describe('constructor', function () {
+    function createAuth(options) {
+      return  function () {
         return getAuthenticator(options);
       };
     }
-    describe('if apiKey not provided', function(){
-      it('should throw api key is required exception', function(){
+    describe('if apiKey not provided', function () {
+      it('should throw api key is required exception', function () {
         createAuth({}).should.throw(/you must specify an ApiKey/i);
       });
     });
 
-    describe('if apiKey.id not provided', function(){
-      it('should throw apiKey.id is required', function(){
+    describe('if apiKey.id not provided', function () {
+      it('should throw apiKey.id is required', function () {
         createAuth({apiKey:{}}).should.throw(/apiKey.id is required/);
       });
     });
-    describe('if apiKey.secret not provided', function(){
-      it('should throw apiKey.secret is required', function(){
+    describe('if apiKey.secret not provided', function () {
+      it('should throw apiKey.secret is required', function () {
         createAuth({apiKey:{id:1}}).should.throw(/apiKey.secret is required/);
       });
     });
-    describe('if provided auth method not supported', function(){
-      function callToAuthSignWithUnsupportedAuthMethod(){
+    describe('if provided auth method not supported', function () {
+      function callToAuthSignWithUnsupportedAuthMethod() {
         var auth = getAuthenticator({apiKey:{id:1, secret:2}, authenticationScheme:'boom!'});
         return auth.authenticate({});
       }
-      it('should throw unsupported auth method', function(){
+      it('should throw unsupported auth method', function () {
         callToAuthSignWithUnsupportedAuthMethod
           .should.throw(/Unrecognized authentication scheme: boom!/i);
       });
@@ -107,7 +107,7 @@ describe('Authorization module', function () {
 
       auth.authenticate(req);
 
-      var expectedAuthHeader ='SAuthc1 sauthc1Id=stormpath_apiKey_id/20140214/3412d026-624e-4778-b02d-f9906f40fc4f/sauthc1_request, sauthc1SignedHeaders=accept;accept-encoding;content-type;host;user-agent;x-stormpath-date, sauthc1Signature=203e26a39bec66b145bce797c0672104e0c8d5a20847686841fa1e17b56875fb';
+      var expectedAuthHeader = 'SAuthc1 sauthc1Id=stormpath_apiKey_id/20140214/3412d026-624e-4778-b02d-f9906f40fc4f/sauthc1_request, sauthc1SignedHeaders=accept;accept-encoding;content-type;host;user-agent;x-stormpath-date, sauthc1Signature=203e26a39bec66b145bce797c0672104e0c8d5a20847686841fa1e17b56875fb';
       req.headers.Authorization.should.be.equal(expectedAuthHeader);
     });
   });

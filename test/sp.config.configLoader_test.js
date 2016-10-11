@@ -35,7 +35,7 @@ describe('Configuration loader', function () {
   function setupFakeFs(files) {
     // If we already have a fake fs, then unpatch
     // the previous one and create a new.
-    if(fakeFs) {
+    if (fakeFs) {
       fakeFs.unpatch();
     }
 
@@ -136,8 +136,8 @@ describe('Configuration loader', function () {
       assert.isNull(config.client.proxy.username);
       assert.isNull(config.client.proxy.password);
 
-      assert.equal(config.client.baseUrl, "https://api.stormpath.com/v1");
-      assert.equal(config.client.authenticationScheme, "SAUTHC1");
+      assert.equal(config.client.baseUrl, 'https://api.stormpath.com/v1');
+      assert.equal(config.client.authenticationScheme, 'SAUTHC1');
       assert.equal(config.client.connectionTimeout, 30);
 
       assert.isTrue(!!config.application);
