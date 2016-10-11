@@ -1,3 +1,5 @@
+'use strict';
+
 var ResourceError = require('../lib/error/ResourceError');
 
 describe('Error:', function () {

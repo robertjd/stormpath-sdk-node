@@ -1,3 +1,5 @@
+'use strict';
+
 /*
   This fixture creates a new application, directory,
   and account. It issues an Oauth request for the

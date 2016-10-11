@@ -1,4 +1,3 @@
-/* jshint -W030 */
 'use strict';
 
 var RequestAuthenticator = require('../lib/authc/RequestAuthenticator');

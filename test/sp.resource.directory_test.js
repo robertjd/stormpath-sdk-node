@@ -1,5 +1,5 @@
-/* jshint -W030 */
-"use strict";
+'use strict';
+
 var common = require('./common');
 var sinon = common.sinon;
 var nock = common.nock;

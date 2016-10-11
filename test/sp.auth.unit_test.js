@@ -1,3 +1,5 @@
+'use strict';
+
 var common = require('./common');
 var sinon = common.sinon;
 var should = common.should;
@@ -7,7 +9,6 @@ var Buffer = require('buffer').Buffer;
 /* jshint +W079 */
 
 describe('Authorization module', function () {
-  'use strict';
   var getAuthenticator;
   var apiKey;
 

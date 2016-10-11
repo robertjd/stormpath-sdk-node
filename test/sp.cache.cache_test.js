@@ -1,3 +1,5 @@
+'use strict';
+
 var common = require('./common');
 var _ = common._;
 var sinon = common.sinon;
@@ -12,7 +14,7 @@ var MemcachedStore = require('../lib/cache/MemcachedStore');
 var RedisStore = require('../lib/cache/RedisStore');
 
 describe('Cache module', function () {
-  "use strict";
+
   describe('Cache class', function () {
     describe('call to constructor', function () {
       it('should return an instance of Cache', function () {

@@ -1,3 +1,5 @@
+'use strict';
+
 var CacheStats = require('../lib/cache/CacheStats');
 
 describe('Cache module',function(){

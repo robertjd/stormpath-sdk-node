@@ -8,9 +8,9 @@ var DataStore = require('../lib/ds/DataStore');
 var Field = require('../lib/resource/Field');
 var Schema = require('../lib/resource/Schema');
 
-describe('Schema Resource', function(){
+describe('Schema Resource', function () {
 
-  describe('getFields()', function(){
+  describe('getFields()', function () {
 
     var sandbox;
     var schema;
@@ -44,7 +44,7 @@ describe('Schema Resource', function(){
 
 
 
-    before(function(){
+    before(function () {
       dataStore = new DataStore({client: {apiKey: {id: 1, secret: 2}}});
       sandbox = sinon.sandbox.create();
       schema = new Schema(mockSchema, dataStore);
@@ -54,12 +54,12 @@ describe('Schema Resource', function(){
       });
     });
 
-    after(function(){
+    after(function () {
       sandbox.restore();
     });
 
-    it('should return Field instances', function(done){
-      schema.getFields(function(err, result){
+    it('should return Field instances', function (done) {
+      schema.getFields(function (err, result) {
         assert.equal(result.items, mockFieldsResponse.items);
         assert.instanceOf(mockFieldsResponse.items[0], Field);
         done();

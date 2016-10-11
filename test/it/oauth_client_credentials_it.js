@@ -1,3 +1,5 @@
+'use strict';
+
 var common = require('../common');
 var helpers = require('./helpers');
 var assert = common.assert;

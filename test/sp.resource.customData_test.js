@@ -11,7 +11,6 @@ var DataStore = require('../lib/ds/DataStore');
 var instantiate = require('../lib/resource/ResourceFactory').instantiate;
 
 describe('Resources: ', function () {
-  "use strict";
   describe('CustomData resource class', function () {
     function removeFieldTest(Ctor, href) {
       describe(Ctor.name + ' remove custom data field', function () {
@@ -39,7 +38,7 @@ describe('Resources: ', function () {
           });
 
           saveResourceStub = sandbox.stub(dataStore, 'saveResource', function () {
-            arguments[arguments.length -1]();
+            arguments[arguments.length - 1]();
           });
 
           // act
@@ -65,7 +64,7 @@ describe('Resources: ', function () {
     removeFieldTest(Account, '/custom/data/href');
     removeFieldTest(Group, '/custom/data/href/');
 
-    describe('when fetched via resource.getCustomData',function(){
+    describe('when fetched via resource.getCustomData', function () {
       var resource;
       var dataStore;
       var sandbox;
@@ -73,7 +72,7 @@ describe('Resources: ', function () {
       var parentHref;
       var customDataObject;
 
-      before(function(done){
+      before(function (done) {
         dataStore = new DataStore({client: {apiKey: {id: 1, secret: 2}}});
         sandbox = sinon.sandbox.create();
         cacheSpy = sinon.spy(dataStore.cacheHandler.cacheManager.caches.customData, 'put');
@@ -93,21 +92,21 @@ describe('Resources: ', function () {
 
         sandbox.stub(dataStore.requestExecutor, 'execute', function (request) {
           // callback with a mock custom data resource
-          if(request.uri===resource.customData.href){
-            arguments[arguments.length -1](null,customDataObject);
+          if (request.uri === resource.customData.href) {
+            arguments[arguments.length - 1](null, customDataObject);
           }
         });
         resource.getCustomData(done);
       });
-      it('should have been put in the cache',function(){
+      it('should have been put in the cache', function () {
         expect(cacheSpy.args[0][1]).to.deep.equal(customDataObject);
       });
     });
 
-    describe('when attached to a resource',function(){
+    describe('when attached to a resource', function () {
       var resource, dataStore, saveResourceStub, sandbox;
 
-      before(function(){
+      before(function () {
         dataStore = new DataStore({client: {apiKey: {id: 1, secret: 2}}});
         resource = instantiate(Account, {
           href: common.uuid(),
@@ -117,43 +116,43 @@ describe('Resources: ', function () {
         }, null, dataStore);
         sandbox = sinon.sandbox.create();
         saveResourceStub = sandbox.stub(dataStore, 'saveResource', function () {
-          arguments[arguments.length -1]();
+          arguments[arguments.length - 1]();
         });
 
       });
-      describe('and reserved properties are added',function(){
+      describe('and reserved properties are added', function () {
         var reserverdFieldName;
 
-        before(function(){
+        before(function () {
           reserverdFieldName = 'createdAt';
 
           resource.customData[reserverdFieldName] = common.uuid();
         });
-        describe('and save is called on the parent resource',function(){
-          before(function(done){
+        describe('and save is called on the parent resource', function () {
+          before(function (done) {
             resource.save(done);
           });
-          it('should remove the reserved properties before passing to the dataStore',function(){
+          it('should remove the reserved properties before passing to the dataStore', function () {
             var passedResource = saveResourceStub.args[0][0];
             expect(passedResource.customData[reserverdFieldName]).to.equal(undefined);
           });
         });
       });
-      describe('and non-reserved properties are added',function(){
+      describe('and non-reserved properties are added', function () {
         var customFieldName;
         var customFieldValue;
 
-        before(function(){
+        before(function () {
           customFieldName = 'myCustomProperty';
           customFieldValue = common.uuid();
 
           resource.customData[customFieldName] = customFieldValue;
         });
-        describe('and save is called on the parent resource',function(){
-          before(function(done){
+        describe('and save is called on the parent resource', function () {
+          before(function (done) {
             resource.save(done);
           });
-          it('should remove the reserved properties before passing to the dataStore',function(){
+          it('should remove the reserved properties before passing to the dataStore', function () {
             var passedResource = saveResourceStub.args[0][0];
             expect(passedResource.customData[customFieldName]).to.equal(customFieldValue);
           });

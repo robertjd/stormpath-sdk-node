@@ -1,3 +1,5 @@
+'use strict';
+
 var common = require('./common');
 var should = common.should;
 

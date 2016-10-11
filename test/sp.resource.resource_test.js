@@ -1,3 +1,5 @@
+'use strict';
+
 var common = require('./common');
 var _ = common._;
 var should = common.should;
@@ -20,7 +22,7 @@ describe('Resources: ', function () {
 
         before(function () {
           obj = {data: 'boom!', data2: 'boom2!'};
-          ds = new DataStore({client: {apiKey:apiKey}});
+          ds = new DataStore({client: {apiKey:apiKey}});
           resource = new Resource(obj, ds);
         });
 
@@ -49,7 +51,7 @@ describe('Resources: ', function () {
             resource[key].should.be.equal(val);
           });
         });
-        it('should leave dataStore empty', function(){
+        it('should leave dataStore empty', function () {
           should.not.exist(resource.dataStore);
         });
       });
@@ -66,10 +68,10 @@ describe('Resources: ', function () {
           resource = new Resource(ds);
         });
 
-        it('should not copy any fields from data param', function(){
+        it('should not copy any fields from data param', function () {
           should.not.exist(resource.hack);
         });
-        it('should persist data store instance', function(){
+        it('should persist data store instance', function () {
           resource.dataStore.should.be.an.instanceof(DataStore);
           resource.dataStore.should.be.equal(ds);
         });

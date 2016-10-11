@@ -1,3 +1,5 @@
+'use strict';
+
 var common = require('./common');
 var nock = common.nock;
 var async = require('async');
@@ -11,7 +13,7 @@ var DataStore = require('../lib/ds/DataStore');
 var BASE_URL = u.BASE_URL;
 
 describe('Resources: ', function () {
-  "use strict";
+
   describe('Account Store Mapping resource', function () {
     var dataStore;
 

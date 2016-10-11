@@ -1,3 +1,5 @@
+'use strict';
+
 var common = require('./common');
 
 var u = common.u;
@@ -10,13 +12,13 @@ var InstanceResource = require('../lib/resource/InstanceResource');
 var DataStore = require('../lib/ds/DataStore');
 
 describe('Resources: ', function () {
-  describe('InstanceResource class', function(){
+  describe('InstanceResource class', function () {
     var ds;
     var app;
     var instanceResource;
 
     before(function () {
-      ds = new DataStore({client: {apiKey:{id: 1,secret: 2}}});
+      ds = new DataStore({client: {apiKey:{id: 1, secret: 2}}});
       app = {href: '/href'};
 
       instanceResource = new InstanceResource({
@@ -25,21 +27,23 @@ describe('Resources: ', function () {
       }, ds);
     });
 
-    describe('call to get()', function(){
-      describe('without property name', function(){
+    describe('call to get()', function () {
+      describe('without property name', function () {
         var sandbox, error, cb, getResourceSpy;
-        before(function(){
-          cb = function(err){error = err;};
+        before(function () {
+          cb = function (err) {
+            error = err;
+          };
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
 
           instanceResource.get(cb);
         });
-        after(function(){
+        after(function () {
           sandbox.restore();
         });
 
-        it('should return error', function(){
+        it('should return error', function () {
           /* jshint -W030 */
           getResourceSpy.should.not.have.been.called;
           /* jshint +W030 */
@@ -48,20 +52,22 @@ describe('Resources: ', function () {
         });
       });
 
-      describe('with property name to not reference field', function(){
+      describe('with property name to not reference field', function () {
         var sandbox, error, cb, getResourceSpy;
-        before(function(){
-          cb = function(err){error = err;};
+        before(function () {
+          cb = function (err) {
+            error = err;
+          };
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
 
           instanceResource.get('directory', cb);
         });
-        after(function(){
+        after(function () {
           sandbox.restore();
         });
 
-        it('should return error', function(){
+        it('should return error', function () {
           /* jshint -W030 */
           getResourceSpy.should.not.have.been.called;
           /* jshint +W030 */
@@ -71,33 +77,37 @@ describe('Resources: ', function () {
         });
       });
 
-      describe('without optional query param', function(){
+      describe('without optional query param', function () {
         var sandbox, error, cb, getResourceSpy;
-        before(function(){
-          cb = function(err){error = err;};
+        before(function () {
+          cb = function (err) {
+            error = err;
+          };
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
           nock(u.BASE_URL).get(u.v1(app.href)).reply(200, {});
 
           instanceResource.get('applications', cb);
         });
-        after(function(){
+        after(function () {
           sandbox.restore();
         });
-        it('should delegate call to data store get resource', function(){
+        it('should delegate call to data store get resource', function () {
           /* jshint -W030 */
           getResourceSpy.should.have.been.calledOnce;
         });
-        it('should assign null to query', function(){
+        it('should assign null to query', function () {
           getResourceSpy.should.have.been
             .calledWith(app.href, null, null, cb);
         });
       });
 
-      describe('without optional query param but with ctor', function(){
+      describe('without optional query param but with ctor', function () {
         var sandbox, error, cb, ctor, getResourceSpy;
-        before(function(){
-          cb = function(err){error = err;};
+        before(function () {
+          cb = function (err) {
+            error = err;
+          };
           ctor = Resource;
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
@@ -105,80 +115,84 @@ describe('Resources: ', function () {
 
           instanceResource.get('applications', ctor, cb);
         });
-        after(function(){
+        after(function () {
           sandbox.restore();
         });
-        it('should assign null to query', function(){
+        it('should assign null to query', function () {
           getResourceSpy.should.have.been
             .calledWith(app.href, null, ctor, cb);
         });
-        it('should call get resource with ctor param', function(){
+        it('should call get resource with ctor param', function () {
           getResourceSpy.should.have.been
             .calledWith(app.href, null, ctor, cb);
         });
       });
 
-      describe('with optional query param', function(){
+      describe('with optional query param', function () {
         var query;
         var sandbox, error, cb, getResourceSpy;
 
-        before(function(){
+        before(function () {
           query = {q: 'asd'};
-          cb = function(err){error = err;};
+          cb = function(err){
+            error = err;
+          };
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
-          nock(u.BASE_URL).get(u.v1(app.href) + '?q='+query.q).reply(200, app);
+          nock(u.BASE_URL).get(u.v1(app.href) + '?q=' + query.q).reply(200, app);
 
           instanceResource.get('applications', query, cb);
         });
-        after(function(){
+        after(function () {
           sandbox.restore();
         });
-        it('should call get resource with query param', function(){
+        it('should call get resource with query param', function () {
           getResourceSpy.should.have.been
             .calledWith(app.href, query, null, cb);
         });
       });
 
-      describe('with optional query and ctor param', function(){
+      describe('with optional query and ctor param', function () {
         var sandbox, error, cb, query, ctor, getResourceSpy;
-        before(function(){
-          cb = function(err){error = err;};
+        before(function () {
+          cb = function (err) {
+            error = err;
+          };
           ctor = Resource;
           query = {q:'boom!'};
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
-          nock(u.BASE_URL).get(u.v1(app.href) + '?q='+query.q).reply(200, app);
+          nock(u.BASE_URL).get(u.v1(app.href) + '?q=' + query.q).reply(200, app);
 
           instanceResource.get('applications', query, ctor, cb);
         });
-        after(function(){
+        after(function () {
           sandbox.restore();
         });
 
-        it('should delegate call to data store get resource', function(){
+        it('should delegate call to data store get resource', function () {
           getResourceSpy.should.have.been
             .calledWith(app.href, query, ctor, cb);
         });
       });
     });
 
-    describe('call to save()', function(){
+    describe('call to save()', function () {
       var sandbox, cb,  saveResourceSpy;
 
-      before(function(){
-        cb = function(){};
+      before(function () {
+        cb = function () {};
         sandbox = sinon.sandbox.create();
         saveResourceSpy = sandbox.stub(ds, 'saveResource');
 
         instanceResource.save(cb);
       });
 
-      after(function(){
+      after(function () {
         sandbox.restore();
       });
 
-      it('should delegate call to data store save', function(){
+      it('should delegate call to data store save', function () {
         /* jshint -W030 */
         saveResourceSpy.should.have.been.calledOnce;
         /* jshint +W030 */
@@ -239,19 +253,19 @@ describe('Resources: ', function () {
       });
     });
 
-    describe('call to delete()', function(){
+    describe('call to delete()', function () {
       var sandbox, cb,  deleteResourceSpy;
-      before(function(){
-        cb = function(){};
+      before(function () {
+        cb = function () {};
         sandbox = sinon.sandbox.create();
         deleteResourceSpy = sandbox.stub(ds, 'deleteResource');
 
         instanceResource.delete(cb);
       });
-      after(function(){
+      after(function () {
         sandbox.restore();
       });
-      it('should delegate call to data store delete', function(){
+      it('should delegate call to data store delete', function () {
         /* jshint -W030 */
         deleteResourceSpy.should.have.been.calledOnce;
         /* jshint +W030 */

@@ -1,3 +1,5 @@
+'use strict';
+
 var common = require('./common');
 var _ = common._;
 
@@ -11,17 +13,17 @@ var instantiate = require('../lib/resource/ResourceFactory').instantiate;
 
 describe('Resources: ', function () {
   describe('Resource factory -> instantiate', function () {
-    describe('if instance constructor can not be a collection', function(){
-      function callInstantiateWithWrongCtor(){
+    describe('if instance constructor can not be a collection', function () {
+      function callInstantiateWithWrongCtor() {
         instantiate(CollectionResource);
       }
-      it('should throw error', function(){
+      it('should throw error', function () {
         callInstantiateWithWrongCtor.should
           .throws(/argument cannot be a CollectionResource/i);
       });
     });
 
-    describe('if data is a collection resource', function(){
+    describe('if data is a collection resource', function () {
       var data;
 
       before(function () {
@@ -58,11 +60,11 @@ describe('Resources: ', function () {
         };
       });
 
-      it('should return collection', function(){
+      it('should return collection', function () {
         var coll = instantiate(Tenant, data);
 
         coll.should.be.an.instanceof(CollectionResource);
-        _.each(data.items, function(item){
+        _.each(data.items, function (item) {
           item.should.be.an.instanceof(Tenant);
         });
       });
@@ -96,8 +98,7 @@ describe('Resources: ', function () {
       });
     });
 
-
-    describe('if data is a resource', function(){
+    describe('if data is a resource', function () {
       var data;
 
       before(function () {
@@ -115,7 +116,7 @@ describe('Resources: ', function () {
         };
       });
 
-      it('should return wrapped obj', function(){
+      it('should return wrapped obj', function () {
         var coll = instantiate(Tenant, data);
 
         coll.should.be.an.instanceof(Tenant);

@@ -1,3 +1,5 @@
+'use strict';
+
 var common = require('./common');
 var sinon = common.sinon;
 
@@ -10,7 +12,6 @@ var instantiate = require('../lib/resource/ResourceFactory').instantiate;
 var GroupMembership = require('../lib/resource/GroupMembership');
 
 describe('Resources: ', function () {
-  "use strict";
   describe('Group resource', function () {
     var dataStore;
 
@@ -227,7 +228,7 @@ describe('Resources: ', function () {
       });
     });
 
-    describe('custom data', function(){
+    describe('custom data', function () {
       var sandbox, group, groupJSON;
       before(function () {
         sandbox = sinon.sandbox.create();
@@ -242,7 +243,7 @@ describe('Resources: ', function () {
       after(function () {
         sandbox.restore();
       });
-      it('should wrap account field customData in CustomData class', function(){
+      it('should wrap account field customData in CustomData class', function () {
         // assert
         group.customData.should.be.an.instanceOf(CustomData);
       });

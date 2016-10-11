@@ -1,4 +1,5 @@
-/* jshint -W030 */
+'use strict';
+
 var common = require('./common');
 var sinon = common.sinon;
 var nock = common.nock;
@@ -20,7 +21,7 @@ var Phone = require('../lib/resource/Phone');
 
 
 describe('Resources: ', function () {
-  "use strict";
+
   describe('Account resource class', function () {
     var dataStore;
 

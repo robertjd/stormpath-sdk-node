@@ -1,4 +1,5 @@
-/* jshint -W030 */
+'use strict';
+
 var common = require('./common');
 var _ = common._;
 var u = common.u;
@@ -18,7 +19,6 @@ var instantiate = require('../lib/resource/ResourceFactory').instantiate;
 var DataStore = require('../lib/ds/DataStore');
 
 describe('Resources: ', function () {
-  "use strict";
   var apiKey;
 
   before(function () {
@@ -156,7 +156,9 @@ describe('Resources: ', function () {
     });
 
     describe('call to each method', function () {
-      function iterator(){Array.prototype.slice.call(arguments).pop()();}
+      function iterator() {
+        Array.prototype.slice.call(arguments).pop()();
+      }
 
       describe('with no items', function () {
         var cr, iteratorSpy, cbSpy;
@@ -185,7 +187,7 @@ describe('Resources: ', function () {
           cr.each(iteratorSpy, cbSpy);
         });
 
-        it('should not call callback', function(){
+        it('should not call callback', function () {
           /* jshint -W030 */
           iteratorSpy.should.not.have.been.called;
           cbSpy.should.have.been.calledOnce;
@@ -213,26 +215,26 @@ describe('Resources: ', function () {
           iteratorSpy = sandbox.spy(iterator);
           cbSpy = sandbox.spy();
           getResourceStub = sandbox.stub(ds, 'getResource',
-            function onGetResource(href, nextQuery, ctor, cb){
+            function onGetResource(href, nextQuery, ctor, cb) {
               cb(null, {});
             });
           cr.each(iteratorSpy, cbSpy);
         });
 
-        after(function(){
+        after(function () {
           sandbox.restore();
         });
 
-        it('should call callback for each item', function(){
+        it('should call callback for each item', function () {
           /* jshint -W030 */
           iteratorSpy.should.have.been.calledTwice;
           cbSpy.should.have.been.calledOnce;
         });
 
-        it('should increase offset counter', function(){
-          _.each(data.items, function(item, index){
+        it('should increase offset counter', function () {
+          _.each(data.items, function (item, index) {
             var spyCall = iteratorSpy.getCall(index);
-            spyCall.args[spyCall.args.length -1].should.be.a('function');
+            spyCall.args[spyCall.args.length - 1].should.be.a('function');
             spyCall.should.have.been.calledWith(item);
           });
         });
@@ -281,12 +283,13 @@ describe('Resources: ', function () {
           sandbox = sinon.sandbox.create();
 
           getResourceStub = sandbox.stub(ds, 'getResource',
-            function onGetResource(href, nextQuery, ctor, cb){
-              if (nextQuery.offset > 2){
+            function onGetResource(href, nextQuery, ctor, cb) {
+              if (nextQuery.offset > 2) {
                 return cb(null, null);
               }
               cb(null, new CollectionResource(data2, query, Tenant, ds));
-          });
+            }
+          );
 
           cr = new CollectionResource(data, query, Tenant, ds);
           iteratorSpy = sandbox.spy(iterator);
@@ -294,11 +297,11 @@ describe('Resources: ', function () {
           cr.each(iteratorSpy, done);
         });
 
-        after(function(){
+        after(function () {
           sandbox.restore();
         });
 
-        it('should request next page', function(){
+        it('should request next page', function () {
           iteratorSpy.callCount.should.be.equal(4);
           /* jshint -W030 */
           getResourceStub.should.have.been.calledTwice;
@@ -309,27 +312,27 @@ describe('Resources: ', function () {
       });
     });
 
-    describe('async methods with pagination', function(){
+    describe('async methods with pagination', function () {
       var ds;
 
       before(function () {
         ds = new DataStore({client: {apiKey: {id: 1, secret: 2}}});
       });
 
-      function test(method){
-        return function(){
+      function test(method) {
+        return function () {
           var n;
 
-          function createAppsCollection(items, offset, limit){
+          function createAppsCollection(items, offset, limit) {
             return {
               href: '/tenants/78KBoSJ5EkMD8OVmBV934Y/applications',
               offset: offset,
               limit: limit,
-              items: items.slice(offset, offset+limit)
+              items: items.slice(offset, offset + limit)
             };
           }
 
-          function application(i){
+          function application(i) {
             return { href: '/applications/' + i,
               name: 'testing ' + i,
               description: i,
@@ -337,9 +340,9 @@ describe('Resources: ', function () {
             };
           }
 
-          function createNApps(n){
+          function createNApps(n) {
             var items = [];
-            for (var i = 0; i < n; i++){
+            for (var i = 0; i < n; i++) {
               items.push(application(i));
             }
             return items;
@@ -348,7 +351,7 @@ describe('Resources: ', function () {
           var i, items, pages, applications;
           var sandbox, iteratorSpy, callbackSpy, asyncIteratorSpy, asyncCallbackSpy;
 
-          before(function(done){
+          before(function (done) {
             n = 250;
             pages = [];
 
@@ -356,34 +359,34 @@ describe('Resources: ', function () {
             // 1. items
             items = createNApps(n);
             // 2. create app collection resource
-            for (i = 0; i < Math.ceil(n/100); i++){
-              pages.push(createAppsCollection(items, i*100, (i+1)*100));
+            for (i = 0; i < Math.ceil(n / 100); i++) {
+              pages.push(createAppsCollection(items, i * 100, (i + 1) * 100));
             }
             applications = instantiate(Application, pages[0], {}, ds);
             // 3. nock
-            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200,pages);
-            for (i = 1; i < Math.ceil(n/100); i++) {
+            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200, pages);
+            for (i = 1; i < Math.ceil(n / 100); i++) {
               var ref = u.v1(applications.href) + '?' + querystring.stringify({offset: i * 100, limit: 100});
               nock(u.BASE_URL).get(ref).reply(200, pages[i]);
             }
             sandbox = sinon.sandbox.create();
             // 4. iterator and callback spies
-            function iterator(item, cb){
+            function iterator(item, cb) {
               cb();
             }
             iteratorSpy = sandbox.spy(iterator);
             asyncIteratorSpy = sandbox.spy(iterator);
 
             async.series([
-              function(cb){
-                function callback(err){
+              function (cb) {
+                function callback(err) {
                   cb(err);
                 }
                 callbackSpy = sandbox.spy(callback);
                 applications[method](iteratorSpy, callbackSpy);
               },
-              function(cb){
-                function callback(err){
+              function (cb) {
+                function callback(err) {
                   cb(err);
                 }
                 asyncCallbackSpy = sandbox.spy(callback);
@@ -392,43 +395,43 @@ describe('Resources: ', function () {
             ], done);
           });
 
-          after(function(){
+          after(function () {
             sandbox.restore();
           });
 
-          it('should call iterators with same arguments', function(){
-            for (var i = 0; i < n; i++){
+          it('should call iterators with same arguments', function () {
+            for (var i = 0; i < n; i++) {
               var asyncArgs = asyncIteratorSpy.getCall(i).args;
               var args = iteratorSpy.getCall(i).args;
               asyncArgs[0].should.be.deep.equal(_.pick(args[0], 'href', 'name', 'description', 'status'));
             }
           });
 
-          it('should call iterator n times', function(){
+          it('should call iterator n times', function () {
             iteratorSpy.should.have.been.calledBefore(callbackSpy);
             iteratorSpy.callCount.should.be.equal(n);
           });
 
-          it('should call callback once', function(){
+          it('should call callback once', function () {
             callbackSpy.should.have.been.calledOnce;
           });
         };
       }
 
-      function testLimit(method){
-        return function(){
+      function testLimit(method) {
+        return function () {
           var n;
 
-          function createAppsCollection(items, offset, limit){
+          function createAppsCollection(items, offset, limit) {
             return {
               href: '/tenants/78KBoSJ5EkMD8OVmBV934Y/applications',
               offset: offset,
               limit: limit,
-              items: items.slice(offset, offset+limit)
+              items: items.slice(offset, offset + limit)
             };
           }
 
-          function application(i){
+          function application(i) {
             return { href: '/applications/' + i,
               name: 'testing ' + i,
               description: i,
@@ -436,9 +439,9 @@ describe('Resources: ', function () {
             };
           }
 
-          function createNApps(n){
+          function createNApps(n) {
             var items = [];
-            for (var i = 0; i < n; i++){
+            for (var i = 0; i < n; i++) {
               items.push(application(i));
             }
             return items;
@@ -447,7 +450,7 @@ describe('Resources: ', function () {
           var i, items, pages, applications;
           var sandbox, iteratorSpy, callbackSpy, asyncIteratorSpy, asyncCallbackSpy;
 
-          before(function(done){
+          before(function (done) {
             n = 250;
             pages = [];
 
@@ -455,34 +458,34 @@ describe('Resources: ', function () {
             // 1. items
             items = createNApps(n);
             // 2. create app collection resource
-            for (i = 0; i < Math.ceil(n/100); i++){
-              pages.push(createAppsCollection(items, i*100, (i+1)*100));
+            for (i = 0; i < Math.ceil(n / 100); i++) {
+              pages.push(createAppsCollection(items, i * 100, (i + 1) * 100));
             }
             applications = instantiate(Application, pages[0], {}, ds);
             // 3. nock
-            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200,pages);
-            for (i = 1; i < Math.ceil(n/100); i++) {
+            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200, pages);
+            for (i = 1; i < Math.ceil(n / 100); i++) {
               var ref = u.v1(applications.href) + '?' + querystring.stringify({offset: i * 100, limit: 100});
               nock(u.BASE_URL).get(ref).reply(200, pages[i]);
             }
             sandbox = sinon.sandbox.create();
             // 4. iterator and callback spies
-            function iterator(item, cb){
+            function iterator(item, cb) {
               cb();
             }
             iteratorSpy = sandbox.spy(iterator);
             asyncIteratorSpy = sandbox.spy(iterator);
 
             async.series([
-              function(cb){
-                function callback(err){
+              function (cb) {
+                function callback(err) {
                   cb(err);
                 }
                 callbackSpy = sandbox.spy(callback);
                 applications[method](10, iteratorSpy, callbackSpy);
               },
-              function(cb){
-                function callback(err){
+              function (cb) {
+                function callback(err) {
                   cb(err);
                 }
                 asyncCallbackSpy = sandbox.spy(callback);
@@ -491,43 +494,43 @@ describe('Resources: ', function () {
             ], done);
           });
 
-          after(function(){
+          after(function () {
             sandbox.restore();
           });
 
-          it('should call iterators with same arguments', function(){
-            for (var i = 0; i < n; i++){
+          it('should call iterators with same arguments', function () {
+            for (var i = 0; i < n; i++) {
               var asyncArgs = asyncIteratorSpy.getCall(i).args;
               var args = iteratorSpy.getCall(i).args;
               asyncArgs[0].should.be.deep.equal(_.pick(args[0], 'href', 'name', 'description', 'status'));
             }
           });
 
-          it('should call iterator n times', function(){
+          it('should call iterator n times', function () {
             iteratorSpy.should.have.been.calledBefore(callbackSpy);
             iteratorSpy.callCount.should.be.equal(n);
           });
 
-          it('should call callback once', function(){
+          it('should call callback once', function () {
             callbackSpy.should.have.been.calledOnce;
           });
         };
       }
 
-      function testBoolean(method){
-        return function(){
+      function testBoolean(method) {
+        return function () {
           var shouldBeCalledCount = 250;
 
-          function createAppsCollection(items, offset, limit){
+          function createAppsCollection(items, offset, limit) {
             return {
               href: '/tenants/78KBoSJ5EkMD8OVmBV934Y/applications',
               offset: offset,
               limit: limit,
-              items: items.slice(offset, offset+limit)
+              items: items.slice(offset, offset + limit)
             };
           }
 
-          function application(i){
+          function application(i) {
             return { href: '/applications/' + i,
               name: 'testing ' + i,
               description: i,
@@ -535,9 +538,9 @@ describe('Resources: ', function () {
             };
           }
 
-          function createNApps(n){
+          function createNApps(n) {
             var items = [];
-            for (var i = 0; i < n; i++){
+            for (var i = 0; i < n; i++) {
               items.push(application(i));
             }
             return items;
@@ -546,26 +549,26 @@ describe('Resources: ', function () {
           var i, items, pages, applications;
           var sandbox, iteratorSpy, callbackSpy, asyncIteratorSpy, asyncCallbackSpy;
 
-          before(function(done){
+          before(function (done) {
             pages = [];
 
             // set up:
             // 1. items
             items = createNApps(shouldBeCalledCount);
             // 2. create app collection resource
-            for (i = 0; i < Math.ceil(shouldBeCalledCount/100); i++){
-              pages.push(createAppsCollection(items, i*100, (i+1)*100));
+            for (i = 0; i < Math.ceil(shouldBeCalledCount / 100); i++) {
+              pages.push(createAppsCollection(items, i * 100, (i + 1) * 100));
             }
             applications = instantiate(Application, pages[0], {}, ds);
             // 3. nock
-            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200,pages);
-            for (i = 1; i < Math.ceil(shouldBeCalledCount/100); i++) {
+            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200, pages);
+            for (i = 1; i < Math.ceil(shouldBeCalledCount / 100); i++) {
               var ref = u.v1(applications.href) + '?' + querystring.stringify({offset: i * 100, limit: 100});
               nock(u.BASE_URL).get(ref).reply(200, pages[i]);
             }
             sandbox = sinon.sandbox.create();
             // 4. iterator and callback spies
-            function iterator(item, cb){
+            function iterator(item, cb) {
               var result = true;
 
               switch (method) {
@@ -584,15 +587,15 @@ describe('Resources: ', function () {
             asyncIteratorSpy = sandbox.spy(iterator);
 
             async.series([
-              function(cb){
-                function callback(){
+              function (cb) {
+                function callback() {
                   cb();
                 }
                 callbackSpy = sandbox.spy(callback);
                 applications[method](iteratorSpy, callbackSpy);
               },
-              function(cb){
-                function callback(){
+              function (cb) {
+                function callback() {
                   cb();
                 }
                 asyncCallbackSpy = sandbox.spy(callback);
@@ -601,43 +604,43 @@ describe('Resources: ', function () {
             ], done);
           });
 
-          after(function(){
+          after(function () {
             sandbox.restore();
           });
 
-          it('should call iterator '+ shouldBeCalledCount +' times', function(){
+          it('should call iterator ' + shouldBeCalledCount + ' times', function () {
             iteratorSpy.should.have.been.calledBefore(callbackSpy);
             iteratorSpy.callCount.should.be.equal(shouldBeCalledCount);
           });
 
-          it('should call iterators with same arguments', function(){
-            for (var i = 0; i < shouldBeCalledCount; i++){
+          it('should call iterators with same arguments', function () {
+            for (var i = 0; i < shouldBeCalledCount; i++) {
               var asyncArgs = asyncIteratorSpy.getCall(i).args;
               var args = iteratorSpy.getCall(i).args;
               asyncArgs[0].should.be.deep.equal(_.pick(args[0], 'href', 'name', 'description', 'status'));
             }
           });
 
-          it('should call callback once', function(){
+          it('should call callback once', function () {
             callbackSpy.should.have.been.calledOnce;
           });
         };
       }
 
-      function testCheck(method){
-        return function(){
+      function testCheck(method) {
+        return function () {
           var n;
 
-          function createAppsCollection(items, offset, limit){
+          function createAppsCollection(items, offset, limit) {
             return {
               href: '/tenants/78KBoSJ5EkMD8OVmBV934Y/applications',
               offset: offset,
               limit: limit,
-              items: items.slice(offset, offset+limit)
+              items: items.slice(offset, offset + limit)
             };
           }
 
-          function application(i){
+          function application(i) {
             return { href: '/applications/' + i,
               name: 'testing ' + i,
               description: i,
@@ -645,9 +648,9 @@ describe('Resources: ', function () {
             };
           }
 
-          function createNApps(n){
+          function createNApps(n) {
             var items = [];
-            for (var i = 0; i < n; i++){
+            for (var i = 0; i < n; i++) {
               items.push(application(i));
             }
             return items;
@@ -656,7 +659,7 @@ describe('Resources: ', function () {
           var i, items, pages, applications;
           var sandbox, iteratorSpy, callbackSpy, asyncIteratorSpy, asyncCallbackSpy;
 
-          before(function(done){
+          before(function (done) {
             n = 250;
             pages = [];
 
@@ -664,34 +667,34 @@ describe('Resources: ', function () {
             // 1. items
             items = createNApps(n);
             // 2. create app collection resource
-            for (i = 0; i < Math.ceil(n/100); i++){
-              pages.push(createAppsCollection(items, i*100, (i+1)*100));
+            for (i = 0; i < Math.ceil(n / 100); i++) {
+              pages.push(createAppsCollection(items, i * 100, (i + 1) * 100));
             }
             applications = instantiate(Application, pages[0], {}, ds);
             // 3. nock
-            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200,pages);
-            for (i = 1; i < Math.ceil(n/100); i++) {
+            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200, pages);
+            for (i = 1; i < Math.ceil(n / 100); i++) {
               var ref = u.v1(applications.href) + '?' + querystring.stringify({offset: i * 100, limit: 100});
               nock(u.BASE_URL).get(ref).reply(200, pages[i]);
             }
             sandbox = sinon.sandbox.create();
             // 4. iterator and callback spies
-            function iterator(item, cb){
+            function iterator(item, cb) {
               cb(item.description % 2 === 0);
             }
             iteratorSpy = sandbox.spy(iterator);
             asyncIteratorSpy = sandbox.spy(iterator);
 
             async.series([
-              function(cb){
-                function callback(){
+              function (cb) {
+                function callback() {
                   cb();
                 }
                 callbackSpy = sandbox.spy(callback);
                 applications[method](iteratorSpy, callbackSpy);
               },
-              function(cb){
-                function callback(){
+              function (cb) {
+                function callback() {
                   cb();
                 }
                 asyncCallbackSpy = sandbox.spy(callback);
@@ -700,27 +703,27 @@ describe('Resources: ', function () {
             ], done);
           });
 
-          after(function(){
+          after(function () {
             sandbox.restore();
           });
 
-          it('should call iterators with same arguments', function(){
-            for (var i = 0; i < n; i++){
+          it('should call iterators with same arguments', function () {
+            for (var i = 0; i < n; i++) {
               var asyncArgs = asyncIteratorSpy.getCall(i).args;
               var args = iteratorSpy.getCall(i).args;
               asyncArgs[0].should.be.deep.equal(_.pick(args[0], 'href', 'name', 'description', 'status'));
             }
           });
 
-          it('should call iterator n times', function(){
+          it('should call iterator n times', function () {
             iteratorSpy.should.have.been.calledBefore(callbackSpy);
             iteratorSpy.callCount.should.be.equal(n);
           });
 
-          it('should call callback once', function(){
+          it('should call callback once', function () {
             callbackSpy.should.have.been.calledOnce;
             var args = _.map(callbackSpy.getCall(0).args[0],
-              function(item) {
+              function (item) {
                 return _.pick(item, 'href', 'name', 'description', 'status');
               });
             var asyncArgs = asyncCallbackSpy.getCall(0).args[0];
@@ -729,20 +732,20 @@ describe('Resources: ', function () {
         };
       }
 
-      function testSortBy(method){
-        return function(){
+      function testSortBy(method) {
+        return function () {
           var n;
 
-          function createAppsCollection(items, offset, limit){
+          function createAppsCollection(items, offset, limit) {
             return {
               href: '/tenants/78KBoSJ5EkMD8OVmBV934Y/applications',
               offset: offset,
               limit: limit,
-              items: items.slice(offset, offset+limit)
+              items: items.slice(offset, offset + limit)
             };
           }
 
-          function application(i){
+          function application(i) {
             return { href: '/applications/' + i,
               name: 'testing ' + i,
               description: i,
@@ -750,9 +753,9 @@ describe('Resources: ', function () {
             };
           }
 
-          function createNApps(n){
+          function createNApps(n) {
             var items = [];
-            for (var i = 0; i < n; i++){
+            for (var i = 0; i < n; i++) {
               items.push(application(i));
             }
             return items;
@@ -761,7 +764,7 @@ describe('Resources: ', function () {
           var i, items, pages, applications;
           var sandbox, iteratorSpy, callbackSpy, asyncIteratorSpy, asyncCallbackSpy;
 
-          before(function(done){
+          before(function (done) {
             n = 250;
             pages = [];
 
@@ -769,34 +772,34 @@ describe('Resources: ', function () {
             // 1. items
             items = createNApps(n);
             // 2. create app collection resource
-            for (i = 0; i < Math.ceil(n/100); i++){
-              pages.push(createAppsCollection(items, i*100, (i+1)*100));
+            for (i = 0; i < Math.ceil(n / 100); i++) {
+              pages.push(createAppsCollection(items, i * 100, (i + 1) * 100));
             }
             applications = instantiate(Application, pages[0], {}, ds);
             // 3. nock
-            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200,pages);
-            for (i = 1; i < Math.ceil(n/100); i++) {
+            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200, pages);
+            for (i = 1; i < Math.ceil(n / 100); i++) {
               var ref = u.v1(applications.href) + '?' + querystring.stringify({offset: i * 100, limit: 100});
               nock(u.BASE_URL).get(ref).reply(200, pages[i]);
             }
             sandbox = sinon.sandbox.create();
             // 4. iterator and callback spies
-            function iterator(item, cb){
+            function iterator(item, cb) {
               cb(null, item.description % 2 === 0);
             }
             iteratorSpy = sandbox.spy(iterator);
             asyncIteratorSpy = sandbox.spy(iterator);
 
             async.series([
-              function(cb){
-                function callback(){
+              function (cb) {
+                function callback() {
                   cb();
                 }
                 callbackSpy = sandbox.spy(callback);
                 applications[method](iteratorSpy, callbackSpy);
               },
-              function(cb){
-                function callback(){
+              function (cb) {
+                function callback() {
                   cb();
                 }
                 asyncCallbackSpy = sandbox.spy(callback);
@@ -805,27 +808,27 @@ describe('Resources: ', function () {
             ], done);
           });
 
-          after(function(){
+          after(function () {
             sandbox.restore();
           });
 
-          it('should call iterators with same arguments', function(){
-            for (var i = 0; i < n; i++){
+          it('should call iterators with same arguments', function () {
+            for (var i = 0; i < n; i++) {
               var asyncArgs = asyncIteratorSpy.getCall(i).args;
               var args = iteratorSpy.getCall(i).args;
               asyncArgs[0].should.be.deep.equal(_.pick(args[0], 'href', 'name', 'description', 'status'));
             }
           });
 
-          it('should call iterator n times', function(){
+          it('should call iterator n times', function () {
             iteratorSpy.should.have.been.calledBefore(callbackSpy);
             iteratorSpy.callCount.should.be.equal(n);
           });
 
-          it('should call callback once', function(){
+          it('should call callback once', function () {
             callbackSpy.should.have.been.calledOnce;
             var args = _.map(callbackSpy.getCall(0).args[1],
-              function(item) {
+              function (item) {
                 return _.pick(item, 'href', 'name', 'description', 'status');
               });
             var asyncArgs = asyncCallbackSpy.getCall(0).args[1];
@@ -834,20 +837,20 @@ describe('Resources: ', function () {
         };
       }
 
-      function testReduce(method){
-        return function(){
+      function testReduce(method) {
+        return function () {
           var n;
 
-          function createAppsCollection(items, offset, limit){
+          function createAppsCollection(items, offset, limit) {
             return {
               href: '/tenants/78KBoSJ5EkMD8OVmBV934Y/applications',
               offset: offset,
               limit: limit,
-              items: items.slice(offset, offset+limit)
+              items: items.slice(offset, offset + limit)
             };
           }
 
-          function application(i){
+          function application(i) {
             return { href: '/applications/' + i,
               name: 'testing ' + i,
               description: i,
@@ -855,9 +858,9 @@ describe('Resources: ', function () {
             };
           }
 
-          function createNApps(n){
+          function createNApps(n) {
             var items = [];
-            for (var i = 0; i < n; i++){
+            for (var i = 0; i < n; i++) {
               items.push(application(i));
             }
             return items;
@@ -866,7 +869,7 @@ describe('Resources: ', function () {
           var i, items, pages, applications;
           var sandbox, iteratorSpy, callbackSpy, asyncIteratorSpy, asyncCallbackSpy;
 
-          before(function(done){
+          before(function (done) {
             n = 250;
             pages = [];
 
@@ -874,34 +877,34 @@ describe('Resources: ', function () {
             // 1. items
             items = createNApps(n);
             // 2. create app collection resource
-            for (i = 0; i < Math.ceil(n/100); i++){
-              pages.push(createAppsCollection(items, i*100, (i+1)*100));
+            for (i = 0; i < Math.ceil(n / 100); i++) {
+              pages.push(createAppsCollection(items, i * 100, (i + 1) * 100));
             }
             applications = instantiate(Application, pages[0], {}, ds);
             // 3. nock
-            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200,pages);
-            for (i = 1; i < Math.ceil(n/100); i++) {
+            nock(u.BASE_URL).get(u.v1(applications.href)).reply(200, pages);
+            for (i = 1; i < Math.ceil(n / 100); i++) {
               var ref = u.v1(applications.href) + '?' + querystring.stringify({offset: i * 100, limit: 100});
               nock(u.BASE_URL).get(ref).reply(200, pages[i]);
             }
             sandbox = sinon.sandbox.create();
             // 4. iterator and callback spies
-            function iterator(memo, item, cb){
+            function iterator(memo, item, cb) {
               cb(null, memo + item.description);
             }
             iteratorSpy = sandbox.spy(iterator);
             asyncIteratorSpy = sandbox.spy(iterator);
 
             async.series([
-              function(cb){
-                function callback(){
+              function (cb) {
+                function callback() {
                   cb();
                 }
                 callbackSpy = sandbox.spy(callback);
                 applications[method](100500, iteratorSpy, callbackSpy);
               },
-              function(cb){
-                function callback(){
+              function (cb) {
+                function callback() {
                   cb();
                 }
                 asyncCallbackSpy = sandbox.spy(callback);
@@ -910,12 +913,12 @@ describe('Resources: ', function () {
             ], done);
           });
 
-          after(function(){
+          after(function () {
             sandbox.restore();
           });
 
-          it('should call iterators with same arguments', function(){
-            for (var i = 0; i < n; i++){
+          it('should call iterators with same arguments', function () {
+            for (var i = 0; i < n; i++) {
               var asyncArgs = asyncIteratorSpy.getCall(i).args;
               var args = iteratorSpy.getCall(i).args;
               asyncArgs[0].should.be.equal(args[0]);
@@ -923,12 +926,12 @@ describe('Resources: ', function () {
             }
           });
 
-          it('should call iterator n times', function(){
+          it('should call iterator n times', function () {
             iteratorSpy.should.have.been.calledBefore(callbackSpy);
             iteratorSpy.callCount.should.be.equal(n);
           });
 
-          it('should call callback once', function(){
+          it('should call callback once', function () {
             callbackSpy.should.have.been.calledOnce;
             callbackSpy.getCall(0).args[1].should.be.equal(asyncCallbackSpy.getCall(0).args[1]);
           });

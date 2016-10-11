@@ -1,4 +1,5 @@
-/* jshint -W030 */
+'use strict';
+
 var common = require('./common');
 var sinon = common.sinon;
 var nock = common.nock;
@@ -24,7 +25,7 @@ var uuid = require('node-uuid');
 var url = require('url');
 
 describe('Resources: ', function () {
-  "use strict";
+
   describe('Application resource', function () {
     var dataStore;
 

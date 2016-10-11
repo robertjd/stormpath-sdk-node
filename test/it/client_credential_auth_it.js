@@ -1,3 +1,5 @@
+'use strict';
+
 var nJwt = require('njwt');
 var common = require('../common');
 var helpers = require('./helpers');
