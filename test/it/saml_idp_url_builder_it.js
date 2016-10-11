@@ -26,7 +26,7 @@ describe('SamlIdpUrlBuilder', function () {
     });
   });
 
-  after(function(done){
+  after(function (done) {
     helpers.cleanupApplicationAndStores(application, done);
   });
 

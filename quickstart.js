@@ -38,7 +38,7 @@ function createApplication() {
     description: ('No, Srsly. It\'s Awesome')
   };
 
-  return client.createApplication(app, {createDirectory: true}, function(err, app) {
+  return client.createApplication(app, {createDirectory: true}, function (err, app) {
     if (err) throw err;
     application = app;
     console.log('Created application:');
@@ -60,7 +60,7 @@ function createAccount() {
     password: 'Changeme1!'
   };
 
-  return application.createAccount(acct, function(err, createdAccount) {
+  return application.createAccount(acct, function (err, createdAccount) {
     if (err) throw err;
     account = createdAccount;
     console.log('Created account:');
@@ -76,7 +76,7 @@ function updateAccount() {
 
   account.middleName = 'Make it so.';
 
-  return account.save(function(err, savedAccount) {
+  return account.save(function (err, savedAccount) {
     if (err) throw err;
     account = savedAccount;
     console.log('Updated account:');
@@ -96,10 +96,10 @@ function authenticateAccount() {
     password: 'Changeme1!'
   };
 
-  return application.authenticateAccount(authcRequest, function(err, result) {
+  return application.authenticateAccount(authcRequest, function (err, result) {
     if (err) throw err;
 
-    return result.getAccount(function(err2, theAccount) { //this is cached and will execute immediately (no server request):
+    return result.getAccount(function (err2, theAccount) { //this is cached and will execute immediately (no server request):
       if(err2) throw err2;
 
       account = theAccount;
@@ -120,7 +120,7 @@ function authenticateAccount() {
 // ==================================================
 function sendPasswordResetEmail() {
 
-  return application.sendPasswordResetEmail(accountEmail, function(err, token) {
+  return application.sendPasswordResetEmail(accountEmail, function (err, token) {
     if (err) throw err;
 
     console.log("Sent email that included a link with password reset token: " + token.toString());
@@ -140,7 +140,7 @@ function createGroup() {
     name: unique('Administrators')
   };
 
-  return application.createGroup(aGroup, function(err, createdGroup) {
+  return application.createGroup(aGroup, function (err, createdGroup) {
     if (err) throw err;
     group = createdGroup;
 
@@ -153,7 +153,7 @@ function createGroup() {
 // ==================================================
 function addAccountToGroup() {
 
-  return account.addToGroup(group, function(err, membership) {
+  return account.addToGroup(group, function (err, membership) {
     if (err) throw err;
     console.log(membership);
 
@@ -166,8 +166,8 @@ function addAccountToGroup() {
 // Step 8 - Retrieve an Account's Groups
 // ==================================================
 function retrieveAccountGroups() {
-  account.getGroups(function(err, groups) {
-    groups.each(function(err, group) {
+  account.getGroups(function (err, groups) {
+    groups.each(function (err, group) {
       console.log(group);
     })
   });
@@ -185,18 +185,18 @@ function cleanup() {
   var ds = application.dataStore;
 
   //delete the application's directory.  This will auto-delete any contained accounts and groups:
-  ds.getResource(application.defaultAccountStoreMapping.href, function(err, mapping) {
+  ds.getResource(application.defaultAccountStoreMapping.href, function (err, mapping) {
     if (err) throw err;
 
     console.log('Retrieved application accountStoreMapping for deletion:');
     console.log(mapping);
 
-    ds.deleteResource(mapping.accountStore, function(err) {
+    ds.deleteResource(mapping.accountStore, function (err) {
       if(err) throw err;
 
       console.log('Deleted application directory.');
 
-      application.delete(function(err) {
+      application.delete(function (err) {
         if (err) throw err;
         console.log('Deleted application.');
       });

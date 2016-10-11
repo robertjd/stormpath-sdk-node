@@ -411,7 +411,7 @@ describe('Resources: ', function () {
         }, dataStore)
           .createApiKey(function (err, value) {
             result = [err, value];
-            dataStore.cacheHandler.get(creationResponse.href, function(err, value) {
+            dataStore.cacheHandler.get(creationResponse.href, function (err, value) {
               cacheResult = [err, value];
               done();
             });

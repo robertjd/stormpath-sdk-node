@@ -116,7 +116,7 @@ describe('ds:', function () {
       });
 
       // todo: tbd - ignore cache if query param provided
-      /*      describe('if query provided', function(){
+      /*      describe('if query provided', function () {
        it('should ignore cache');
        });*/
 

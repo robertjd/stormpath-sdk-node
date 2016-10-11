@@ -282,7 +282,7 @@ describe('Resources: ', function () {
       });
     });
 
-    describe('get provider', function(){
+    describe('get provider', function () {
       function getProvider(data) {
         return function () {
           var dirObj, providerObj, app, provider;

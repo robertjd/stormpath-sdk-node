@@ -260,17 +260,13 @@ describe('Resources: ', function () {
             var result = test.cbSpy.args[0];
             common.assert.instanceOf(result[1].account, Account);
           });
-<<<<<<< HEAD
 
           it('should return an expanded instance of Account', function() {
             var result = test.cbSpy.args[0];
             common.assert.instanceOf(result[1].account, Account);
           });
 
-          it('should return the correct account on the idSiteResult',function(){
-=======
-          it('should return the correct account on the idSiteResult', function () {
->>>>>>> more eslint fixes
+          it('should return the correct account on the idSiteResult', function() {
             var result = test.cbSpy.args[0];
             common.assert.equal(result[1].account.href, accountHref);
           });

@@ -30,11 +30,11 @@ function getClient(cb) {
   });
 }
 
-function uniqId(){
+function uniqId() {
   return 'it-'+uuid();
 }
 
-function fakeAccount(){
+function fakeAccount() {
   return {
     givenName: uniqId(),
     surname: uniqId(),
@@ -108,18 +108,18 @@ function cleanupOldApplications(callback) {
  */
 function cleanupApplicationAndStores(application, callback) {
   application.getAccountStoreMappings(function (err, mappings) {
-    if(err){
+    if (err) {
       return callback(err);
     }
-    mappings.each(function(mapping, next){
-      mapping.getAccountStore(function(err, store){
-        if(err){
+    mappings.each(function (mapping, next) {
+      mapping.getAccountStore(function (err, store) {
+        if (err) {
           return next(err);
         }
         store.delete(next);
       });
-    },function(err){
-      if(err){
+    }, function (err) {
+      if (err) {
         return callback(err);
       }
       application.delete(callback);
@@ -139,7 +139,7 @@ function createApplication(callback) {
     var appData = { name: pkg.name + ':' + getFriendlyCallerName() + ':' + testRunId + ':' + uuid.v4() };
     var opts = { createDirectory: true };
 
-    getClient(function(client){
+    getClient(function (client) {
       client.createApplication(appData, opts, callback);
     });
   } else {
@@ -172,7 +172,7 @@ function createDirectory(options, callback) {
   });
 }
 
-function fakeDirectory(){
+function fakeDirectory() {
   return {
     name: uniqId()
   };
@@ -186,11 +186,11 @@ function fakeDirectory(){
  * @param {Object} application - Stormpath Application Object
  * @param {Function} callback - A callback to run when done.
  */
-function getDefaultAccountStore(application,done){
-  application.getDefaultAccountStore(function(err,accountStoreMapping){
-    if(err){
+function getDefaultAccountStore(application,done) {
+  application.getDefaultAccountStore(function (err,accountStoreMapping) {
+    if (err) {
       done(err);
-    }else{
+    } else {
       accountStoreMapping.getAccountStore(done);
     }
   });

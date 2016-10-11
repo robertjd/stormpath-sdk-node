@@ -62,8 +62,8 @@ accounts in your Stormpath Tenant:
 ```javascript
 // Fetch all the accounts in my Stormpath Tenant
 
-client.getAccounts(function(err, accountsCollection) {
-  accountsCollection.each(function(account, next) {
+client.getAccounts(function (err, accountsCollection) {
+  accountsCollection.each(function (account, next) {
     console.log(account);
     next();
   });

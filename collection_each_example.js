@@ -21,9 +21,9 @@ stormpath.loadApiKey(apiKeyFilePath, function (err, apiKey) {
       throw err;
     }
     //add 200 applications for testing
-//    for(var i = 0; i < 200; i++){
+//    for(var i = 0; i < 200; i++) {
 //      tenant.createApplication({name: 'Just Testing! Delete me.' + Math.random() },
-//        function(){})
+//        function () {})
 //    }
 
     tenant.getApplications({limit: itemsPerPage}, function (err, apps) {
@@ -56,7 +56,7 @@ function onAppsReady(apps) {
     s(sortBy),
     s(concat)
   ], function (err) {
-    if(err){
+    if (err) {
       console.error(err);
     }
 

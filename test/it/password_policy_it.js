@@ -4,8 +4,8 @@ var assert = require('assert');
 var uuid = require('uuid');
 var Client = require('../../lib/Client');
 
-describe('PasswordPolicy', function() {
-  describe('getStrength', function() {
+describe('PasswordPolicy', function () {
+  describe('getStrength', function () {
     var client, directory;
 
     before(function (done) {
@@ -21,7 +21,7 @@ describe('PasswordPolicy', function() {
     });
 
     after(function (done) {
-      directory.delete(function(err) {
+      directory.delete(function (err) {
         done(err);
       });
     });

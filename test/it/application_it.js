@@ -248,7 +248,7 @@ describe('Application', function () {
   describe('resendVerificationEmail', function () {
     var fakeAccount = helpers.fakeAccount();
     before(function (done) {
-      directory.createAccount(fakeAccount, function(err,_account){
+      directory.createAccount(fakeAccount, function (err,_account) {
         if (err) { throw err; }
         account = _account;
         done();
@@ -259,14 +259,14 @@ describe('Application', function () {
       before(function (done) {
         app.resendVerificationEmail({
           login: fakeAccount.email
-        }, function(err,authenticationResult){
+        }, function (err,authenticationResult) {
           console.log(err);
           result = [err,authenticationResult];
           done();
         });
       });
       it('should not err', function () {
-        assert.equal(result[0],null);
+        assert.equal(result[0], null);
       });
       it('should be an accepted response', function () {
         assert.equal(result[1].accepted,true);
@@ -331,10 +331,10 @@ describe('Application', function () {
 
     // describe('via resource expansion', function () {
 
-    //   function getExpandedApplication(cb){
+    //   function getExpandedApplication(cb) {
     //     client.getApplication(
     //       { expand: 'customData' },
-    //       function(err, app){
+    //       function (err, app) {
     //         if (err) { throw err; }
     //         cb(app);
     //       }
@@ -344,7 +344,7 @@ describe('Application', function () {
     //   var customData;
 
     //   before(function (done) {
-    //     getExpandedApplication(function(app){
+    //     getExpandedApplication(function (app) {
     //       customData = app.customData;
     //       done();
     //     });
@@ -361,9 +361,9 @@ describe('Application', function () {
     //     var propertyValue = helpers.uniqId();
     //     before(function (done) {
     //       customData[propertyName] = propertyValue;
-    //       customData.save(function(err){
+    //       customData.save(function (err) {
     //         if (err) { throw err; }
-    //         getExpandedApplication(function(tenant){
+    //         getExpandedApplication(function (tenant) {
     //           customDataAfterGet = tenant.customData;
     //           done();
     //         });

@@ -134,7 +134,7 @@ describe('Resources: ', function () {
 
         before(function () {
           query = {q: 'asd'};
-          cb = function(err){
+          cb = function (err) {
             error = err;
           };
           sandbox = sinon.sandbox.create();

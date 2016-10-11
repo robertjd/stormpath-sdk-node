@@ -55,11 +55,11 @@ describe('AssertionAuthenticationResult', function () {
 
   describe('when constructed', function () {
 
-    it('should apply the data store parmater to the object', function(){
+    it('should apply the data store parmater to the object', function () {
       assert.equal(authenticationResult.dataStore, dataStore);
     });
 
-    it('should apply the data parmater properties to the object', function(){
+    it('should apply the data parmater properties to the object', function () {
       assert.ok(authenticationResult.account);
       assert.equal(authenticationResult.account.href, mockAccount.href);
     });
@@ -67,8 +67,8 @@ describe('AssertionAuthenticationResult', function () {
 
   describe('.getAccount()', function () {
 
-    it('should error if no account is defined', function(done) {
-      new AssertionAuthenticationResult({},{}).getAccount(function(err){
+    it('should error if no account is defined', function (done) {
+      new AssertionAuthenticationResult({},{}).getAccount(function (err) {
         assert.isOk(err);
         assert.equal(err.message, 'Unable to get account. Account HREF not specified.');
         done();

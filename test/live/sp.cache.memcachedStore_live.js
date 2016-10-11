@@ -5,7 +5,7 @@ var Memcached = require("memcached");
 var MemcachedStore = require('../../lib/cache/MemcachedStore');
 var Cache = require('../../lib/cache/Cache');
 
-var memcachedActionTests = function(memcachedStore) {
+var memcachedActionTests = function (memcachedStore) {
 
     describe('set entry', function () {
       var key;
@@ -113,7 +113,7 @@ var memcachedActionTests = function(memcachedStore) {
         key = 'key' + random();
         val = 'val' + random();
 
-        memcachedStore.clear(function(){
+        memcachedStore.clear(function () {
           memcachedStore.put(key, val, done);
         });
       });

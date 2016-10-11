@@ -185,7 +185,7 @@ describe('Client', function () {
   //  TODO bring this test back when i figure out why nock
   //  is interfering with the application call
   //
-  // describe('with an application name',function () {
+  // describe('with an application name', function () {
 
   //   var application;
   //   before(function (done) {
@@ -195,7 +195,7 @@ describe('Client', function () {
   //       function (err,app) {
   //         if(err) {
   //           throw err;
-  //         }else{
+  //         } else {
   //           application = app;
   //           done();
   //         }
@@ -206,13 +206,13 @@ describe('Client', function () {
   //     application.delete(done);
   //   });
 
-  //   it('should fail',function (done) {
+  //   it('should fail', function (done) {
   //     var client = makeTestClient({
   //       application:{
   //         name: application.name
   //       }
   //     });
-  //     client.on('ready',function () {
+  //     client.on('ready', function () {
   //       assert.equal(client.config.application.href,application.href);
   //       done();
   //     });

@@ -7,7 +7,7 @@ var RedisStore = require('../../lib/cache/RedisStore');
 
 var redis = require('redis');
 
-var redisActionTests = function(redisStore) {
+var redisActionTests = function (redisStore) {
     describe('set entry', function () {
       var key;
       var val;
@@ -114,7 +114,7 @@ var redisActionTests = function(redisStore) {
         key = 'key' + random();
         val = 'val' + random();
 
-        redisStore.clear(function(){
+        redisStore.clear(function () {
           redisStore.put(key, val, done);
         });
       });
