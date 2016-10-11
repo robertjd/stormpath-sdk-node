@@ -68,7 +68,7 @@ describe('AssertionAuthenticationResult', function () {
   describe('.getAccount()', function () {
 
     it('should error if no account is defined', function (done) {
-      new AssertionAuthenticationResult({},{}).getAccount(function (err) {
+      new AssertionAuthenticationResult({}, {}).getAccount(function (err) {
         assert.isOk(err);
         assert.equal(err.message, 'Unable to get account. Account HREF not specified.');
         done();

@@ -100,7 +100,7 @@ function authenticateAccount() {
     if (err) throw err;
 
     return result.getAccount(function (err2, theAccount) { //this is cached and will execute immediately (no server request):
-      if(err2) throw err2;
+      if (err2) throw err2;
 
       account = theAccount;
 
@@ -192,7 +192,7 @@ function cleanup() {
     console.log(mapping);
 
     ds.deleteResource(mapping.accountStore, function (err) {
-      if(err) throw err;
+      if (err) throw err;
 
       console.log('Deleted application directory.');
 

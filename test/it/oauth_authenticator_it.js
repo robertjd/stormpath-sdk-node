@@ -51,7 +51,7 @@ describe('OAuthAuthenticator', function () {
    */
   before(function (done) {
     newAccount = helpers.fakeAccount();
-    unsignedToken = nJwt.create({hello:'world'},'not a secret').compact();
+    unsignedToken = nJwt.create({hello:'world'}, 'not a secret').compact();
 
     helpers.createApplication(function (err, app) {
       if (err) {

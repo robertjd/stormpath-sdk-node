@@ -66,7 +66,7 @@ function getFriendlyCallerName() {
     while (err.stack.length) {
       var callerfile = err.stack.shift().getFileName();
 
-      if(currentfile !== callerfile) {
+      if (currentfile !== callerfile) {
         friendlyName = path.basename(callerfile).replace('.js', '');
         break;
       }

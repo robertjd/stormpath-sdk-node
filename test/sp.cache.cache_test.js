@@ -306,7 +306,7 @@ describe('Cache module', function () {
       opt.cache = null;
       sandbox = sinon.sandbox.create();
       var ms = new MemoryStore();
-      _.extend(ms,{
+      _.extend(ms, {
         expire: function () {},
         del: ms.delete,
         flushdb: ms.clear,

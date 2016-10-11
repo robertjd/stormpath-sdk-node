@@ -52,7 +52,7 @@ describe('DataStore', function () {
     });
   });
 
-  describe('when asked for a previously created resource w/ expansions,', function () {
+  describe('when asked for a previously created resource w/ expansions, ', function () {
     var directory, expandedDirectory;
     before(function (done) {
       helpers.getClient(function (client) {
@@ -60,7 +60,7 @@ describe('DataStore', function () {
         client.createDirectory(helpers.fakeDirectory(), function (err, _directory) {
           if (err) {throw err;}
           directory = _directory;
-          client.getDirectory(directory.href,{expand:'customData'}, function (err, _directory) {
+          client.getDirectory(directory.href, {expand:'customData'}, function (err, _directory) {
             if (err) {throw err;}
             expandedDirectory = _directory;
             done();
@@ -72,7 +72,7 @@ describe('DataStore', function () {
       directory.delete(done);
     });
     it('should return the resource w/ expansions', function () {
-      assert.equal(typeof expandedDirectory.customData.createdAt,'string');
+      assert.equal(typeof expandedDirectory.customData.createdAt, 'string');
     });
 
   });

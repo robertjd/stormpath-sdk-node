@@ -31,7 +31,7 @@ function clearEnvVars() {
     saved[arg] = process.env[arg];
     delete process.env[arg];
     return saved;
-  },{});
+  }, {});
   return function () {
     args.forEach(function (arg) {
       process.env[arg] = saved[arg];
@@ -193,7 +193,7 @@ describe('Client', function () {
   //       {name:common.uuid()},
   //       {createDirectory: true},
   //       function (err, app) {
-  //         if(err) {
+  //         if (err) {
   //           throw err;
   //         } else {
   //           application = app;
