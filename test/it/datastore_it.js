@@ -33,11 +33,11 @@ describe('DataStore', function () {
 
     before(function (done) {
       helpers.getClient(function (client) {
-        client.getCurrentTenant(function (err,tenant) {
+        client.getCurrentTenant(function (err, tenant) {
           if (err) {throw err;}
-          tenant.getApplications(function (err,collection) {
+          tenant.getApplications(function (err, collection) {
             if (err) {throw err;}
-            client._dataStore.cacheHandler.get(collection.href, function (err,value) {
+            client._dataStore.cacheHandler.get(collection.href, function (err, value) {
               if (err) {throw err;}
               cacheResult = value;
               done();
@@ -57,10 +57,10 @@ describe('DataStore', function () {
     before(function (done) {
       helpers.getClient(function (client) {
 
-        client.createDirectory(helpers.fakeDirectory(), function (err,_directory) {
+        client.createDirectory(helpers.fakeDirectory(), function (err, _directory) {
           if (err) {throw err;}
           directory = _directory;
-          client.getDirectory(directory.href,{expand:'customData'}, function (err,_directory) {
+          client.getDirectory(directory.href,{expand:'customData'}, function (err, _directory) {
             if (err) {throw err;}
             expandedDirectory = _directory;
             done();

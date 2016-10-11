@@ -45,7 +45,7 @@ describe('Client', function () {
     });
 
     it('should get an access token resource', function (done) {
-      accountCase.client.getAccessToken('/accessTokens/' + accountCase.passwordGrantResult.accessToken.body.jti, function (err,resource) {
+      accountCase.client.getAccessToken('/accessTokens/' + accountCase.passwordGrantResult.accessToken.body.jti, function (err, resource) {
         if (err) {
           done(err);
         } else {
@@ -72,7 +72,7 @@ describe('Client', function () {
     });
 
     it('should get a refresh token resource', function (done) {
-      accountCase.client.getRefreshToken('/refreshTokens/' + accountCase.passwordGrantResult.refreshToken.body.jti, function (err,resource) {
+      accountCase.client.getRefreshToken('/refreshTokens/' + accountCase.passwordGrantResult.refreshToken.body.jti, function (err, resource) {
         if (err) {
           done(err);
         } else {
@@ -122,7 +122,7 @@ describe('Client', function () {
       client.createOrganization({
         name: uuid(),
         nameKey: uuid()
-      }, function (err,_organization) {
+      }, function (err, _organization) {
         assert(_organization instanceof Organization);
         organization = _organization;
         done();
@@ -147,7 +147,7 @@ describe('Client', function () {
       });
     });
     it('should get an organization', function (done) {
-      client.getOrganization(organization.href, function (err,organization) {
+      client.getOrganization(organization.href, function (err, organization) {
         assert(organization instanceof Organization);
         done();
       });
@@ -169,7 +169,7 @@ describe('Client', function () {
       });
     });
     it('should get an organization', function (done) {
-      client.getOrganizations(function (err,collection) {
+      client.getOrganizations(function (err, collection) {
         assert(collection.items[0] instanceof Organization);
         done();
       });

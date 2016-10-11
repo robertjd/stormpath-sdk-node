@@ -13,9 +13,9 @@ describe('OAuthIdSiteTokenGrantAuthenticator', function () {
   before(function (done) {
     newAccount = helpers.fakeAccount();
 
-    helpers.createApplication(function (err,app) {
+    helpers.createApplication(function (err, app) {
       application = app;
-      application.createAccount(newAccount,done);
+      application.createAccount(newAccount, done);
     });
   });
 

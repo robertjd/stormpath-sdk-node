@@ -4,7 +4,7 @@ var base64 = require('../lib/utils').base64;
 var Benchmark = require('benchmark');
 var async = require('async');
 
-function invoke(app,apiKey,cb) {
+function invoke(app, apiKey, cb) {
   app.authenticateApiRequest({
     request:{
       method: 'GET',
@@ -13,10 +13,10 @@ function invoke(app,apiKey,cb) {
         'authorization': 'Basic '+ base64.encode(apiKey.id+':'+apiKey.secret)
       }
     }
-  },cb);
+  }, cb);
 }
 
-function addTestRunner(apiKey,test,suite,done) {
+function addTestRunner(apiKey, test, suite, done) {
   var client = new stormpath.Client({
     apiKey: new stormpath.ApiKey(
       process.env['STORMPATH_API_KEY_ID'],
@@ -25,18 +25,18 @@ function addTestRunner(apiKey,test,suite,done) {
     apiKeyEncryptionOptions: test.apiKeyEncryptionOptions
   });
 
-  client.getApplication(process.env['STORMPATH_APP_HREF'], function (err,app) {
+  client.getApplication(process.env['STORMPATH_APP_HREF'], function (err, app) {
 
     if (err) { throw err; }
 
     // Make an initial invocation to warm the cache
 
-    invoke(app,apiKey, function (err) {
+    invoke(app, apiKey, function (err) {
       if (err) { throw err; }
       suite.add(test.title, {
         defer: true,
         fn: function (deferred) {
-          invoke(app,apiKey, function (err) {
+          invoke(app, apiKey, function (err) {
             if (err) {
               throw err;
             } else {
@@ -110,7 +110,7 @@ var suite = new Benchmark.Suite('api auth')
   });
 
 
-client1.getApplication(process.env['STORMPATH_APP_HREF'], function (err,app1) {
+client1.getApplication(process.env['STORMPATH_APP_HREF'], function (err, app1) {
 
   if (err) { throw err; }
 
@@ -121,18 +121,18 @@ client1.getApplication(process.env['STORMPATH_APP_HREF'], function (err,app1) {
     password: uuid() + 'ABC1',
     givenName: uuid(),
     surname: uuid()
-  }, function (err,result) {
+  }, function (err, result) {
 
     if (err) { throw err; }
 
     account = result;
 
-    account.createApiKey(function (err,apiKey) {
+    account.createApiKey(function (err, apiKey) {
 
       if (err) { throw err; }
 
         async.parallel(tests.map(function (test) {
-          return addTestRunner.bind(null,apiKey,test,suite);
+          return addTestRunner.bind(null, apiKey, test, suite);
         }), function (err) {
           if (err) { throw err; }
           suite.run({async:true});

@@ -22,7 +22,7 @@ describe('Client Credential Authentication', function () {
           app = _app;
           app.createAccount(
             fakeAccount,
-            function (err,_account) {
+            function (err, _account) {
               if (err) { throw err; }
               account = _account;
               done();
@@ -34,7 +34,7 @@ describe('Client Credential Authentication', function () {
   });
 
   after(function (done) {
-    helpers.cleanupApplicationAndStores(app,done);
+    helpers.cleanupApplicationAndStores(app, done);
   });
 
   describe('AuthenticationResult.getAccessToken()', function () {
@@ -43,7 +43,7 @@ describe('Client Credential Authentication', function () {
       app.authenticateAccount({
         username: fakeAccount.username,
         password: fakeAccount.password
-      }, function (err,authenticationResult) {
+      }, function (err, authenticationResult) {
         if (err) { throw err; }
         accessToken = authenticationResult.getAccessToken();
 
@@ -54,12 +54,12 @@ describe('Client Credential Authentication', function () {
     it('should return an access token', function (done) {
       assert.isString(accessToken);
       var secret = client._dataStore.requestExecutor.options.client.apiKey.secret;
-      nJwt.verify(accessToken,secret, function (err,jwt) {
+      nJwt.verify(accessToken, secret, function (err, jwt) {
         if (err) { throw err; }
         // The subject should be the account
-        assert.equal(jwt.body.sub,account.href);
+        assert.equal(jwt.body.sub, account.href);
         // The defalt TTL is 3600 seconds
-        assert.equal(jwt.body.exp - jwt.body.iat,3600);
+        assert.equal(jwt.body.exp - jwt.body.iat, 3600);
         done();
       });
     });
@@ -73,7 +73,7 @@ describe('Client Credential Authentication', function () {
       app.authenticateAccount({
         username: account.username,
         password: fakeAccount.password
-      }, function (err,authenticationResult) {
+      }, function (err, authenticationResult) {
         if (err) { throw err; }
 
         var requestObject = {
@@ -86,8 +86,8 @@ describe('Client Credential Authentication', function () {
 
         app.authenticateApiRequest({
           request: requestObject
-        }, function (err,value) {
-          result = [err,value];
+        }, function (err, value) {
+          result = [err, value];
 
           account.status = 'DISABLED';
           account.save(function (err) {
@@ -101,15 +101,15 @@ describe('Client Credential Authentication', function () {
             };
             app.authenticateApiRequest({
               request: requestObject
-            }, function (err,value) {
-              result2 = [err,value];
+            }, function (err, value) {
+              result2 = [err, value];
               // done();
               account.delete(function (err) {
                 if (err) { throw err; }
                 app.authenticateApiRequest({
                   request: requestObject
-                }, function (err,value) {
-                  result3 = [err,value];
+                }, function (err, value) {
+                  result3 = [err, value];
                   done();
                 });
               });
@@ -121,15 +121,15 @@ describe('Client Credential Authentication', function () {
     });
     it('should validate tokens where the account is the subject', function () {
       assert.equal(result[0], null);
-      assert.equal(result[1].account.href,account.href);
+      assert.equal(result[1].account.href, account.href);
     });
     it('should not validate tokens where the account is the subject and the account is disabled', function () {
       assert.isObject(result2[0]);
-      assert.equal(result2[0].statusCode,401);
+      assert.equal(result2[0].statusCode, 401);
     });
     it('should not validate tokens where the account is the subject and the account has been deleted', function () {
       assert.isObject(result3[0]);
-      assert.equal(result3[0].statusCode,401);
+      assert.equal(result3[0].statusCode, 401);
     });
 
   });

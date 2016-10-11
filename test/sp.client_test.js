@@ -192,7 +192,7 @@ describe('Client', function () {
   //     new Client().createApplication(
   //       {name:common.uuid()},
   //       {createDirectory: true},
-  //       function (err,app) {
+  //       function (err, app) {
   //         if(err) {
   //           throw err;
   //         } else {
@@ -213,7 +213,7 @@ describe('Client', function () {
   //       }
   //     });
   //     client.on('ready', function () {
-  //       assert.equal(client.config.application.href,application.href);
+  //       assert.equal(client.config.application.href, application.href);
   //       done();
   //     });
   //   });

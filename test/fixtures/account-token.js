@@ -18,20 +18,20 @@ AccountAccessTokenFixture.prototype.before = function before(done) {
   helpers.getClient(function (_client) {
 
     self.client = _client;
-    helpers.createApplication(function (err,app) {
+    helpers.createApplication(function (err, app) {
       if (err) {
         return done(err);
       }
 
       self.application = app;
-      helpers.getDefaultAccountStore(app, function (err,dir) {
+      helpers.getDefaultAccountStore(app, function (err, dir) {
         if (err) {
           return done(err);
         }
 
         self.directory = dir;
         self.newAccount = helpers.fakeAccount();
-        dir.createAccount(self.newAccount, function (err,_account) {
+        dir.createAccount(self.newAccount, function (err, _account) {
           self.account = _account;
           self.creationResult = [err, _account];
 
@@ -44,7 +44,7 @@ AccountAccessTokenFixture.prototype.before = function before(done) {
           authenticator.authenticate({
             username: _account.username,
             password: self.newAccount.password
-          }, function (err,passwordGrantResult) {
+          }, function (err, passwordGrantResult) {
             if (err) {
               done(err);
             } else {

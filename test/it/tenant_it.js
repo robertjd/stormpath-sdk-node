@@ -50,12 +50,12 @@ describe('Tenant', function () {
               fakeAccount,
               function (err) {
                 if (err) { throw err; }
-                tenant.getAccounts(function (err,collection) {
+                tenant.getAccounts(function (err, collection) {
                   if (err) { throw err; }
-                  collection.each(function (account,next) {
+                  collection.each(function (account, next) {
                     accounts.push(account);
                     next();
-                  },done);
+                  }, done);
                 });
               }
             );
@@ -72,8 +72,8 @@ describe('Tenant', function () {
       var found = accounts.filter(function (account) {
         return account.email === fakeAccount.email;
       });
-      assert.equal(found.length,1);
-      assert.equal(found[0].email,fakeAccount.email);
+      assert.equal(found.length, 1);
+      assert.equal(found[0].email, fakeAccount.email);
     });
 
   });
@@ -97,12 +97,12 @@ describe('Tenant', function () {
               {name: groupName},
               function (err) {
                 if (err) { throw err; }
-                tenant.getGroups(function (err,collection) {
+                tenant.getGroups(function (err, collection) {
                   if (err) { throw err; }
-                  collection.each(function (group,next) {
+                  collection.each(function (group, next) {
                     groups.push(group);
                     next();
-                  },done);
+                  }, done);
                 });
               }
             );
@@ -119,8 +119,8 @@ describe('Tenant', function () {
       var found = groups.filter(function (group) {
         return group.name === groupName;
       });
-      assert.equal(found.length,1);
-      assert.equal(found[0].name,groupName);
+      assert.equal(found.length, 1);
+      assert.equal(found[0].name, groupName);
     });
 
   });
@@ -131,7 +131,7 @@ describe('Tenant', function () {
       var customData;
 
       before(function (done) {
-        tenant.getCustomData(function (err,_customData) {
+        tenant.getCustomData(function (err, _customData) {
           if (err) { throw err; }
           customData = _customData;
           done();
@@ -139,8 +139,8 @@ describe('Tenant', function () {
       });
 
       it('should be get-able', function () {
-        assert.instanceOf(customData,CustomData);
-        assert.equal(customData.href,tenant.href+'/customData');
+        assert.instanceOf(customData, CustomData);
+        assert.equal(customData.href, tenant.href+'/customData');
       });
 
       describe('when saved and re-fetched', function () {
@@ -155,7 +155,7 @@ describe('Tenant', function () {
           customData[propertyName] = propertyValue;
           customData.save(function (err) {
             if (err) { throw err; }
-            tenant.getCustomData(function (err,customData) {
+            tenant.getCustomData(function (err, customData) {
               if (err) { throw err; }
               customDataAfterGet = customData;
               done();
@@ -163,7 +163,7 @@ describe('Tenant', function () {
           });
         });
         it('should have the new property persisted', function () {
-          assert.equal(customDataAfterGet[propertyName],propertyValue);
+          assert.equal(customDataAfterGet[propertyName], propertyValue);
         });
       });
     });
@@ -190,8 +190,8 @@ describe('Tenant', function () {
       });
 
       it('should be get-able', function () {
-        assert.instanceOf(customData,CustomData);
-        assert.equal(customData.href,tenant.href+'/customData');
+        assert.instanceOf(customData, CustomData);
+        assert.equal(customData.href, tenant.href+'/customData');
       });
 
       describe('when saved and re-fetched', function () {
@@ -213,7 +213,7 @@ describe('Tenant', function () {
           });
         });
         it('should have the new property persisted', function () {
-          assert.equal(customDataAfterGet[propertyName],propertyValue);
+          assert.equal(customDataAfterGet[propertyName], propertyValue);
         });
       });
     });

@@ -17,7 +17,7 @@ describe('Directory', function () {
       client.createDirectory(
         {name: helpers.uniqId()},
         function (err, _directory) {
-          creationResult = [err,_directory];
+          creationResult = [err, _directory];
           directory = _directory;
           done();
         }
@@ -31,7 +31,7 @@ describe('Directory', function () {
 
   it('should be create-able', function () {
     assert.equal(creationResult[0], null); // did not error
-    assert.instanceOf(directory,Directory);
+    assert.instanceOf(directory, Directory);
   });
 
   describe('custom data', function () {
@@ -39,7 +39,7 @@ describe('Directory', function () {
       var customData;
 
       before(function (done) {
-        directory.getCustomData(function (err,_customData) {
+        directory.getCustomData(function (err, _customData) {
           if (err) { throw err; }
           customData = _customData;
           done();
@@ -47,8 +47,8 @@ describe('Directory', function () {
       });
 
       it('should be get-able', function () {
-        assert.instanceOf(customData,CustomData);
-        assert.equal(customData.href,directory.href+'/customData');
+        assert.instanceOf(customData, CustomData);
+        assert.equal(customData.href, directory.href+'/customData');
       });
 
       describe('when saved and re-fetched', function () {
@@ -63,7 +63,7 @@ describe('Directory', function () {
           customData[propertyName] = propertyValue;
           customData.save(function (err) {
             if (err) { throw err; }
-            directory.getCustomData(function (err,customData) {
+            directory.getCustomData(function (err, customData) {
               if (err) { throw err; }
               customDataAfterGet = customData;
               done();
@@ -71,7 +71,7 @@ describe('Directory', function () {
           });
         });
         it('should have the new property persisted', function () {
-          assert.equal(customDataAfterGet[propertyName],propertyValue);
+          assert.equal(customDataAfterGet[propertyName], propertyValue);
         });
       });
     });
@@ -99,8 +99,8 @@ describe('Directory', function () {
       });
 
       it('should be get-able', function () {
-        assert.instanceOf(customData,CustomData);
-        assert.equal(customData.href,directory.href+'/customData');
+        assert.instanceOf(customData, CustomData);
+        assert.equal(customData.href, directory.href+'/customData');
       });
 
       describe('when saved and re-fetched', function () {
@@ -122,7 +122,7 @@ describe('Directory', function () {
           });
         });
         it('should have the new property persisted', function () {
-          assert.equal(customDataAfterGet[propertyName],propertyValue);
+          assert.equal(customDataAfterGet[propertyName], propertyValue);
         });
       });
     });

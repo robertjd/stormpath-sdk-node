@@ -446,7 +446,7 @@ object like you have been with Accounts.  For more information please see the
 We recently added Single Sign On (SSO) support to our
 [ID Site Feature](http://docs.stormpath.com/guides/using-id-site)
 and this SDK release adds
-a `logout: true` option to the ` application.CreateIdSiteUrl([options],cb)` method.  When this
+a `logout: true` option to the ` application.CreateIdSiteUrl([options], cb)` method.  When this
 option is used  the user’s SSO cookie will be destroyed and the user will be immediately redirected
 to the specified `callbackUri` where the `idSiteResult` has a new `status` property which will
 be the value of `'LOGOUT'`
@@ -477,7 +477,7 @@ Fix for case where `application.getAccount()` receives an error but still tries 
 
 #### Breaking Changes ####
 
-* `application.authenticateApiRequest(options,cb)` now requires you to supply the request method as `options.request.method`
+* `application.authenticateApiRequest(options, cb)` now requires you to supply the request method as `options.request.method`
 * OAuth token requests must use POST, see [RFC749 3.2](http://tools.ietf.org/html/rfc6749#section-3.2)
 
 #### Fixes ####

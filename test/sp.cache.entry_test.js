@@ -69,7 +69,7 @@ describe('Cache module', function () {
     describe('constructor params validation', function () {
       function createCacheEntry(createdAt, lastAccessedAt) {
         return function () {
-          return new CacheEntry({},createdAt, lastAccessedAt);
+          return new CacheEntry({}, createdAt, lastAccessedAt);
         };
       }
       it('should throw "expecting date in timestamp format"', function () {
@@ -107,7 +107,7 @@ describe('Cache module', function () {
         });
 
         it('should not be expired', function () {
-          var notExpired = cacheEntry.isExpired(300,300);
+          var notExpired = cacheEntry.isExpired(300, 300);
           /* jshint -W030 */
           notExpired.should.not.be.true;
         });
@@ -122,7 +122,7 @@ describe('Cache module', function () {
         });
 
         it('should be expired', function () {
-          var expired = cacheEntry.isExpired(300,300);
+          var expired = cacheEntry.isExpired(300, 300);
           /* jshint -W030 */
           expired.should.be.true;
         });
@@ -137,7 +137,7 @@ describe('Cache module', function () {
         });
 
         it('should be expired', function () {
-          var expired = cacheEntry.isExpired(300,300);
+          var expired = cacheEntry.isExpired(300, 300);
           /* jshint -W030 */
           expired.should.be.true;
         });

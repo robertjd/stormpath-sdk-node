@@ -248,7 +248,7 @@ describe('Application', function () {
   describe('resendVerificationEmail', function () {
     var fakeAccount = helpers.fakeAccount();
     before(function (done) {
-      directory.createAccount(fakeAccount, function (err,_account) {
+      directory.createAccount(fakeAccount, function (err, _account) {
         if (err) { throw err; }
         account = _account;
         done();
@@ -259,9 +259,9 @@ describe('Application', function () {
       before(function (done) {
         app.resendVerificationEmail({
           login: fakeAccount.email
-        }, function (err,authenticationResult) {
+        }, function (err, authenticationResult) {
           console.log(err);
-          result = [err,authenticationResult];
+          result = [err, authenticationResult];
           done();
         });
       });
@@ -269,7 +269,7 @@ describe('Application', function () {
         assert.equal(result[0], null);
       });
       it('should be an accepted response', function () {
-        assert.equal(result[1].accepted,true);
+        assert.equal(result[1].accepted, true);
       });
     });
 
@@ -351,8 +351,8 @@ describe('Application', function () {
     //   });
 
     //   it('should be get-able', function () {
-    //     assert.instanceOf(customData,CustomData);
-    //     assert.equal(customData.href,app.href+'/customData');
+    //     assert.instanceOf(customData, CustomData);
+    //     assert.equal(customData.href, app.href+'/customData');
     //   });
 
     //   describe('when saved and re-fetched', function () {
@@ -370,7 +370,7 @@ describe('Application', function () {
     //       });
     //     });
     //     it('should have the new property persisted', function () {
-    //       assert.equal(customDataAfterGet[propertyName],propertyValue);
+    //       assert.equal(customDataAfterGet[propertyName], propertyValue);
     //     });
     //   });
     // });

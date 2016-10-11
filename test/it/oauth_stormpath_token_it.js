@@ -96,7 +96,7 @@ describe('OAuthStormpathTokenAuthenticator', function () {
         If the assertions run too quickly, the iat of the token will be in the
         future and this will cause an iat validation error.
        */
-      setTimeout(done,1000);
+      setTimeout(done, 1000);
     });
 
     describe('without a data parameter', function () {

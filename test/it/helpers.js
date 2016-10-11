@@ -186,8 +186,8 @@ function fakeDirectory() {
  * @param {Object} application - Stormpath Application Object
  * @param {Function} callback - A callback to run when done.
  */
-function getDefaultAccountStore(application,done) {
-  application.getDefaultAccountStore(function (err,accountStoreMapping) {
+function getDefaultAccountStore(application, done) {
+  application.getDefaultAccountStore(function (err, accountStoreMapping) {
     if (err) {
       done(err);
     } else {

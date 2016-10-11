@@ -26,7 +26,7 @@ describe('Organization', function () {
         if (err) { throw err; }
         organization = _organization;
 
-        client.createDirectory(dir, function (err,_directory) {
+        client.createDirectory(dir, function (err, _directory) {
           if (err) { throw err; }
           directory = _directory;
           done();
@@ -38,7 +38,7 @@ describe('Organization', function () {
   });
 
   after(function (done) {
-    async.eachSeries([mapping,directory, organization ], function (resource, next) {
+    async.eachSeries([mapping, directory, organization ], function (resource, next) {
       resource.delete(next);
     }, done);
   });
@@ -48,7 +48,7 @@ describe('Organization', function () {
       mapping.delete(done);
     });
     it('should create an OrganizationAccountStoreMapping', function (done) {
-      organization.createAccountStoreMapping({accountStore:directory}, function (err,_mapping) {
+      organization.createAccountStoreMapping({accountStore:directory}, function (err, _mapping) {
         mapping = _mapping;
         assert(_mapping instanceof OrganizationAccountStoreMapping);
         done();
@@ -68,7 +68,7 @@ describe('Organization', function () {
       mapping.delete(done);
     });
     it('should return the organization', function (done) {
-      mapping.getOrganization(function (err,organization) {
+      mapping.getOrganization(function (err, organization) {
         assert(organization instanceof Organization);
         done();
       });
@@ -77,7 +77,7 @@ describe('Organization', function () {
 
   describe('createAccountStoreMappings', function () {
     it('should create an OrganizationAccountStoreMapping', function (done) {
-      organization.createAccountStoreMappings([{accountStore:directory}], function (err,results) {
+      organization.createAccountStoreMappings([{accountStore:directory}], function (err, results) {
         if (err) {
           done(err);
         } else {
@@ -91,7 +91,7 @@ describe('Organization', function () {
 
   describe('getAccountStoreMappings', function () {
     it('should get an OrganizationAccountStoreMapping', function (done) {
-      organization.getAccountStoreMappings(function (err,collection) {
+      organization.getAccountStoreMappings(function (err, collection) {
         assert(collection.items[0] instanceof OrganizationAccountStoreMapping);
         done();
       });

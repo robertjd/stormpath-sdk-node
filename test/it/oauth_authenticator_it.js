@@ -12,7 +12,7 @@ var JwtAuthenticationResult = require('../../lib/jwt/jwt-authentication-result')
 function assertUnauthenticatedResponse(done) {
   return function (err) {
     assert.isNotNull(err);
-    assert.equal(err.statusCode,401);
+    assert.equal(err.statusCode, 401);
     done();
   };
 }
@@ -53,7 +53,7 @@ describe('OAuthAuthenticator', function () {
     newAccount = helpers.fakeAccount();
     unsignedToken = nJwt.create({hello:'world'},'not a secret').compact();
 
-    helpers.createApplication(function (err,app) {
+    helpers.createApplication(function (err, app) {
       if (err) {
         done(err);
       } else {
@@ -70,7 +70,7 @@ describe('OAuthAuthenticator', function () {
             done(err);
           } else {
 
-            helpers.createApplication(function (err,app2) {
+            helpers.createApplication(function (err, app2) {
               if (err) {
                 done(err);
               } else {
@@ -79,7 +79,7 @@ describe('OAuthAuthenticator', function () {
                   We are setting the token ttl to 2 seconds, beacuse
                   we want to test expired tokens in this test
                  */
-                application2.getOAuthPolicy(function (err,policy) {
+                application2.getOAuthPolicy(function (err, policy) {
                   if (err) {
                     done(err);
                   } else {
@@ -88,7 +88,7 @@ describe('OAuthAuthenticator', function () {
                       if (err) {
                         done(err);
                       } else {
-                        application2.createAccount(newAccount,done);
+                        application2.createAccount(newAccount, done);
                       }
                     });
                   }
@@ -113,12 +113,12 @@ describe('OAuthAuthenticator', function () {
 
   it('should be constructable with new operator', function () {
     var authenticator = new stormpath.OAuthAuthenticator(application);
-    assert.instanceOf(authenticator,stormpath.OAuthAuthenticator);
+    assert.instanceOf(authenticator, stormpath.OAuthAuthenticator);
   });
 
   it('should be constructable without new operator', function () {
     var authenticator = stormpath.OAuthAuthenticator(application);
-    assert.instanceOf(authenticator,stormpath.OAuthAuthenticator);
+    assert.instanceOf(authenticator, stormpath.OAuthAuthenticator);
   });
 
   it('should throw if not called with a request and callback', function () {
@@ -136,8 +136,8 @@ describe('OAuthAuthenticator', function () {
         username: newAccount.username,
         password: newAccount.password
       }
-    }, function (err,result) {
-      common.assertPasswordGrantResponse(done)(err,result);
+    }, function (err, result) {
+      common.assertPasswordGrantResponse(done)(err, result);
       passwordGrantResponse = result;
     });
   });
@@ -149,7 +149,7 @@ describe('OAuthAuthenticator', function () {
         grant_type: 'id_site_token',
         id_site_token: 'abc'
       }
-    }, function (err,result) {
+    }, function (err, result) {
       assert.isUndefined(result);
 
       assert.isNotNull(err);
@@ -167,7 +167,7 @@ describe('OAuthAuthenticator', function () {
         grant_type: 'stormpath_token',
         stormpath_token: 'abc'
       }
-    }, function (err,result) {
+    }, function (err, result) {
       assert.isUndefined(result);
 
       assert.isNotNull(err);
@@ -185,7 +185,7 @@ describe('OAuthAuthenticator', function () {
         grant_type: 'refresh_token',
         refresh_token: 'abc'
       }
-    }, function (err,result) {
+    }, function (err, result) {
       assert.isUndefined(result);
 
       assert.isNotNull(err);
@@ -198,7 +198,7 @@ describe('OAuthAuthenticator', function () {
 
   it('should return 401 if no auth information is given', function (done) {
     var authenticator = stormpath.OAuthAuthenticator(application);
-    authenticator.authenticate({},assertUnauthenticatedResponse(done));
+    authenticator.authenticate({}, assertUnauthenticatedResponse(done));
   });
 
   it('should return 401 if the Authorization header is not Bearer', function (done) {
@@ -207,7 +207,7 @@ describe('OAuthAuthenticator', function () {
       headers: {
         authorization: 'Basic abc'
       }
-    },assertUnauthenticatedResponse(done));
+    }, assertUnauthenticatedResponse(done));
   });
 
   it('should reject expired tokens', function (done) {
@@ -215,7 +215,7 @@ describe('OAuthAuthenticator', function () {
       .authenticate({
         username: newAccount.username,
         password: newAccount.password
-      }, function (err,passwordGrantResponse) {
+      }, function (err, passwordGrantResponse) {
         if (err) {
           done(err);
         } else {
@@ -225,8 +225,8 @@ describe('OAuthAuthenticator', function () {
                 headers: {
                   authorization: 'Bearer ' + passwordGrantResponse.accessToken.toString()
                 }
-              },assertUnauthenticatedResponse(done));
-          },5000);
+              }, assertUnauthenticatedResponse(done));
+          }, 5000);
         }
       });
 
@@ -285,7 +285,7 @@ describe('OAuthAuthenticator', function () {
         headers: {
           authorization: 'Bearer ' + unsignedToken
         }
-      },assertUnauthenticatedResponse(done));
+      }, assertUnauthenticatedResponse(done));
     });
 
     it('should return 401 if the token is expired', function (done) {
@@ -293,7 +293,7 @@ describe('OAuthAuthenticator', function () {
         headers: {
           authorization: 'Bearer ' + expiredToken
         }
-      },assertUnauthenticatedResponse(done));
+      }, assertUnauthenticatedResponse(done));
     });
 
     it('should validate access tokens and return a JwtAuthenticationResult', function (done) {
@@ -301,7 +301,7 @@ describe('OAuthAuthenticator', function () {
         headers: {
           authorization: 'Bearer ' + passwordGrantResponse.accessToken.toString()
         }
-      },assertJwtAuthenticationResult(false, done));
+      }, assertJwtAuthenticationResult(false, done));
     });
   });
 

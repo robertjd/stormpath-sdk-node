@@ -14,7 +14,7 @@ var JwtAuthenticationResult = require('../../lib/jwt/jwt-authentication-result')
 function assertUnauthenticatedResponse(done) {
   return function (err) {
     assert.isNotNull(err);
-    assert.equal(err.statusCode,401);
+    assert.equal(err.statusCode, 401);
     done();
   };
 }
@@ -48,7 +48,7 @@ describe('JwtAuthenticator', function () {
     newAccount = helpers.fakeAccount();
     unsignedToken = nJwt.create({hello:'world'},'not a secret').compact();
 
-    helpers.createApplication(function (err,app) {
+    helpers.createApplication(function (err, app) {
       if (err) {
         done(err);
       } else {
@@ -68,11 +68,11 @@ describe('JwtAuthenticator', function () {
               .authenticate({
                 username: newAccount.email,
                 password: newAccount.password
-              }, function (err,accessTokenResponse) {
+              }, function (err, accessTokenResponse) {
                 passwordGrantResponse = accessTokenResponse;
               });
 
-            helpers.createApplication(function (err,app2) {
+            helpers.createApplication(function (err, app2) {
               if (err) {
                 done(err);
               } else {
@@ -81,7 +81,7 @@ describe('JwtAuthenticator', function () {
                   We are setting the token ttl to 10 seconds, beacuse
                   we want to test expired tokens in this test
                  */
-                application2.getOAuthPolicy(function (err,policy) {
+                application2.getOAuthPolicy(function (err, policy) {
                   if (err) {
                     done(err);
                   } else {
@@ -90,7 +90,7 @@ describe('JwtAuthenticator', function () {
                       if (err) {
                         done(err);
                       } else {
-                        application2.createAccount(newAccount,done);
+                        application2.createAccount(newAccount, done);
                       }
                     });
                   }
@@ -115,12 +115,12 @@ describe('JwtAuthenticator', function () {
 
   it('should be constructable with new operator', function () {
     var authenticator = new stormpath.JwtAuthenticator(application);
-    assert.instanceOf(authenticator,stormpath.JwtAuthenticator);
+    assert.instanceOf(authenticator, stormpath.JwtAuthenticator);
   });
 
   it('should be constructable without new operator', function () {
     var authenticator = stormpath.JwtAuthenticator(application);
-    assert.instanceOf(authenticator,stormpath.JwtAuthenticator);
+    assert.instanceOf(authenticator, stormpath.JwtAuthenticator);
   });
 
   it('should throw if not called with a request and callback', function () {
@@ -130,7 +130,7 @@ describe('JwtAuthenticator', function () {
 
   it('should return 401 if no auth information is given', function (done) {
     var authenticator = stormpath.JwtAuthenticator(application);
-    authenticator.authenticate({},assertUnauthenticatedResponse(done));
+    authenticator.authenticate({}, assertUnauthenticatedResponse(done));
   });
 
   it('should return 401 if the Authorization header is not Bearer', function (done) {
@@ -139,7 +139,7 @@ describe('JwtAuthenticator', function () {
       headers: {
         authorization: 'Basic abc'
       }
-    },assertUnauthenticatedResponse(done));
+    }, assertUnauthenticatedResponse(done));
   });
 
   it('should reject expired tokens', function (done) {
@@ -148,7 +148,7 @@ describe('JwtAuthenticator', function () {
       .authenticate({
         username: newAccount.username,
         password: newAccount.password
-      }, function (err,passwordGrantResponse) {
+      }, function (err, passwordGrantResponse) {
         if (err) {
           done(err);
         } else {
@@ -158,8 +158,8 @@ describe('JwtAuthenticator', function () {
                 headers: {
                   authorization: 'Bearer ' + passwordGrantResponse.accessToken.toString()
                 }
-              },assertUnauthenticatedResponse(done));
-          },10000);
+              }, assertUnauthenticatedResponse(done));
+          }, 10000);
         }
       });
 
@@ -175,15 +175,15 @@ describe('JwtAuthenticator', function () {
 
     it('should validate access tokens from Bearer header and return a JwtAuthenticationResult', function (done) {
 
-      authenticator.authenticate(passwordGrantResponse.accessToken.toString(),assertJwtAuthenticationResult(done));
+      authenticator.authenticate(passwordGrantResponse.accessToken.toString(), assertJwtAuthenticationResult(done));
     });
 
     it('should return 401 if the access token is not signed by the application', function (done) {
-      authenticator.authenticate(unsignedToken,assertUnauthenticatedResponse(done));
+      authenticator.authenticate(unsignedToken, assertUnauthenticatedResponse(done));
     });
 
     it('should return 401 if the token is expired', function (done) {
-      authenticator.authenticate(expiredToken,assertUnauthenticatedResponse(done));
+      authenticator.authenticate(expiredToken, assertUnauthenticatedResponse(done));
     });
   });
 
@@ -196,15 +196,15 @@ describe('JwtAuthenticator', function () {
     });
 
     it('should return 401 if the access token is not signed by the application', function (done) {
-      authenticator.authenticate(unsignedToken,assertUnauthenticatedResponse(done));
+      authenticator.authenticate(unsignedToken, assertUnauthenticatedResponse(done));
     });
 
     it('should return 401 if the token is expired', function (done) {
-      authenticator.authenticate(expiredToken,assertUnauthenticatedResponse(done));
+      authenticator.authenticate(expiredToken, assertUnauthenticatedResponse(done));
     });
 
     it('should validate access tokens and return a JwtAuthenticationResult', function (done) {
-      authenticator.authenticate(passwordGrantResponse.accessToken.toString(),assertJwtAuthenticationResult(done));
+      authenticator.authenticate(passwordGrantResponse.accessToken.toString(), assertJwtAuthenticationResult(done));
     });
   });
 

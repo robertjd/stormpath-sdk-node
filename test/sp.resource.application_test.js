@@ -88,7 +88,7 @@ describe('Resources: ', function () {
         it('should create a jwtRequest that is signed with the client secret',
           function () {
             common.assert.equal(
-              nJwt.verify(params.jwtRequest,clientApiKeySecret).body.state,
+              nJwt.verify(params.jwtRequest, clientApiKeySecret).body.state,
               clientState
             );
           }
@@ -138,7 +138,7 @@ describe('Resources: ', function () {
         it('should create a jwtRequest that is signed with the client secret',
           function () {
             common.assert.equal(
-              nJwt.verify(params.jwtRequest,clientApiKeySecret).body.state,
+              nJwt.verify(params.jwtRequest, clientApiKeySecret).body.state,
               clientState
             );
           }

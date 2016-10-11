@@ -15,9 +15,9 @@ describe('OAuthPasswordGrantRequestAuthenticator', function () {
   before(function (done) {
     newAccount = helpers.fakeAccount();
 
-    helpers.createApplication(function (err,app) {
+    helpers.createApplication(function (err, app) {
       application = app;
-      application.createAccount(newAccount,done);
+      application.createAccount(newAccount, done);
     });
   });
 
@@ -27,12 +27,12 @@ describe('OAuthPasswordGrantRequestAuthenticator', function () {
 
   it('should be constructable with new operator', function () {
     var authenticator = new stormpath.OAuthPasswordGrantRequestAuthenticator(application);
-    assert.instanceOf(authenticator,stormpath.OAuthPasswordGrantRequestAuthenticator);
+    assert.instanceOf(authenticator, stormpath.OAuthPasswordGrantRequestAuthenticator);
   });
 
   it('should be constructable without new operator', function () {
     var authenticator = stormpath.OAuthPasswordGrantRequestAuthenticator(application);
-    assert.instanceOf(authenticator,stormpath.OAuthPasswordGrantRequestAuthenticator);
+    assert.instanceOf(authenticator, stormpath.OAuthPasswordGrantRequestAuthenticator);
   });
 
   it('should create access tokens', function (done) {
@@ -40,6 +40,6 @@ describe('OAuthPasswordGrantRequestAuthenticator', function () {
     authenticator.authenticate({
       username: newAccount.username,
       password: newAccount.password
-    },common.assertPasswordGrantResponse(done));
+    }, common.assertPasswordGrantResponse(done));
   });
 });

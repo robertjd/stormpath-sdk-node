@@ -50,7 +50,7 @@ describe('Application.authenticateApiRequest', function () {
       before(function (done) {
         var requestObject = {
           headers: {
-            'authorization': 'Basic ' + new Buffer([apiKey.id,apiKey.secret].join(':')).toString('base64')
+            'authorization': 'Basic ' + new Buffer([apiKey.id, apiKey.secret].join(':')).toString('base64')
           },
           url: '/some/resource',
           method: 'POST'
@@ -92,8 +92,8 @@ describe('Application.authenticateApiRequest', function () {
       });
 
       it('should err', function () {
-        assert.instanceOf(result[0],Error);
-        assert.equal(result[0].statusCode,401);
+        assert.instanceOf(result[0], Error);
+        assert.equal(result[0].statusCode, 401);
       });
 
       it('should not return an instance of AuthenticationResult', function () {

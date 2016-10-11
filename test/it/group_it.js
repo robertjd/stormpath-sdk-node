@@ -21,9 +21,9 @@ describe('Group', function () {
           directory = _directory;
           directory.createGroup(
             {name: 'it-group-'+helpers.uniqId()},
-            function (err,_group) {
+            function (err, _group) {
               group = _group;
-              creationResult = [err,_group];
+              creationResult = [err, _group];
               done();
             }
           );
@@ -45,7 +45,7 @@ describe('Group', function () {
 
   it('should be create-able from a directory instance', function () {
     assert.equal(creationResult[0], null); // did not error
-    assert.instanceOf(group,Group);
+    assert.instanceOf(group, Group);
   });
 
   describe('custom data', function () {
@@ -53,7 +53,7 @@ describe('Group', function () {
       var customData;
 
       before(function (done) {
-        group.getCustomData(function (err,_customData) {
+        group.getCustomData(function (err, _customData) {
           if (err) { throw err; }
           customData = _customData;
           done();
@@ -61,8 +61,8 @@ describe('Group', function () {
       });
 
       it('should be get-able', function () {
-        assert.instanceOf(customData,CustomData);
-        assert.equal(customData.href,group.href+'/customData');
+        assert.instanceOf(customData, CustomData);
+        assert.equal(customData.href, group.href+'/customData');
       });
 
       describe('when saved and re-fetched', function () {
@@ -77,7 +77,7 @@ describe('Group', function () {
           customData[propertyName] = propertyValue;
           customData.save(function (err) {
             if (err) { throw err; }
-            group.getCustomData(function (err,customData) {
+            group.getCustomData(function (err, customData) {
               if (err) { throw err; }
               customDataAfterGet = customData;
               done();
@@ -85,7 +85,7 @@ describe('Group', function () {
           });
         });
         it('should have the new property persisted', function () {
-          assert.equal(customDataAfterGet[propertyName],propertyValue);
+          assert.equal(customDataAfterGet[propertyName], propertyValue);
         });
       });
     });
@@ -113,8 +113,8 @@ describe('Group', function () {
       });
 
       it('should be get-able', function () {
-        assert.instanceOf(customData,CustomData);
-        assert.equal(customData.href,group.href+'/customData');
+        assert.instanceOf(customData, CustomData);
+        assert.equal(customData.href, group.href+'/customData');
       });
 
       describe('when saved and re-fetched', function () {
@@ -136,7 +136,7 @@ describe('Group', function () {
           });
         });
         it('should have the new property persisted', function () {
-          assert.equal(customDataAfterGet[propertyName],propertyValue);
+          assert.equal(customDataAfterGet[propertyName], propertyValue);
         });
       });
     });
@@ -152,8 +152,8 @@ describe('Group', function () {
       group.name = newName;
       group.save(function (err) {
         saveResult = [err];
-        client.getGroup(group.href, function (err,_group) {
-          getResult = [err,_group];
+        client.getGroup(group.href, function (err, _group) {
+          getResult = [err, _group];
           done();
         });
       });
@@ -163,7 +163,7 @@ describe('Group', function () {
     });
     it('should be persisted after a save', function () {
       assert.equal(getResult[0], null); // did not error
-      assert.equal(getResult[1].name,newName); // did not error
+      assert.equal(getResult[1].name, newName); // did not error
     });
   });
 
@@ -177,8 +177,8 @@ describe('Group', function () {
       group.description = newDescription;
       group.save(function (err) {
         saveResult = [err];
-        client.getGroup(group.href, function (err,_group) {
-          getResult = [err,_group];
+        client.getGroup(group.href, function (err, _group) {
+          getResult = [err, _group];
           done();
         });
       });
@@ -188,19 +188,19 @@ describe('Group', function () {
     });
     it('should be persisted after a save', function () {
       assert.equal(getResult[0], null); // did not error
-      assert.equal(getResult[1].description,newDescription); // did not error
+      assert.equal(getResult[1].description, newDescription); // did not error
     });
   });
 
   describe('accounts', function () {
     var account, creationResult;
     before(function (done) {
-      directory.createAccount(helpers.fakeAccount(), function (err,_account) {
+      directory.createAccount(helpers.fakeAccount(), function (err, _account) {
         if (err) {
           throw err;
         }
         group.addAccount(_account, function () {
-          creationResult = [err,_account];
+          creationResult = [err, _account];
           account = _account;
           done();
         });
@@ -208,34 +208,34 @@ describe('Group', function () {
     });
     it('should be assignable as group memberships', function () {
       assert.equal(creationResult[0], null);
-      assert.instanceOf(account,Account);
+      assert.instanceOf(account, Account);
     });
 
     describe('through getAccounts', function () {
       var result;
       before(function (done) {
-        group.getAccounts(function (err,accounts) {
-          result = [err,accounts];
+        group.getAccounts(function (err, accounts) {
+          result = [err, accounts];
           done();
         });
       });
       it('should be found', function () {
         assert.equal(result[0], null);
-        assert.equal(account.href,result[1].items[0].href);
+        assert.equal(account.href, result[1].items[0].href);
       });
     });
 
     describe('through getAccountMemberships', function () {
       var result;
       before(function (done) {
-        group.getAccountMemberships(function (err,memberships) {
-          result = [err,memberships];
+        group.getAccountMemberships(function (err, memberships) {
+          result = [err, memberships];
           done();
         });
       });
       it('should be found', function () {
         assert.equal(result[0], null);
-        assert.equal(result[1].items[0].account.href,account.href);
+        assert.equal(result[1].items[0].account.href, account.href);
       });
     });
 

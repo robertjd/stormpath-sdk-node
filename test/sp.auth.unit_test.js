@@ -86,7 +86,7 @@ describe('Authorization module', function () {
       guidStub = sandbox.stub(uuid, 'v4', function () {
         return '3412d026-624e-4778-b02d-f9906f40fc4f';
       });
-      sandbox.useFakeTimers(1392387217351, 'Date'); //utc date(2014,01,14,14,13,37,351)
+      sandbox.useFakeTimers(1392387217351, 'Date'); //utc date(2014, 01, 14, 14, 13, 37, 351)
     });
     after(function () {
       sandbox.restore();

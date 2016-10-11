@@ -15,7 +15,7 @@ describe('OAuthRefreshTokenGrantRequestAuthenticator', function () {
   before(function (done) {
     newAccount = helpers.fakeAccount();
 
-    helpers.createApplication(function (err,app) {
+    helpers.createApplication(function (err, app) {
       if (err) {
         done(err);
       } else {
@@ -28,7 +28,7 @@ describe('OAuthRefreshTokenGrantRequestAuthenticator', function () {
             authenticator.authenticate({
               username: newAccount.username,
               password: newAccount.password
-            }, function (err,passwordGrantResult) {
+            }, function (err, passwordGrantResult) {
               if (err) {
                 done(err);
               } else {
@@ -49,12 +49,12 @@ describe('OAuthRefreshTokenGrantRequestAuthenticator', function () {
 
   it('should be constructable with new operator', function () {
     var authenticator = new stormpath.OAuthRefreshTokenGrantRequestAuthenticator(application);
-    assert.instanceOf(authenticator,stormpath.OAuthRefreshTokenGrantRequestAuthenticator);
+    assert.instanceOf(authenticator, stormpath.OAuthRefreshTokenGrantRequestAuthenticator);
   });
 
   it('should be constructable without new operator', function () {
     var authenticator = stormpath.OAuthRefreshTokenGrantRequestAuthenticator(application);
-    assert.instanceOf(authenticator,stormpath.OAuthRefreshTokenGrantRequestAuthenticator);
+    assert.instanceOf(authenticator, stormpath.OAuthRefreshTokenGrantRequestAuthenticator);
   });
 
   it('should refresh access tokens', function (done) {
