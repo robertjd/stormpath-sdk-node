@@ -17,11 +17,9 @@ describe('Cache module', function () {
       });
 
       it('cache should be empty', function () {
-        /* jshint -W030 */
         manager.caches.should.deep.equal({});
       });
       it('stats should be empty', function () {
-        /* jshint -W030 */
         expect(manager.stats).deep.equal({});
       });
     });

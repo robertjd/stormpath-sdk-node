@@ -9,12 +9,11 @@ var DataStore = require('../lib/ds/DataStore');
 
 describe('resource', function () {
   describe('ApiKey', function () {
-    var clientApiKeySecret, sandbox, cbSpy, apiKey, getResourceStub;
+    var clientApiKeySecret, sandbox, apiKey, getResourceStub;
 
     before(function (done) {
       clientApiKeySecret = uuid();
       sandbox = sinon.sandbox.create();
-      cbSpy = sandbox.spy();
 
       apiKey = new ApiKey({
         id: 'id',

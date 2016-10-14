@@ -104,7 +104,6 @@ describe('ds:', function () {
 
         it('should call the cache and not the resource executor', function () {
           ds.getResource(resource.href, cbSpy);
-          /* jshint -W030 */
           cacheGetSpy.should.have.been.calledOnce;
           cacheGetSpy.should.have.been.calledWith(resource.href);
 
@@ -148,7 +147,6 @@ describe('ds:', function () {
           sandbox.restore();
         });
         it('request executor should be called once', function () {
-          /* jshint -W030 */
           cacheGetSpy.should.have.been.calledOnce;
           cacheGetSpy.should.have.been.calledWith(resource.href);
 
@@ -157,7 +155,6 @@ describe('ds:', function () {
           cbSpy.should.have.been.calledOnce;
         });
         it('and result should be stored in cache', function () {
-          /* jshint -W030 */
           cachePutSpy.should.have.been.calledOnce;
           cachePutSpy.should.have.been.calledWith(resource.href, resource);
         });
@@ -186,9 +183,7 @@ describe('ds:', function () {
           sandbox.restore();
         });
         it('request executor should be called once', function () {
-          /* jshint -W030 */
           reqExecStub.should.have.been.called;
-
           cbSpy.should.have.been.calledOnce;
         });
       });
@@ -198,7 +193,7 @@ describe('ds:', function () {
         var href;
         var cbSpy;
         var error;
-        var sandbox, reqExecStub;
+        var sandbox;
 
         before(function () {
           ds = new DataStore({
@@ -219,7 +214,7 @@ describe('ds:', function () {
           error = new Error();
 
           sandbox = sinon.sandbox.create();
-          reqExecStub = sandbox.stub(ds.requestExecutor, 'execute', function (req, cb) {
+          sandbox.stub(ds.requestExecutor, 'execute', function (req, cb) {
             cb(error);
           });
 
@@ -254,7 +249,7 @@ describe('ds:', function () {
         var ds;
         var href;
         var cbSpy;
-        var sandbox, reqExecStub;
+        var sandbox;
 
         before(function () {
           ds = new DataStore({
@@ -274,7 +269,7 @@ describe('ds:', function () {
           cbSpy = sinon.spy();
 
           sandbox = sinon.sandbox.create();
-          reqExecStub = sandbox.stub(ds.requestExecutor, 'execute', function (req, cb) {
+          sandbox.stub(ds.requestExecutor, 'execute', function (req, cb) {
             cb(null, null);
           });
 
@@ -285,7 +280,6 @@ describe('ds:', function () {
           sandbox.restore();
         });
         it('should not hang if response undefined', function () {
-          /* jshint -W030 */
           cbSpy.should.have.been.calledOnce;
           cbSpy.should.have.been.calledWith(null);
         });
@@ -299,7 +293,7 @@ describe('ds:', function () {
       var data;
       var response;
       var cbSpy;
-      var sandbox, cachePutSpy, reqExecStub, requestSpy;
+      var sandbox, cachePutSpy, requestSpy;
 
       before(function () {
         ds = new DataStore({
@@ -329,7 +323,7 @@ describe('ds:', function () {
         sandbox = sinon.sandbox.create();
         var cache = ds.cacheHandler.cacheManager.getCache('tenants');
         cachePutSpy = sandbox.spy(cache, 'put');
-        reqExecStub = sandbox.stub(ds.requestExecutor, 'execute', function (req, cb) {
+        sandbox.stub(ds.requestExecutor, 'execute', function (req, cb) {
           requestSpy = req;
           cb(null, response);
         });
@@ -366,7 +360,6 @@ describe('ds:', function () {
 
       describe('after resource creation', function () {
         it('resource should be stored in cache by href in response', function () {
-          /* jshint -W030 */
           cachePutSpy.should.have.been.calledOnce;
         });
       });
@@ -378,7 +371,7 @@ describe('ds:', function () {
       var data;
       var response;
       var cbSpy;
-      var sandbox, cachePutSpy, reqExecStub, requestSpy;
+      var sandbox, cachePutSpy, requestSpy;
 
       before(function () {
         ds = new DataStore({
@@ -400,7 +393,7 @@ describe('ds:', function () {
         sandbox = sinon.sandbox.create();
         var cache = ds.cacheHandler.cacheManager.getCache('tenants');
         cachePutSpy = sandbox.spy(cache, 'put');
-        reqExecStub = sandbox.stub(ds.requestExecutor, 'execute', function (req, cb) {
+        sandbox.stub(ds.requestExecutor, 'execute', function (req, cb) {
           requestSpy = req;
           cb(null, response);
         });
@@ -426,7 +419,6 @@ describe('ds:', function () {
 
       describe('after resource update', function () {
         it('should be stored in cache', function () {
-          /* jshint -W030 */
           cachePutSpy.should.have.been.calledOnce;
           cachePutSpy.should.have.been.calledWith(response.href, response, false);
         });
@@ -439,7 +431,7 @@ describe('ds:', function () {
       var data;
       var response;
       var cbSpy;
-      var sandbox, cacheDeleteSpy, reqExecStub, requestSpy;
+      var sandbox, cacheDeleteSpy, requestSpy;
 
       before(function () {
         ds = new DataStore({
@@ -461,7 +453,7 @@ describe('ds:', function () {
         sandbox = sinon.sandbox.create();
         var cache = ds.cacheHandler.cacheManager.getCache('tenants');
         cacheDeleteSpy = sandbox.spy(cache, 'delete');
-        reqExecStub = sandbox.stub(ds.requestExecutor, 'execute', function (req, cb) {
+        sandbox.stub(ds.requestExecutor, 'execute', function (req, cb) {
           requestSpy = req;
           cb(null, response);
         });
@@ -474,7 +466,6 @@ describe('ds:', function () {
       });
 
       it('should remove entry from cache', function () {
-        /* jshint -W030 */
         cacheDeleteSpy.should.have.been.calledOnce;
         cacheDeleteSpy.should.have.been.calledWith(href, utils.noop);
       });

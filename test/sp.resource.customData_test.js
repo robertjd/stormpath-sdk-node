@@ -17,7 +17,7 @@ describe('Resources: ', function () {
         var dataStore;
         var sandbox, fieldName,
           dcr, dcrJSON,
-          deleteHref, cbSpy, deleteResourceStub, saveResourceStub;
+          deleteHref, cbSpy, deleteResourceStub;
 
         before(function () {
           sandbox = sinon.sandbox.create();
@@ -37,7 +37,7 @@ describe('Resources: ', function () {
             cb();
           });
 
-          saveResourceStub = sandbox.stub(dataStore, 'saveResource', function () {
+          sandbox.stub(dataStore, 'saveResource', function () {
             arguments[arguments.length - 1]();
           });
 

@@ -39,11 +39,10 @@ describe('Resources: ', function () {
       });
 
       describe('if provided data don`t have items:', function () {
-        var cr;
         var data;
 
         function createCollectionResource() {
-          cr = new CollectionResource(data);
+          new CollectionResource(data);
         }
 
         before(function () {
@@ -62,7 +61,6 @@ describe('Resources: ', function () {
       describe('if provided data has items:', function () {
         describe('if items is a raw json', function () {
           var data;
-          var cr;
 
           before(function () {
             data = {
@@ -72,7 +70,7 @@ describe('Resources: ', function () {
               ]
             };
 
-            cr = new CollectionResource(data);
+            new CollectionResource(data);
           });
 
           it('they should be converted', function () {
@@ -85,7 +83,6 @@ describe('Resources: ', function () {
         describe('if items already converted', function () {
           var ds;
           var data;
-          var cr;
 
           before(function () {
             ds = new DataStore({client: {apiKey: apiKey}});
@@ -97,7 +94,7 @@ describe('Resources: ', function () {
               ]
             };
 
-            cr = new CollectionResource(data);
+            new CollectionResource(data);
           });
 
           it('they should not be converted', function () {
@@ -171,7 +168,6 @@ describe('Resources: ', function () {
         });
 
         it('should not call callback', function () {
-          /* jshint -W030 */
           iteratorSpy.should.not.have.been.called;
           cbSpy.should.have.been.calledOnce;
         });
@@ -188,14 +184,13 @@ describe('Resources: ', function () {
         });
 
         it('should not call callback', function () {
-          /* jshint -W030 */
           iteratorSpy.should.not.have.been.called;
           cbSpy.should.have.been.calledOnce;
         });
       });
 
       describe('with items list', function () {
-        var cr, sandbox, iteratorSpy, cbSpy, getResourceStub;
+        var cr, sandbox, iteratorSpy, cbSpy;
         var ds;
         var data;
 
@@ -214,7 +209,7 @@ describe('Resources: ', function () {
           sandbox = sinon.sandbox.create();
           iteratorSpy = sandbox.spy(iterator);
           cbSpy = sandbox.spy();
-          getResourceStub = sandbox.stub(ds, 'getResource',
+          sandbox.stub(ds, 'getResource',
             function onGetResource(href, nextQuery, ctor, cb) {
               cb(null, {});
             });
@@ -226,7 +221,6 @@ describe('Resources: ', function () {
         });
 
         it('should call callback for each item', function () {
-          /* jshint -W030 */
           iteratorSpy.should.have.been.calledTwice;
           cbSpy.should.have.been.calledOnce;
         });
@@ -303,9 +297,7 @@ describe('Resources: ', function () {
 
         it('should request next page', function () {
           iteratorSpy.callCount.should.be.equal(4);
-          /* jshint -W030 */
           getResourceStub.should.have.been.calledTwice;
-          /* jshint +W030 */
           getResourceStub.getCall(0)
             .should.have.been.calledWith(data.href, nextQuery, Tenant);
         });

@@ -486,10 +486,8 @@ describe('Resources: ', function () {
         });
 
         it('should create login attempt', function () {
-          /* jshint -W030 */
           createResourceStub.should.have.been.calledTwice;
           cbSpy.should.have.been.calledTwice;
-          /* jshint +W030 */
 
           // call without optional param
           createResourceStub.should.have.been
@@ -569,10 +567,8 @@ describe('Resources: ', function () {
         });
 
         it('should create password reset email request', function () {
-          /* jshint -W030 */
           createResourceStub.should.have.been.calledOnce;
           cbSpy.should.have.been.calledOnce;
-          /* jshint +W030 */
 
           createResourceStub.should.have.been
             .calledWith(app.passwordResetTokens.href, null, {email: opt}, PasswordResetToken, cbSpy);
@@ -618,10 +614,8 @@ describe('Resources: ', function () {
         });
 
         it('should get verify reset password token', function () {
-          /* jshint -W030 */
           getResourceStub.should.have.been.calledOnce;
           cbSpy.should.have.been.calledOnce;
-          /* jshint +W030 */
 
           // call with optional param
           getResourceStub.should.have.been
@@ -694,10 +688,8 @@ describe('Resources: ', function () {
         });
 
         it('should get accounts', function () {
-          /* jshint -W030 */
           getResourceStub.should.have.been.calledTwice;
           cbSpy.should.have.been.calledTwice;
-          /* jshint +W030 */
 
           // call without optional param
           getResourceStub.should.have.been
@@ -747,10 +739,8 @@ describe('Resources: ', function () {
         });
 
         it('should create account', function () {
-          /* jshint -W030 */
           createResourceStub.should.have.been.calledTwice;
           cbSpy.should.have.been.calledTwice;
-          /* jshint +W030 */
 
           // call without optional param
           createResourceStub.should.have.been
@@ -798,10 +788,8 @@ describe('Resources: ', function () {
         });
 
         it('should get groups', function () {
-          /* jshint -W030 */
           getResourceStub.should.have.been.calledTwice;
           cbSpy.should.have.been.calledTwice;
-          /* jshint +W030 */
 
           // call without optional param
           getResourceStub.should.have.been
@@ -851,10 +839,8 @@ describe('Resources: ', function () {
         });
 
         it('should create account', function () {
-          /* jshint -W030 */
           createResourceStub.should.have.been.calledTwice;
           cbSpy.should.have.been.calledTwice;
-          /* jshint +W030 */
 
           // call without optional param
           createResourceStub.should.have.been
@@ -902,10 +888,8 @@ describe('Resources: ', function () {
         });
 
         it('should get tenants', function () {
-          /* jshint -W030 */
           getResourceStub.should.have.been.calledTwice;
           cbSpy.should.have.been.calledTwice;
-          /* jshint +W030 */
 
           // call without optional param
           getResourceStub.should.have.been

@@ -56,10 +56,8 @@ describe('Resources: ', function () {
         });
 
         it('should get application resource', function () {
-          /* jshint -W030 */
           getResourceStub.should.have.been.calledTwice;
           cbSpy.should.have.been.calledTwice;
-          /* jshint +W030 */
 
           // call without optional param
           getResourceStub.should.have.been.calledWith('boom!', null, Application, cbSpy);
@@ -93,10 +91,8 @@ describe('Resources: ', function () {
       });
 
       it('should create application', function () {
-        /* jshint -W030 */
         createResourceStub.should.have.been.calledTwice;
         cbSpy.should.have.been.calledTwice;
-        /* jshint +W030 */
 
         // call without optional param
         createResourceStub.should.have.been
@@ -142,10 +138,8 @@ describe('Resources: ', function () {
         });
 
         it('should get application resource', function () {
-          /* jshint -W030 */
           getResourceStub.should.have.been.calledTwice;
           cbSpy.should.have.been.calledTwice;
-          /* jshint +W030 */
 
           // call without optional param
           getResourceStub.should.have.been.calledWith('boom!', null, Directory, cbSpy);
@@ -179,10 +173,8 @@ describe('Resources: ', function () {
       });
 
       it('should create application', function () {
-        /* jshint -W030 */
         createResourceStub.should.have.been.calledTwice;
         cbSpy.should.have.been.calledTwice;
-        /* jshint +W030 */
 
         // call without optional param
         createResourceStub.should.have.been
@@ -224,10 +216,8 @@ describe('Resources: ', function () {
       });
 
       it('should call createResource with the /smtpServers path', function () {
-        /* jshint -W030 */
         createResourceStub.should.have.been.calledTwice;
         cbSpy.should.have.been.calledTwice;
-        /* jshint +W030 */
 
         createResourceStub.should.have.been.calledWith(createSmtpServerPath, null, smtpServer, SmtpServer, cbSpy);
         createResourceStub.should.have.been.calledWith(createSmtpServerPath, options, smtpServer, SmtpServer, cbSpy);
@@ -263,10 +253,8 @@ describe('Resources: ', function () {
       });
 
       it('should call getResource with the smtpServers href', function () {
-        /* jshint -W030 */
         getResourceStub.should.have.been.calledTwice;
         cbSpy.should.have.been.calledTwice;
-        /* jshint +W030 */
 
         getResourceStub.should.have.been.calledWith('boom!', null, SmtpServer, cbSpy);
         getResourceStub.should.have.been.calledWith('boom!', opts, SmtpServer, cbSpy);
@@ -378,10 +366,8 @@ describe('Resources: ', function () {
       });
 
       it('should process calls with and without params correctly', function () {
-        /* jshint -W030 */
         getResourceStub.should.have.been.calledTwice;
         cbSpy.should.have.been.calledTwice;
-        /* jshint +W030 */
 
         getResourceStub.should.have.been.calledWith('boom!', null, IdSiteModel, cbSpy);
         getResourceStub.should.have.been.calledWith('boom!', opts, IdSiteModel, cbSpy);

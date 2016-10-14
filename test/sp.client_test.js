@@ -65,9 +65,7 @@ describe('Client', function () {
       client._dataStore.should.be.an.instanceof(DataStore);
     });
     it('should init private current tenant field', function () {
-      /* jshint -W030 */
       expect(client._currentTenant).to.be.null;
-      /* jshint +W030 */
     });
     it('should use the public api as the base url', function () {
       expect(client._dataStore.requestExecutor.baseUrl).to.equal('https://api.stormpath.com/v1');
@@ -277,21 +275,18 @@ describe('Client', function () {
           .calledWith(currentTenantHref, {error: err}, Tenant, onCurrentTenantCb);
         cbSpy.should.have.been.calledWith(err);
 
-        /* jshint -W030 */
         getResourceStub.should.have.been.calledThrice;
         cbSpy.should.have.been.calledThrice;
-        /* jshint +W030 */
       });
     });
 
     describe('second and after call', function () {
-      var sandbox, client, getResourceStub, cbSpy, err, tenant, onCurrentTenantCb;
+      var sandbox, client, getResourceStub, cbSpy, tenant, onCurrentTenantCb;
       var currentTenantHref;
 
       before(function (done) {
         currentTenantHref = '/tenants/current';
         sandbox = sinon.sandbox.create();
-        err = {error: 'boom!'};
         tenant = { href: 'foo'};
         client = makeTestClient({apiKey: apiKey});
 
@@ -326,10 +321,9 @@ describe('Client', function () {
         cbSpy.should.be.calledWith(null, tenant);
         client._currentTenant.should.be.equal(tenant);
 
-        /* jshint -W030 */
+
         getResourceStub.should.have.been.calledOnce;
         cbSpy.should.have.been.calledTwice;
-        /* jshint +W030 */
       });
     });
   });
@@ -368,10 +362,8 @@ describe('Client', function () {
       getResourceStub.should.have.been
         .calledWith(href, Tenant, cbSpy);
 
-      /* jshint -W030 */
       getResourceStub.should.have.been.calledOnce;
       cbSpy.should.have.been.calledOnce;
-      /* jshint +W030 */
     });
   });
 
@@ -409,10 +401,8 @@ describe('Client', function () {
       createResourceStub.should.have.been
         .calledWith(href, {}, Tenant, cbSpy);
 
-      /* jshint -W030 */
       createResourceStub.should.have.been.calledOnce;
       cbSpy.should.have.been.calledOnce;
-      /* jshint +W030 */
     });
   });
 
@@ -464,10 +454,8 @@ describe('Client', function () {
         getTenantAccounts.should.have.been.calledWith(null, cbSpy);
         getTenantAccounts.should.have.been.calledWith({}, cbSpy);
 
-        /* jshint -W030 */
         getCurrentTenantStub.should.have.been.calledTwice;
         getTenantAccounts.should.have.been.calledTwice;
-        /* jshint +W030 */
       });
     });
 
@@ -479,10 +467,8 @@ describe('Client', function () {
       client.on('ready', function () {
         cbSpy.should.have.been.calledWith(err);
 
-        /* jshint -W030 */
         getCurrentTenantStub.should.have.been.calledThrice;
         getTenantAccounts.should.have.been.calledTwice;
-        /* jshint +W030 */
       });
     });
   });
@@ -534,10 +520,8 @@ describe('Client', function () {
       getTenantGroups.should.have.been.calledWith(null, cbSpy);
       getTenantGroups.should.have.been.calledWith({}, cbSpy);
 
-      /* jshint -W030 */
       getCurrentTenantStub.should.have.been.calledTwice;
       getTenantGroups.should.have.been.calledTwice;
-      /* jshint +W030 */
     });
 
     it('should return error', function () {
@@ -546,10 +530,8 @@ describe('Client', function () {
       client.getGroups(cbSpy);
       cbSpy.should.have.been.calledWith(err);
 
-      /* jshint -W030 */
       getCurrentTenantStub.should.have.been.calledThrice;
       getTenantGroups.should.have.been.calledTwice;
-      /* jshint +W030 */
     });
   });
 
@@ -598,20 +580,16 @@ describe('Client', function () {
       getTenantApplications.should.have.been.calledWith(null, cbSpy);
       getTenantApplications.should.have.been.calledWith({}, cbSpy);
 
-      /* jshint -W030 */
       getCurrentTenantStub.should.have.been.calledTwice;
       getTenantApplications.should.have.been.calledTwice;
-      /* jshint +W030 */
     });
 
     it('should return error', function () {
       returnError = true;
       client.getApplications(cbSpy);
       cbSpy.should.have.been.calledWith(err);
-      /* jshint -W030 */
       getCurrentTenantStub.should.have.been.calledThrice;
       getTenantApplications.should.have.been.calledTwice;
-      /* jshint +W030 */
     });
   });
 
@@ -660,20 +638,16 @@ describe('Client', function () {
       createTenantApplication.should.have.been.calledWith(app, null, cbSpy);
       createTenantApplication.should.have.been.calledWith(app, {}, cbSpy);
 
-      /* jshint -W030 */
       getCurrentTenantStub.should.have.been.calledTwice;
       createTenantApplication.should.have.been.calledTwice;
-      /* jshint +W030 */
     });
 
     it('should return error', function () {
       returnError = true;
       client.createApplication(app, cbSpy);
       cbSpy.should.have.been.calledWith(err);
-      /* jshint -W030 */
       getCurrentTenantStub.should.have.been.calledThrice;
       createTenantApplication.should.have.been.calledTwice;
-      /* jshint +W030 */
     });
   });
 
@@ -722,20 +696,16 @@ describe('Client', function () {
       getTenantDirectories.should.have.been.calledWith(null, cbSpy);
       getTenantDirectories.should.have.been.calledWith({}, cbSpy);
 
-      /* jshint -W030 */
       getCurrentTenantStub.should.have.been.calledTwice;
       getTenantDirectories.should.have.been.calledTwice;
-      /* jshint +W030 */
     });
 
     it('should return error', function () {
       returnError = true;
       client.getDirectories(cbSpy);
       cbSpy.should.have.been.calledWith(err);
-      /* jshint -W030 */
       getCurrentTenantStub.should.have.been.calledThrice;
       getTenantDirectories.should.have.been.calledTwice;
-      /* jshint +W030 */
     });
   });
 
@@ -784,20 +754,16 @@ describe('Client', function () {
       createTenantDirectory.should.have.been.calledWith(app, null, cbSpy);
       createTenantDirectory.should.have.been.calledWith(app, {}, cbSpy);
 
-      /* jshint -W030 */
       getCurrentTenantStub.should.have.been.calledTwice;
       createTenantDirectory.should.have.been.calledTwice;
-      /* jshint +W030 */
     });
 
     it('should return error', function () {
       returnError = true;
       client.createDirectory(app, cbSpy);
       cbSpy.should.have.been.calledWith(err);
-      /* jshint -W030 */
       getCurrentTenantStub.should.have.been.calledThrice;
       createTenantDirectory.should.have.been.calledTwice;
-      /* jshint +W030 */
     });
   });
 
@@ -976,10 +942,8 @@ describe('Client', function () {
     });
 
     it('should get account', function () {
-      /* jshint -W030 */
       getResourceStub.should.have.been.calledTwice;
       cbSpy.should.have.been.calledTwice;
-      /* jshint +W030 */
 
       // call without optional param
       getResourceStub.should.have.been
@@ -1022,10 +986,8 @@ describe('Client', function () {
     });
 
     it('should get application', function () {
-      /* jshint -W030 */
       getResourceStub.should.have.been.calledTwice;
       cbSpy.should.have.been.calledTwice;
-      /* jshint +W030 */
 
       // call without optional param
       getResourceStub.should.have.been
@@ -1068,10 +1030,8 @@ describe('Client', function () {
     });
 
     it('should get directory', function () {
-      /* jshint -W030 */
       getResourceStub.should.have.been.calledTwice;
       cbSpy.should.have.been.calledTwice;
-      /* jshint +W030 */
 
       // call without optional param
       getResourceStub.should.have.been
@@ -1114,10 +1074,8 @@ describe('Client', function () {
     });
 
     it('should get group', function () {
-      /* jshint -W030 */
       getResourceStub.should.have.been.calledTwice;
       cbSpy.should.have.been.calledTwice;
-      /* jshint +W030 */
 
       // call without optional param
       getResourceStub.should.have.been
@@ -1159,10 +1117,8 @@ describe('Client', function () {
     });
 
     it('should get group', function () {
-      /* jshint -W030 */
       getResourceStub.should.have.been.calledTwice;
       cbSpy.should.have.been.calledTwice;
-      /* jshint +W030 */
 
       // call without optional param
       getResourceStub.should.have.been
@@ -1174,13 +1130,12 @@ describe('Client', function () {
   });
 
   describe('call to get id sites', function () {
-    var sandbox, cbSpy, err, app, client, tenant, getCurrentTenantStub, getTenantIdSites, returnError;
+    var sandbox, cbSpy, err, client, tenant, getCurrentTenantStub, getTenantIdSites, returnError;
 
     before(function (done) {
       sandbox = sinon.sandbox.create();
 
       err = {error: 'boom!'};
-      app = {href: 'boom!'};
       client = makeTestClient({apiKey: apiKey});
 
       client.on('error', function (err) {
@@ -1218,20 +1173,16 @@ describe('Client', function () {
       getTenantIdSites.should.have.been.calledWith(null, cbSpy);
       getTenantIdSites.should.have.been.calledWith({}, cbSpy);
 
-      /* jshint -W030 */
       getCurrentTenantStub.should.have.been.calledTwice;
       getTenantIdSites.should.have.been.calledTwice;
-      /* jshint +W030 */
     });
 
     it('should return error', function () {
       returnError = true;
       client.getIdSites(cbSpy);
       cbSpy.should.have.been.calledWith(err);
-      /* jshint -W030 */
       getCurrentTenantStub.should.have.been.calledThrice;
       getTenantIdSites.should.have.been.calledTwice;
-      /* jshint +W030 */
     });
   });
 
@@ -1267,10 +1218,8 @@ describe('Client', function () {
     });
 
     it('should get account', function () {
-      /* jshint -W030 */
       getResourceStub.should.have.been.calledTwice;
       cbSpy.should.have.been.calledTwice;
-      /* jshint +W030 */
 
       // call without optional param
       getResourceStub.should.have.been

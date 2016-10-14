@@ -60,18 +60,15 @@ function getFriendlyCallerName() {
     return stack;
   };
 
-  try {
-    var currentfile = err.stack.shift().getFileName();
+  var currentfile = err.stack.shift().getFileName();
 
-    while (err.stack.length) {
-      var callerfile = err.stack.shift().getFileName();
+  while (err.stack.length) {
+    var callerfile = err.stack.shift().getFileName();
 
-      if (currentfile !== callerfile) {
-        friendlyName = path.basename(callerfile).replace('.js', '');
-        break;
-      }
+    if (currentfile !== callerfile) {
+      friendlyName = path.basename(callerfile).replace('.js', '');
+      break;
     }
-  } catch (err) {
   }
 
   Error.prepareStackTrace = originalPrepareStackTrace;

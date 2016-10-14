@@ -4,9 +4,7 @@ var common = require('./common');
 var sinon = common.sinon;
 var should = common.should;
 
-/* jshint -W079 */
 var Buffer = require('buffer').Buffer;
-/* jshint +W079 */
 
 describe('Authorization module', function () {
   var getAuthenticator;
@@ -76,14 +74,14 @@ describe('Authorization module', function () {
     // is a false positive in Node < 6, and a failsure in Node 6.2.2
     var uuid;
     var auth;
-    var sandbox, guidStub;
+    var sandbox;
 
     before(function () {
       uuid = require('node-uuid');
       auth = getAuthenticator({apiKey: apiKey, authenticationScheme:'SAUTHC1'});
 
       sandbox = sinon.sandbox.create();
-      guidStub = sandbox.stub(uuid, 'v4', function () {
+      sandbox.stub(uuid, 'v4', function () {
         return '3412d026-624e-4778-b02d-f9906f40fc4f';
       });
       sandbox.useFakeTimers(1392387217351, 'Date'); //utc date(2014, 01, 14, 14, 13, 37, 351)

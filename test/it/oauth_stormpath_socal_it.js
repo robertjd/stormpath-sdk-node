@@ -7,7 +7,6 @@ var helpers = require('./helpers');
 var assert = common.assert;
 
 describe('OAuthStormpathSocialAuthenticator', function () {
-  var account;
   var application;
   var validProviderId;
 
@@ -41,15 +40,7 @@ describe('OAuthStormpathSocialAuthenticator', function () {
             return done(err);
           }
 
-          application.createAccount(helpers.fakeAccount(), function (err, newAccount) {
-            if (err) {
-              return done(err);
-            }
-
-            account = newAccount;
-
-            done();
-          });
+          application.createAccount(helpers.fakeAccount(), done);
         });
       });
     });

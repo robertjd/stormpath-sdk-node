@@ -77,10 +77,8 @@ describe('Resources: ', function () {
         });
 
         it('should get groups resource', function () {
-          /* jshint -W030 */
           getResourceStub.should.have.been.calledTwice;
           cbSpy.should.have.been.calledTwice;
-          /* jshint +W030 */
 
           // call without optional param
           getResourceStub.should.have.been.calledWith('boom!', null, Group, cbSpy);
@@ -130,10 +128,8 @@ describe('Resources: ', function () {
         });
 
         it('should get groups resource', function () {
-          /* jshint -W030 */
           getResourceStub.should.have.been.calledTwice;
           cbSpy.should.have.been.calledTwice;
-          /* jshint +W030 */
 
           // call without optional param
           getResourceStub.should.have.been.calledWith('boom!', null, GroupMembership, cbSpy);
@@ -301,10 +297,8 @@ describe('Resources: ', function () {
           });
 
           it('should get groups resource', function () {
-            /* jshint -W030 */
             getResourceStub.should.have.been.calledTwice;
             cbSpy.should.have.been.calledTwice;
-            /* jshint +W030 */
 
             // call without optional param
             getResourceStub.should.have.been.calledWith('boom!', null, CustomData, cbSpy);

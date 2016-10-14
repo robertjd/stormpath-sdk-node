@@ -72,7 +72,7 @@ describe('util', function () {
       dest = new Class();
       dest.prop = 'will be overridden';
       dest.prop2 = 'should be in object';
-
+      utils.shallowCopy(objToCopy, dest);
     });
 
     it('should copy own fields', function () {

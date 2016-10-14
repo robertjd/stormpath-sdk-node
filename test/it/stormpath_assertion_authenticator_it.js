@@ -11,7 +11,6 @@ var stormpath = common.Stormpath;
 var StormpathAssertionAuthenticator = stormpath.StormpathAssertionAuthenticator;
 var AssertionAuthenticationResult = stormpath.AssertionAuthenticationResult;
 
-/* jshint -W030 */
 describe('StormpathAssertionAuthenticator', function () {
   var secret;
   var sandbox;

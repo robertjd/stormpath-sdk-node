@@ -55,10 +55,8 @@ describe('Resources: ', function () {
         });
 
         it('should get account', function () {
-          /* jshint -W030 */
           getResourceStub.should.have.been.calledTwice;
           cbSpy.should.have.been.calledTwice;
-          /* jshint +W030 */
 
           // call without optional param
           getResourceStub.should.have.been
@@ -106,10 +104,8 @@ describe('Resources: ', function () {
         });
 
         it('should get account', function () {
-          /* jshint -W030 */
           getResourceStub.should.have.been.calledTwice;
           cbSpy.should.have.been.calledTwice;
-          /* jshint +W030 */
 
           // call without optional param
           getResourceStub.should.have.been

@@ -18,9 +18,7 @@ describe('Cache module', function () {
   describe('Cache class', function () {
     describe('call to constructor', function () {
       it('should return an instance of Cache', function () {
-        /* jshint -W064 */
-        Cache().should.be.an.instanceof(Cache);
-        /* jshint +W064 */
+        new Cache().should.be.an.instanceof(Cache);
       });
     });
 
@@ -61,6 +59,17 @@ describe('Cache module', function () {
         var tickDelta;
 
         before(function (done) {
+
+          sandbox = sinon.sandbox.create();
+          key = 'key' + random();
+          key2 = 'key' + random();
+          data = 'entry' + random();
+          initialTime = 100500;
+          tickDelta = 150;
+
+          var clock = sandbox.useFakeTimers(initialTime, 'Date');
+          hitsCounter = cache.stats.hits;
+
           function createCacheWithDifferentTTL(cache, done) {
             cache.ttl = 300;
             cache.tti = 200;
@@ -73,15 +82,6 @@ describe('Cache module', function () {
             });
           }
 
-          sandbox = sinon.sandbox.create();
-          key = 'key' + random();
-          key2 = 'key' + random();
-          data = 'entry' + random();
-          initialTime = 100500;
-          tickDelta = 150;
-
-          var clock = sandbox.useFakeTimers(initialTime, 'Date');
-          hitsCounter = cache.stats.hits;
           cache.put(key, data, function () {
             clock.tick(tickDelta);
             cache.get(key, function (err, ent) {
@@ -129,7 +129,6 @@ describe('Cache module', function () {
       describe('if entry expired', function () {
         var key ;
         var data;
-        var entry;
         var missCounter;
         var initialTime;
         var tickDelta;
@@ -148,10 +147,7 @@ describe('Cache module', function () {
           missCounter = cache.stats.misses;
           cache.put(key, data, function () {
             clock.tick(tickDelta);
-            cache.get(key, function (err, ent) {
-              entry = ent;
-              done();
-            });
+            cache.get(key, done);
           });
         });
         after(function () {
@@ -162,7 +158,6 @@ describe('Cache module', function () {
           cache.stats.misses.should.be.equal(missCounter + 1);
         });
         it('should delete entry from cache', function () {
-          /* jshint -W030 */
           storeDeleteSpy.should.have.been.calledOnce;
           storeDeleteSpy.should.have.been.calledWith(key);
         });
@@ -207,7 +202,6 @@ describe('Cache module', function () {
           });
         });
         it('should update stats', function () {
-          /* jshint -W030 */
           statsPutSpy.should.have.been.calledOnce;
         });
       });
@@ -231,11 +225,9 @@ describe('Cache module', function () {
         sandbox.restore();
       });
       it('should update stats', function () {
-        /* jshint -W030 */
         statsDeleteSpy.should.have.been.calledOnce;
       });
       it('should remove entry from cache', function () {
-        /* jshint -W030 */
         storeDeleteSpy.should.have.been.calledOnce;
         storeDeleteSpy.should.have.been.calledWith(key, cb);
       });
@@ -257,11 +249,9 @@ describe('Cache module', function () {
         sandbox.restore();
       });
       it('should reset stats', function () {
-        /* jshint -W030 */
         statsClearSpy.should.have.been.calledOnce;
       });
       it('should remove all entries from cache', function () {
-        /* jshint -W030 */
         storeClearSpy.should.have.been.calledOnce;
         storeClearSpy.should.have.been.calledWith(cb);
       });
@@ -282,7 +272,6 @@ describe('Cache module', function () {
         sandbox.restore();
       });
       it('should return size of cache', function () {
-        /* jshint -W030 */
         storeSizeSpy.should.have.been.calledOnce;
         storeSizeSpy.should.have.been.calledWith(cb);
       });

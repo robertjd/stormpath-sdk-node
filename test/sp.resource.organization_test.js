@@ -7,7 +7,6 @@ var Organization = require('../lib/resource/Organization');
 
 var sandbox = sinon.sandbox.create();
 
-/*jshint -W030 */
 describe('resource/Organization.js', function () {
   afterEach(function () {
     sandbox.restore();

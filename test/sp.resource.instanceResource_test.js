@@ -11,6 +11,8 @@ var Resource = require('../lib/resource/Resource');
 var InstanceResource = require('../lib/resource/InstanceResource');
 var DataStore = require('../lib/ds/DataStore');
 
+var noop = function () {};
+
 describe('Resources: ', function () {
   describe('InstanceResource class', function () {
     var ds;
@@ -44,9 +46,7 @@ describe('Resources: ', function () {
         });
 
         it('should return error', function () {
-          /* jshint -W030 */
           getResourceSpy.should.not.have.been.called;
-          /* jshint +W030 */
           error.should.be.an.instanceof(Error);
           error.message.should.match(/There is no field named/i);
         });
@@ -68,9 +68,7 @@ describe('Resources: ', function () {
         });
 
         it('should return error', function () {
-          /* jshint -W030 */
           getResourceSpy.should.not.have.been.called;
-          /* jshint +W030 */
           error.should.be.an.instanceof(Error);
           error.message.should.match(/is not a reference property/i);
           error.message.should.match(/directory/i);
@@ -78,31 +76,25 @@ describe('Resources: ', function () {
       });
 
       describe('without optional query param', function () {
-        var sandbox, error, cb, getResourceSpy;
+        var sandbox, getResourceSpy;
         before(function () {
-          cb = function (err) {
-            error = err;
-          };
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
           nock(u.BASE_URL).get(u.v1(app.href)).reply(200, {});
 
-          instanceResource.get('applications', cb);
+          instanceResource.get('applications', noop);
         });
         after(function () {
           sandbox.restore();
         });
         it('should delegate call to data store get resource', function () {
-          /* jshint -W030 */
           getResourceSpy.should.have.been.calledOnce;
         });
         it('should assign null to query', function () {
           getResourceSpy.should.have.been
-            .calledWith(app.href, null, null, cb);
+            .calledWith(app.href, null, null, noop);
         });
       });
-
-      var noop = function () {};
 
       describe('without optional query param but with ctor', function () {
         var sandbox, ctor, getResourceSpy;
@@ -187,9 +179,7 @@ describe('Resources: ', function () {
       });
 
       it('should delegate call to data store save', function () {
-        /* jshint -W030 */
         saveResourceSpy.should.have.been.calledOnce;
-        /* jshint +W030 */
         saveResourceSpy.should.have.been.calledWith(instanceResource, cb);
       });
 
@@ -222,27 +212,19 @@ describe('Resources: ', function () {
         });
 
         it('should call customData._hasReservedFields()', function () {
-          /* jshint -W030 */
           hasReservedFieldsSpy.should.have.been.calledOnce;
-          /* jshint +W030 */
         });
 
         it('should call customData._deleteReservedFields()', function () {
-          /* jshint -W030 */
           hasReservedFieldsSpy.should.have.been.calledOnce;
-          /* jshint +W030 */
         });
 
         it('should call customData._hasRemovedProperties()', function () {
-          /* jshint -W030 */
           hasRemovedPropertiesSpy.should.have.been.calledOnce;
-          /* jshint +W030 */
         });
 
         it('should call customData._deleteRemovedProperties()', function () {
-          /* jshint -W030 */
           deleteRemovedPropertiesSpy.should.have.been.calledOnce;
-          /* jshint +W030 */
         });
       });
     });
@@ -260,9 +242,7 @@ describe('Resources: ', function () {
         sandbox.restore();
       });
       it('should delegate call to data store delete', function () {
-        /* jshint -W030 */
         deleteResourceSpy.should.have.been.calledOnce;
-        /* jshint +W030 */
         deleteResourceSpy.should.have.been.calledWith(instanceResource, cb);
       });
     });
