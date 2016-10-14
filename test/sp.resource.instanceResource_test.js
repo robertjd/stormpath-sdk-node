@@ -102,69 +102,63 @@ describe('Resources: ', function () {
         });
       });
 
+      var noop = function () {};
+
       describe('without optional query param but with ctor', function () {
-        var sandbox, error, cb, ctor, getResourceSpy;
+        var sandbox, ctor, getResourceSpy;
+
         before(function () {
-          cb = function (err) {
-            error = err;
-          };
           ctor = Resource;
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
           nock(u.BASE_URL).get(u.v1(app.href)).reply(200, app);
 
-          instanceResource.get('applications', ctor, cb);
+          instanceResource.get('applications', ctor, noop);
         });
         after(function () {
           sandbox.restore();
         });
         it('should assign null to query', function () {
           getResourceSpy.should.have.been
-            .calledWith(app.href, null, ctor, cb);
+            .calledWith(app.href, null, ctor, noop);
         });
         it('should call get resource with ctor param', function () {
           getResourceSpy.should.have.been
-            .calledWith(app.href, null, ctor, cb);
+            .calledWith(app.href, null, ctor, noop);
         });
       });
 
       describe('with optional query param', function () {
         var query;
-        var sandbox, error, cb, getResourceSpy;
+        var sandbox, getResourceSpy;
 
         before(function () {
           query = {q: 'asd'};
-          cb = function (err) {
-            error = err;
-          };
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
           nock(u.BASE_URL).get(u.v1(app.href) + '?q=' + query.q).reply(200, app);
 
-          instanceResource.get('applications', query, cb);
+          instanceResource.get('applications', query, noop);
         });
         after(function () {
           sandbox.restore();
         });
         it('should call get resource with query param', function () {
           getResourceSpy.should.have.been
-            .calledWith(app.href, query, null, cb);
+            .calledWith(app.href, query, null, noop);
         });
       });
 
       describe('with optional query and ctor param', function () {
-        var sandbox, error, cb, query, ctor, getResourceSpy;
+        var sandbox, query, ctor, getResourceSpy;
         before(function () {
-          cb = function (err) {
-            error = err;
-          };
           ctor = Resource;
           query = {q:'boom!'};
           sandbox = sinon.sandbox.create();
           getResourceSpy = sandbox.spy(ds, 'getResource');
           nock(u.BASE_URL).get(u.v1(app.href) + '?q=' + query.q).reply(200, app);
 
-          instanceResource.get('applications', query, ctor, cb);
+          instanceResource.get('applications', query, ctor, noop);
         });
         after(function () {
           sandbox.restore();
@@ -172,7 +166,7 @@ describe('Resources: ', function () {
 
         it('should delegate call to data store get resource', function () {
           getResourceSpy.should.have.been
-            .calledWith(app.href, query, ctor, cb);
+            .calledWith(app.href, query, ctor, noop);
         });
       });
     });
@@ -202,7 +196,7 @@ describe('Resources: ', function () {
       describe('with custom data', function () {
         var hasReservedFieldsSpy;
         var hasRemovedPropertiesSpy;
-        var deleteReservedFieldsSpy;
+
         var deleteRemovedPropertiesSpy;
 
         before(function () {
@@ -215,7 +209,7 @@ describe('Resources: ', function () {
 
           hasReservedFieldsSpy = sandbox.stub(customDataMock, '_hasReservedFields').returns(true);
           hasRemovedPropertiesSpy = sandbox.stub(customDataMock, '_hasRemovedProperties').returns(true);
-          deleteReservedFieldsSpy = sandbox.stub(customDataMock, '_deleteReservedFields').returns(customDataMock);
+          sandbox.stub(customDataMock, '_deleteReservedFields').returns(customDataMock);
           deleteRemovedPropertiesSpy = sandbox.stub(customDataMock, '_deleteRemovedProperties');
 
           instanceResource.customData = customDataMock;
@@ -274,13 +268,12 @@ describe('Resources: ', function () {
     });
 
     describe('call to invalidate()', function () {
-      var sandbox, evictStub, evictedKeys;
+      var sandbox, evictedKeys;
 
       before(function (done) {
         evictedKeys = [];
         sandbox = sinon.sandbox.create();
-
-        evictStub = sandbox.stub(ds, '_evict', function (key, callback) {
+        sandbox.stub(ds, '_evict', function (key, callback) {
           evictedKeys.push(key);
           callback();
         });
