@@ -40,7 +40,9 @@ describe('Directory', function () {
 
       before(function (done) {
         directory.getCustomData(function (err, _customData) {
-          if (err) { throw err; }
+          if (err) {
+            throw err;
+          }
           customData = _customData;
           done();
         });
@@ -48,7 +50,7 @@ describe('Directory', function () {
 
       it('should be get-able', function () {
         assert.instanceOf(customData, CustomData);
-        assert.equal(customData.href, directory.href+'/customData');
+        assert.equal(customData.href, directory.href + '/customData');
       });
 
       describe('when saved and re-fetched', function () {
@@ -62,9 +64,13 @@ describe('Directory', function () {
 
           customData[propertyName] = propertyValue;
           customData.save(function (err) {
-            if (err) { throw err; }
+            if (err) {
+              throw err;
+            }
             directory.getCustomData(function (err, customData) {
-              if (err) { throw err; }
+              if (err) {
+                throw err;
+              }
               customDataAfterGet = customData;
               done();
             });
@@ -83,7 +89,9 @@ describe('Directory', function () {
           directory.href,
           { expand: 'customData' },
           function (err, directory) {
-            if (err) { throw err; }
+            if (err) {
+              throw err;
+            }
             cb(directory);
           }
         );
@@ -100,7 +108,7 @@ describe('Directory', function () {
 
       it('should be get-able', function () {
         assert.instanceOf(customData, CustomData);
-        assert.equal(customData.href, directory.href+'/customData');
+        assert.equal(customData.href, directory.href + '/customData');
       });
 
       describe('when saved and re-fetched', function () {
@@ -114,7 +122,9 @@ describe('Directory', function () {
 
           customData[propertyName] = propertyValue;
           customData.save(function (err) {
-            if (err) { throw err; }
+            if (err) {
+              throw err;
+            }
             getExpandedDirectory(function (directory) {
               customDataAfterGet = directory.customData;
               done();

@@ -31,7 +31,7 @@ function getClient(cb) {
 }
 
 function uniqId() {
-  return 'it-'+uuid();
+  return 'it-' + uuid();
 }
 
 function fakeAccount() {

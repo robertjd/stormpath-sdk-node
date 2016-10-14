@@ -159,7 +159,7 @@ describe('Resources: ', function () {
               }
             }
           });
-          var app = {href:'http://api.stormpath.com/v1/applications/'+uuid()};
+          var app = {href:'http://api.stormpath.com/v1/applications/' + uuid()};
           self.application = new Application(app, dataStore);
           self.getResourceStub = sinon.stub(dataStore, 'getResource', function () {
             var args = Array.prototype.slice.call(arguments);

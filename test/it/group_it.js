@@ -20,7 +20,7 @@ describe('Group', function () {
         function (err, _directory) {
           directory = _directory;
           directory.createGroup(
-            {name: 'it-group-'+helpers.uniqId()},
+            {name: 'it-group-' + helpers.uniqId()},
             function (err, _group) {
               group = _group;
               creationResult = [err, _group];
@@ -54,7 +54,9 @@ describe('Group', function () {
 
       before(function (done) {
         group.getCustomData(function (err, _customData) {
-          if (err) { throw err; }
+          if (err) {
+            throw err;
+          }
           customData = _customData;
           done();
         });
@@ -62,7 +64,7 @@ describe('Group', function () {
 
       it('should be get-able', function () {
         assert.instanceOf(customData, CustomData);
-        assert.equal(customData.href, group.href+'/customData');
+        assert.equal(customData.href, group.href + '/customData');
       });
 
       describe('when saved and re-fetched', function () {
@@ -76,9 +78,13 @@ describe('Group', function () {
 
           customData[propertyName] = propertyValue;
           customData.save(function (err) {
-            if (err) { throw err; }
+            if (err) {
+              throw err;
+            }
             group.getCustomData(function (err, customData) {
-              if (err) { throw err; }
+              if (err) {
+                throw err;
+              }
               customDataAfterGet = customData;
               done();
             });
@@ -97,7 +103,9 @@ describe('Group', function () {
           group.href,
           { expand: 'customData' },
           function (err, group) {
-            if (err) { throw err; }
+            if (err) {
+              throw err;
+            }
             cb(group);
           }
         );
@@ -114,7 +122,7 @@ describe('Group', function () {
 
       it('should be get-able', function () {
         assert.instanceOf(customData, CustomData);
-        assert.equal(customData.href, group.href+'/customData');
+        assert.equal(customData.href, group.href + '/customData');
       });
 
       describe('when saved and re-fetched', function () {
@@ -128,7 +136,9 @@ describe('Group', function () {
 
           customData[propertyName] = propertyValue;
           customData.save(function (err) {
-            if (err) { throw err; }
+            if (err) {
+              throw err;
+            }
             getExpandedGroup(function (group) {
               customDataAfterGet = group.customData;
               done();

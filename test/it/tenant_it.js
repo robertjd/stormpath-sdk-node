@@ -49,9 +49,13 @@ describe('Tenant', function () {
             directory.createAccount(
               fakeAccount,
               function (err) {
-                if (err) { throw err; }
+                if (err) {
+                  throw err;
+                }
                 tenant.getAccounts(function (err, collection) {
-                  if (err) { throw err; }
+                  if (err) {
+                    throw err;
+                  }
                   collection.each(function (account, next) {
                     accounts.push(account);
                     next();
@@ -96,9 +100,13 @@ describe('Tenant', function () {
             directory.createGroup(
               {name: groupName},
               function (err) {
-                if (err) { throw err; }
+                if (err) {
+                  throw err;
+                }
                 tenant.getGroups(function (err, collection) {
-                  if (err) { throw err; }
+                  if (err) {
+                    throw err;
+                  }
                   collection.each(function (group, next) {
                     groups.push(group);
                     next();
@@ -132,7 +140,9 @@ describe('Tenant', function () {
 
       before(function (done) {
         tenant.getCustomData(function (err, _customData) {
-          if (err) { throw err; }
+          if (err) {
+            throw err;
+          }
           customData = _customData;
           done();
         });
@@ -140,7 +150,7 @@ describe('Tenant', function () {
 
       it('should be get-able', function () {
         assert.instanceOf(customData, CustomData);
-        assert.equal(customData.href, tenant.href+'/customData');
+        assert.equal(customData.href, tenant.href + '/customData');
       });
 
       describe('when saved and re-fetched', function () {
@@ -154,9 +164,13 @@ describe('Tenant', function () {
 
           customData[propertyName] = propertyValue;
           customData.save(function (err) {
-            if (err) { throw err; }
+            if (err) {
+              throw err;
+            }
             tenant.getCustomData(function (err, customData) {
-              if (err) { throw err; }
+              if (err) {
+                throw err;
+              }
               customDataAfterGet = customData;
               done();
             });
@@ -174,7 +188,9 @@ describe('Tenant', function () {
         client.getCurrentTenant(
           { expand: 'customData' },
           function (err, tenant) {
-            if (err) { throw err; }
+            if (err) {
+              throw err;
+            }
             cb(tenant);
           }
         );
@@ -191,7 +207,7 @@ describe('Tenant', function () {
 
       it('should be get-able', function () {
         assert.instanceOf(customData, CustomData);
-        assert.equal(customData.href, tenant.href+'/customData');
+        assert.equal(customData.href, tenant.href + '/customData');
       });
 
       describe('when saved and re-fetched', function () {
@@ -205,7 +221,9 @@ describe('Tenant', function () {
 
           customData[propertyName] = propertyValue;
           customData.save(function (err) {
-            if (err) { throw err; }
+            if (err) {
+              throw err;
+            }
             getExpandedTenant(function (tenant) {
               customDataAfterGet = tenant.customData;
               done();

@@ -69,29 +69,29 @@ describe('Resources: ', function () {
         });
       });
 
-      describe('expand query resource initialization', function() {
-        it('should work for one expansion parameter', function() {
+      describe('expand query resource initialization', function () {
+        it('should work for one expansion parameter', function () {
           instantiate(Tenant, data, {expand: 'account'});
 
-          _.each(data.items, function(item) {
+          _.each(data.items, function (item) {
             item.account.should.be.an.instanceof(Account);
             item.group.should.not.be.an.instanceof(Group);
           });
         });
 
-        it('should work for a comma-delimited list of parameters', function() {
+        it('should work for a comma-delimited list of parameters', function () {
           instantiate(Tenant, data, {expand: 'account,group'});
 
-          _.each(data.items, function(item) {
+          _.each(data.items, function (item) {
             item.account.should.be.an.instanceof(Account);
             item.group.should.be.an.instanceof(Group);
           });
         });
 
-        it('should expand the customData field even if not specified in expand (backwards compatibility)', function() {
+        it('should expand the customData field even if not specified in expand (backwards compatibility)', function () {
           instantiate(Tenant, data);
 
-          _.each(data.items, function(item) {
+          _.each(data.items, function (item) {
             item.customData.should.be.an.instanceof(CustomData);
           });
         });
@@ -122,20 +122,20 @@ describe('Resources: ', function () {
         coll.should.be.an.instanceof(Tenant);
       });
 
-      describe('expand query resource initialization', function() {
-        it('should work for one expansion parameter', function() {
+      describe('expand query resource initialization', function () {
+        it('should work for one expansion parameter', function () {
           var coll = instantiate(Tenant, data, {expand: 'account'});
           coll.account.should.be.an.instanceof(Account);
           coll.group.should.not.be.an.instanceof(Group);
         });
 
-        it('should work for a comma-delimited list of parameters', function() {
+        it('should work for a comma-delimited list of parameters', function () {
           var coll = instantiate(Tenant, data, {expand: 'account,group'});
           coll.account.should.be.an.instanceof(Account);
           coll.group.should.be.an.instanceof(Group);
         });
 
-        it('should expand the customData field even if not specified in expand (backwards compatibility)', function() {
+        it('should expand the customData field even if not specified in expand (backwards compatibility)', function () {
           var coll = instantiate(Tenant, data);
           coll.customData.should.be.an.instanceof(CustomData);
         });

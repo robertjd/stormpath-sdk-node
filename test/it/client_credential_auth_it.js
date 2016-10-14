@@ -18,12 +18,16 @@ describe('Client Credential Authentication', function () {
 
       helpers.createApplication(
         function (err, _app) {
-          if (err) { throw err; }
+          if (err) {
+            throw err;
+          }
           app = _app;
           app.createAccount(
             fakeAccount,
             function (err, _account) {
-              if (err) { throw err; }
+              if (err) {
+                throw err;
+              }
               account = _account;
               done();
             }
@@ -44,7 +48,9 @@ describe('Client Credential Authentication', function () {
         username: fakeAccount.username,
         password: fakeAccount.password
       }, function (err, authenticationResult) {
-        if (err) { throw err; }
+        if (err) {
+          throw err;
+        }
         accessToken = authenticationResult.getAccessToken();
 
         done();
@@ -55,7 +61,9 @@ describe('Client Credential Authentication', function () {
       assert.isString(accessToken);
       var secret = client._dataStore.requestExecutor.options.client.apiKey.secret;
       nJwt.verify(accessToken, secret, function (err, jwt) {
-        if (err) { throw err; }
+        if (err) {
+          throw err;
+        }
         // The subject should be the account
         assert.equal(jwt.body.sub, account.href);
         // The defalt TTL is 3600 seconds
@@ -74,7 +82,9 @@ describe('Client Credential Authentication', function () {
         username: account.username,
         password: fakeAccount.password
       }, function (err, authenticationResult) {
-        if (err) { throw err; }
+        if (err) {
+          throw err;
+        }
 
         var requestObject = {
           headers: {
@@ -91,7 +101,9 @@ describe('Client Credential Authentication', function () {
 
           account.status = 'DISABLED';
           account.save(function (err) {
-            if (err) { throw err; }
+            if (err) {
+              throw err;
+            }
             var requestObject = {
               headers: {
                 'authorization': 'Bearer ' + authenticationResult.getAccessToken()
@@ -105,7 +117,9 @@ describe('Client Credential Authentication', function () {
               result2 = [err, value];
               // done();
               account.delete(function (err) {
-                if (err) { throw err; }
+                if (err) {
+                  throw err;
+                }
                 app.authenticateApiRequest({
                   request: requestObject
                 }, function (err, value) {

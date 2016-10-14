@@ -15,8 +15,8 @@ describe('Cache module', function () {
     describe('if we put a new entry', function () {
       var putsCounter, sizeCounter;
       before(function () {
-         putsCounter = stats.puts;
-         sizeCounter = stats.size;
+        putsCounter = stats.puts;
+        sizeCounter = stats.size;
         stats.put(true);
       });
       it('should increase puts counter', function () {
@@ -30,8 +30,8 @@ describe('Cache module', function () {
     describe('if we put an old entry', function () {
       var putsCounter, sizeCounter;
       before(function () {
-         putsCounter = stats.puts;
-         sizeCounter = stats.size;
+        putsCounter = stats.puts;
+        sizeCounter = stats.size;
 
         stats.put(false);
       });

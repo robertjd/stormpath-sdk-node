@@ -1174,8 +1174,7 @@ describe('Client', function () {
   });
 
   describe('call to get id sites', function () {
-    var sandbox, cbSpy, err, app, client, tenant, getCurrentTenantStub,
-        getTenantIdSites, returnError;
+    var sandbox, cbSpy, err, app, client, tenant, getCurrentTenantStub, getTenantIdSites, returnError;
 
     before(function (done) {
       sandbox = sinon.sandbox.create();

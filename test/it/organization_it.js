@@ -23,11 +23,15 @@ describe('Organization', function () {
         name: helpers.uniqId()
       };
       client.createOrganization(org, function (err, _organization) {
-        if (err) { throw err; }
+        if (err) {
+          throw err;
+        }
         organization = _organization;
 
         client.createDirectory(dir, function (err, _directory) {
-          if (err) { throw err; }
+          if (err) {
+            throw err;
+          }
           directory = _directory;
           done();
         });
@@ -38,7 +42,7 @@ describe('Organization', function () {
   });
 
   after(function (done) {
-    async.eachSeries([mapping, directory, organization ], function (resource, next) {
+    async.eachSeries([mapping, directory, organization], function (resource, next) {
       resource.delete(next);
     }, done);
   });
