@@ -192,24 +192,24 @@ describe('util', function () {
     });
   });
 
-  describe('applyMixin', function() {
+  describe('applyMixin', function () {
     var mixin;
     var Ctor;
 
-    before(function() {
-      mixin = function() {};
+    before(function () {
+      mixin = function () {};
 
-      mixin.jump = function() {};
-      mixin.crouch = function() {};
+      mixin.jump = function () {};
+      mixin.crouch = function () {};
 
-      mixin.prototype.explode = function() {};
+      mixin.prototype.explode = function () {};
 
-      Ctor = function() {};
+      Ctor = function () {};
 
       utils.applyMixin(Ctor, mixin);
     });
 
-    it('should apply properties in the mixin to the object prototype', function() {
+    it('should apply properties in the mixin to the object prototype', function () {
       assert.isDefined(Ctor.prototype.jump);
       assert.isFunction(Ctor.prototype.jump);
       assert.equal(Ctor.prototype.jump, mixin.jump);
@@ -219,7 +219,7 @@ describe('util', function () {
       assert.equal(Ctor.prototype.crouch, mixin.crouch);
     });
 
-    it('should not apply properties from the mixin prototype to the object prototype', function() {
+    it('should not apply properties from the mixin prototype to the object prototype', function () {
       assert.isUndefined(Ctor.prototype.explode);
     });
   });

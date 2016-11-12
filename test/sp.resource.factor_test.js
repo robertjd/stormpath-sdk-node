@@ -31,14 +31,14 @@ var factorData = {
   }
 };
 
-describe('Factor', function() {
+describe('Factor', function () {
   var sandbox;
   var dataStore;
   var getResourceStub;
   var superSpy;
   var factor;
 
-  before(function() {
+  before(function () {
     dataStore = new DataStore({client: {apiKey: {id: 1, secret: 2}}});
     sandbox = sinon.sandbox.create();
     getResourceStub = sinon.stub(dataStore, 'getResource');
@@ -46,16 +46,16 @@ describe('Factor', function() {
     factor = new Factor(factorData, dataStore);
   });
 
-  after(function() {
+  after(function () {
     sandbox.restore();
   });
 
-  describe('constructor', function() {
-    it('should inherit from InstanceResource', function() {
+  describe('constructor', function () {
+    it('should inherit from InstanceResource', function () {
       assert.instanceOf(factor, InstanceResource);
     });
 
-    it('should call super_ with the same arguments', function() {
+    it('should call super_ with the same arguments', function () {
       /*jshint -W030 */
       superSpy.should.have.been.calledOnce;
       superSpy.should.have.been.calledWithExactly(factorData, dataStore);
@@ -63,115 +63,115 @@ describe('Factor', function() {
     });
   });
 
-  describe('Factor#getAccount', function() {
+  describe('Factor#getAccount', function () {
     var options;
     var callback;
 
-    before(function() {
+    before(function () {
       options = {query: 'boom!'};
       callback = sinon.spy();
 
       factor.getAccount(options, callback);
     });
 
-    it('should call DataStore#getResource', function() {
+    it('should call DataStore#getResource', function () {
       /*jshint -W030 */
       getResourceStub.should.have.been.calledOnce;
       /*jshint +W030 */
     });
 
-    it('should pass the correct href to DataStore#getResource', function() {
+    it('should pass the correct href to DataStore#getResource', function () {
       getResourceStub.args[0][0].should.equal(factorData.account.href);
     });
 
-    it('should pass the correct data to DataStore#getResource', function() {
+    it('should pass the correct data to DataStore#getResource', function () {
       getResourceStub.args[0][1].should.equal(options);
     });
 
-    it('should pass the correct constructor to DataStore#getResource', function() {
+    it('should pass the correct constructor to DataStore#getResource', function () {
       getResourceStub.args[0][2].should.equal(Account);
     });
 
-    it('should pass the correct callback to DataStore#getResource', function() {
+    it('should pass the correct callback to DataStore#getResource', function () {
       getResourceStub.args[0][3].should.equal(callback);
     });
   });
 
-  describe('Factor#getChallenges', function() {
+  describe('Factor#getChallenges', function () {
     var options;
     var callback;
 
-    before(function() {
+    before(function () {
       options = {query: 'boom!'};
       callback = sinon.spy();
 
       factor.getChallenges(options, callback);
     });
 
-    it('should call DataStore#getResource', function() {
+    it('should call DataStore#getResource', function () {
       /*jshint -W030 */
       getResourceStub.should.have.been.calledTwice;
       /*jshint +W030 */
     });
 
-    it('should pass the correct href to DataStore#getResource', function() {
+    it('should pass the correct href to DataStore#getResource', function () {
       getResourceStub.args[1][0].should.equal(factorData.challenges.href);
     });
 
-    it('should pass the correct data to DataStore#getResource', function() {
+    it('should pass the correct data to DataStore#getResource', function () {
       getResourceStub.args[1][1].should.equal(options);
     });
 
-    it('should pass the correct constructor to DataStore#getResource', function() {
+    it('should pass the correct constructor to DataStore#getResource', function () {
       getResourceStub.args[1][2].should.equal(Challenge);
     });
 
-    it('should pass the correct callback to DataStore#getResource', function() {
+    it('should pass the correct callback to DataStore#getResource', function () {
       getResourceStub.args[1][3].should.equal(callback);
     });
   });
 
-  describe('Factor#getMostRecentChallenge', function() {
-    describe('when there is one', function() {
+  describe('Factor#getMostRecentChallenge', function () {
+    describe('when there is one', function () {
       var options;
       var callback;
 
-      before(function() {
+      before(function () {
         options = {query: 'boom!'};
         callback = sinon.spy();
 
         factor.getMostRecentChallenge(options, callback);
       });
 
-      it('should call DataStore#getResource', function() {
+      it('should call DataStore#getResource', function () {
         /*jshint -W030 */
         getResourceStub.should.have.been.calledThrice;
         /*jshint +W030 */
       });
 
-      it('should pass the correct href to DataStore#getResource', function() {
+      it('should pass the correct href to DataStore#getResource', function () {
         getResourceStub.args[2][0].should.equal(factorData.mostRecentChallenge.href);
       });
 
-      it('should pass the correct data to DataStore#getResource', function() {
+      it('should pass the correct data to DataStore#getResource', function () {
         getResourceStub.args[2][1].should.equal(options);
       });
 
-      it('should pass the correct constructor to DataStore#getResource', function() {
+      it('should pass the correct constructor to DataStore#getResource', function () {
         getResourceStub.args[2][2].should.equal(Challenge);
       });
 
-      it('should pass the correct callback to DataStore#getResource', function() {
+      it('should pass the correct callback to DataStore#getResource', function () {
         getResourceStub.args[2][3].should.equal(callback);
       });
     });
 
-    describe('when there is no challenge', function() {
+    describe('when there is no challenge', function () {
       var factor2;
       var options;
       var callback;
 
-      before(function() {
+      before(function () {
         factor2 = new Factor({
           mostRecentChallenge: null
         }, dataStore);
@@ -181,13 +181,13 @@ describe('Factor', function() {
         factor2.getMostRecentChallenge(options, callback);
       });
 
-      it('should not call DataStore#getResource', function() {
+      it('should not call DataStore#getResource', function () {
         /*jshint -W030 */
         assert.isFalse(getResourceStub.callCount === 4);
         /*jshint +W030 */
       });
 
-      it('should call the callback with null as the second argument', function() {
+      it('should call the callback with null as the second argument', function () {
         /*jshint -W030 */
         callback.should.have.been.called;
         assert.isNull(callback.args[0][1]);

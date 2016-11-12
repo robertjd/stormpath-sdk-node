@@ -23,33 +23,33 @@ var phoneData = {
   }
 };
 
-describe('Phone resource', function() {
+describe('Phone resource', function () {
   var sandbox;
   var dataStore;
   var phone;
   var getResourceStub;
 
-  before(function() {
+  before(function () {
     dataStore = new DataStore({client: {apiKey: {id: 1, secret: 2}}});
     sandbox = sinon.sandbox.create();
     getResourceStub = sinon.stub(dataStore, 'getResource');
     phone = new Phone(phoneData, dataStore);
   });
 
-  after(function() {
+  after(function () {
     sandbox.restore();
   });
 
-  describe('constructor', function() {
+  describe('constructor', function () {
     var superSpy;
 
-    before(function() {
+    before(function () {
       superSpy = sandbox.spy(Phone, 'super_');
 
       new Phone(phoneData, dataStore);
     });
 
-    it('should call super_ with the same arguments', function() {
+    it('should call super_ with the same arguments', function () {
       /*jshint -W030 */
       superSpy.should.have.been.calledOnce;
       superSpy.should.have.been.calledWithExactly(phoneData, dataStore);
@@ -57,45 +57,45 @@ describe('Phone resource', function() {
     });
   });
 
-  describe('instantiation and inheritance', function() {
-    it('should inherit from InstanceResource', function() {
+  describe('instantiation and inheritance', function () {
+    it('should inherit from InstanceResource', function () {
       assert.instanceOf(phone, InstanceResource);
     });
 
-    it('should be an instance of Phone', function() {
+    it('should be an instance of Phone', function () {
       assert.instanceOf(phone, Phone);
     });
   });
 
-  describe('#getAccount(options, callback)', function() {
+  describe('#getAccount(options, callback)', function () {
     var callback;
 
-    before(function() {
+    before(function () {
       callback = sinon.spy();
       phone.getAccount(callback);
     });
 
-    it('should call dataStore#getResource', function() {
+    it('should call dataStore#getResource', function () {
       /*jshint -W030 */
       getResourceStub.should.have.been.calledOnce;
       /*jshint +W030 */
     });
 
-    it('should pass the correct href to dataStore#getResource', function() {
+    it('should pass the correct href to dataStore#getResource', function () {
       getResourceStub.args[0][0].should.equal(phoneData.account.href);
     });
 
-    it('should pass no options to dataStore#getResource', function() {
+    it('should pass no options to dataStore#getResource', function () {
       /*jshint -W030 */
       getResourceStub.args[0][1].should.be.empty;
       /*jshint +W030 */
     });
 
-    it('should pass the constructor for Account to dataStore#getResource', function() {
+    it('should pass the constructor for Account to dataStore#getResource', function () {
       getResourceStub.args[0][2].should.equal(Account);
     });
 
-    it('should pass the callback to dataStore#getResource', function() {
+    it('should pass the callback to dataStore#getResource', function () {
       getResourceStub.args[0][3].should.equal(callback);
     });
   });

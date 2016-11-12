@@ -385,7 +385,7 @@ describe('Application', function () {
       };
 
       var redirectUrl = app.createIdSiteUrl(options);
-      var jwt = njwt.verify(url.parse(redirectUrl,true).query.jwtRequest, signingKey);
+      var jwt = njwt.verify(url.parse(redirectUrl, true).query.jwtRequest, signingKey);
 
       assert.deepEqual(jwt.body.require_mfa, options.require_mfa);
     });
@@ -397,7 +397,7 @@ describe('Application', function () {
       };
       var redirectUrl = app.createIdSiteUrl(options);
 
-      var jwt = njwt.verify(url.parse(redirectUrl,true).query.jwtRequest, signingKey);
+      var jwt = njwt.verify(url.parse(redirectUrl, true).query.jwtRequest, signingKey);
 
       assert.deepEqual(jwt.body.challenge, options.challenge);
     });
